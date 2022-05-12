@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { useState } from "react";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
+import Header from "./src/component/Header/Header";
 
 // Loading fonts
 function fetchFonts() {
@@ -31,6 +32,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <Header />
       <StatusBar style="auto" />
     </View>
   );
@@ -40,7 +42,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    marginTop: 30,
   },
 });

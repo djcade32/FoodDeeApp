@@ -1,10 +1,16 @@
 import { View, Text } from "react-native";
 import React from "react";
+import styles from "./styles";
+import { Entypo, AntDesign } from "@expo/vector-icons";
 
 const Header = () => {
   return (
-    <View>
-      <Text>Header</Text>
+    <View style={styles.headerContainer}>
+      <Text style={styles.headerTitle}>FooDee</Text>
+      <View style={styles.iconContainer}>
+        <Entypo style={styles.mapIcon} name="map" size={29} color="black" />
+        <AntDesign name="filter" size={29} color="black" />
+      </View>
     </View>
   );
 };
