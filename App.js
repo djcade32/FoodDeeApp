@@ -4,6 +4,7 @@ import { useState } from "react";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import Header from "./src/component/Header/Header";
+import Home from "./src/screens/Home/Home";
 
 // Loading fonts
 function fetchFonts() {
@@ -32,7 +33,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Header />
+      <Home />
       <StatusBar style="auto" />
     </View>
   );
