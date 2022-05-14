@@ -21,6 +21,10 @@ const RestaurantCard = () => {
         />
         <Ionicons name="bookmark" size={35} color="white" />
       </View>
+      <View style={styles.restaurantNameContainer}>
+        <Text style={styles.restaurantName}>Augie's</Text>
+        <Text style={styles.cuisine}>American</Text>
+      </View>
     </View>
   );
 };

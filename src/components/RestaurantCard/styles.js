@@ -36,4 +36,19 @@ export default StyleSheet.create({
     right: 10,
     top: 10,
   },
+  restaurantNameContainer: {
+    position: "absolute",
+    bottom: 10,
+    left: 10,
+  },
+  restaurantName: {
+    color: "white",
+    fontFamily: "lato-bold",
+    fontSize: 24,
+  },
+  cuisine: {
+    color: "white",
+    fontFamily: "lato",
+    fontSize: 16,
+  },
 });
