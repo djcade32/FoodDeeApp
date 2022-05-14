@@ -1,9 +1,14 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import { useState } from "react";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
-import Header from "./src/component/Header/Header";
 import Home from "./src/screens/Home/Home";
 
 // Loading fonts
@@ -32,10 +37,12 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <Home />
-      <StatusBar style="auto" />
-    </View>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={styles.container}>
+        <Home />
+        <StatusBar style="auto" />
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
