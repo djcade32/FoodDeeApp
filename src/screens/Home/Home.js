@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import React from "react";
 import styles from "./styles";
 import Header from "../../components/Header/Header";
@@ -10,7 +10,11 @@ const Home = () => {
     <View style={styles.homeScreenContainer}>
       <Header />
       <SearchBar />
-      <RestaurantCard />
+      <ScrollView>
+        <RestaurantCard />
+        <RestaurantCard />
+        <RestaurantCard />
+      </ScrollView>
     </View>
   );
 };
