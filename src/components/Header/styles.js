@@ -4,7 +4,6 @@ export default StyleSheet.create({
   headerContainer: {
     borderBottomColor: "#D6D6D6",
     borderBottomWidth: 0.5,
-    marginTop: 15,
     flexDirection: "row",
     paddingHorizontal: 25,
     paddingBottom: 10,

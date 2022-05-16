@@ -1,15 +1,15 @@
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
-  Text,
-  View,
   TouchableWithoutFeedback,
   Keyboard,
+  SafeAreaView,
 } from "react-native";
 import { useState } from "react";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
-import Home from "./src/screens/Home/Home";
+import RootNavigator from "./src/navigation";
+import { NavigationContainer } from "@react-navigation/native";
 
 // Loading fonts
 function fetchFonts() {
@@ -37,12 +37,14 @@ export default function App() {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.container}>
-        <Home />
+    <NavigationContainer>
+      <SafeAreaView style={styles.container}>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <RootNavigator />
+        </TouchableWithoutFeedback>
         <StatusBar style="auto" />
-      </View>
-    </TouchableWithoutFeedback>
+      </SafeAreaView>
+    </NavigationContainer>
   );
 }
 
@@ -50,6 +52,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    marginTop: 30,
   },
 });

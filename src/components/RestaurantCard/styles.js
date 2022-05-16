@@ -17,7 +17,7 @@ export default StyleSheet.create({
   distanceContainer: {
     flexDirection: "row",
     position: "absolute",
-    backgroundColor: "#B6B6CF",
+    backgroundColor: "rgba(182, 182, 207, 0.62)",
     marginLeft: 10,
     marginTop: 10,
     borderRadius: 20,
