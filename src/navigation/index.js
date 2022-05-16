@@ -71,4 +71,19 @@ const HomeTabs = () => {
       />
     </Tab.Navigator>
   );
+
+  const HomeStackNavigator = () => {
+    return (
+      <HomeStack.Navigator>
+        <HomeStack.Screen name="Restaurants" component={HomeScreen} />
+        <HomeStack.Screen
+          name="Restaurant"
+          component={RestaurantDetailsScreen}
+          options={{ headerShown: false }}
+        />
+        <HomeStack.Screen name="Dish" component={DishDetailsScreen} />
+        <HomeStack.Screen name="Basket" component={Basket} />
+      </HomeStack.Navigator>
+    );
+  };
 };
