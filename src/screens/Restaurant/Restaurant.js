@@ -1,4 +1,4 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, FlatList } from "react-native";
 import React from "react";
 import styles from "./styles";
 import userData from "../../../assets/data/userData";
@@ -7,6 +7,7 @@ import {
   MaterialCommunityIcons,
   AntDesign,
 } from "@expo/vector-icons";
+import RestaurantItem from "../../components/RestaurantItem/RestaurantItem";
 
 const USER = userData[0];
 
@@ -40,6 +41,7 @@ export default function Restaurant() {
           />
         </View>
       </View>
+
       <View style={styles.detailsContainer}>
         <View style={{ width: "75%" }}>
           <Text style={styles.restaurantName}>{USER.restaurants[0].name}</Text>
@@ -54,6 +56,18 @@ export default function Restaurant() {
           <Text style={styles.rating}>4.3</Text>
           <AntDesign name="star" size={29} color={"#FFC700"} />
         </View>
+      </View>
+
+      <View style={{ borderBottomColor: "#D6D6D6", borderBottomWidth: 0.5 }}>
+        <Text style={styles.itemsTried}>Items tried</Text>
+      </View>
+
+      <View>
+        <FlatList
+          style={{ height: "100%" }}
+          data={USER.items}
+          renderItem={({ item }) => <RestaurantItem item={item} />}
+        />
       </View>
     </View>
   );

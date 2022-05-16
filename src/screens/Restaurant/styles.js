@@ -44,4 +44,11 @@ export default StyleSheet.create({
     fontSize: 24,
     marginRight: 3,
   },
+  itemsTried: {
+    fontFamily: "lato-bold",
+    fontSize: 24,
+    marginTop: 25,
+    marginLeft: 15,
+    marginBottom: 15,
+  },
 });
