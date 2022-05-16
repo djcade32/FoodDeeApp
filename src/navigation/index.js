@@ -7,6 +7,7 @@ import {
 } from "@expo/vector-icons";
 
 import homeScreen from "../screens/Home/Home";
+import Restaurant from "../screens/Restaurant/Restaurant";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,7 +19,8 @@ export default function RootNavigator() {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="HomeTabs" component={HomeTabs} />
+      {/* <Stack.Screen name="HomeTabs" component={HomeTabs} /> */}
+      <Stack.Screen name="HomeTabs" component={Restaurant} />
     </Stack.Navigator>
   );
 }
