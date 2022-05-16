@@ -1,16 +1,29 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableWithoutFeedback } from "react-native";
 import React from "react";
 import styles from "./styles";
 import { Entypo, AntDesign } from "@expo/vector-icons";
 
-const Header = () => {
+const Header = ({ viewTypeHandler }) => {
   return (
     <View style={styles.headerContainer}>
       <Text style={styles.headerTitle}>
         <Text style={{ color: "#FF9A62" }}>Foo</Text>Dee
       </Text>
       <View style={styles.iconContainer}>
-        <Entypo style={styles.mapIcon} name="map" size={29} color="black" />
+        <Entypo.Button
+          style={styles.mapIcon}
+          name="map"
+          size={29}
+          color="black"
+          onPress={() => viewTypeHandler()}
+        />
+        {/* <Entypo
+          style={styles.mapIcon}
+          name="map"
+          size={29}
+          color="black"
+          onPress={() => viewTypeHandler()}
+        /> */}
         <AntDesign name="filter" size={29} color="black" />
       </View>
     </View>
