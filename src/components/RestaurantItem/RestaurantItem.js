@@ -6,10 +6,10 @@ import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 const RestaurantItem = (props) => {
   return (
     <View style={styles.restaurantItemContainer}>
-      <View style={{ width: "50%" }}>
-        <Text style={styles.itemText}>{props.item.itemName}</Text>
+      <View style={{ width: "55%" }}>
+        <Text style={styles.itemName}>{props.item.itemName} </Text>
       </View>
-      <Text style={styles.itemText}>• Food</Text>
+      <Text style={styles.itemType}>Food</Text>
       <View style={styles.ratingContainer}>
         <Text style={styles.rating}>5</Text>
         <AntDesign

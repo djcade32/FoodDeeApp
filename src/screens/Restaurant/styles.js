@@ -44,11 +44,22 @@ export default StyleSheet.create({
     fontSize: 24,
     marginRight: 3,
   },
-  itemsTried: {
+  itemsTriedTitle: {
     fontFamily: "lato-bold",
     fontSize: 24,
     marginTop: 25,
     marginLeft: 15,
     marginBottom: 15,
+  },
+  addButtonContainer: {
+    backgroundColor: "rgba(182, 182, 207, 0.62)",
+    height: "7%",
+    justifyContent: "center",
+  },
+  addButtonText: {
+    fontFamily: "lato-bold",
+    fontSize: 24,
+    color: "white",
+    textAlign: "center",
   },
 });

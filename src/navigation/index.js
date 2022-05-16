@@ -7,20 +7,18 @@ import {
 } from "@expo/vector-icons";
 
 import homeScreen from "../screens/Home/Home";
-import Restaurant from "../screens/Restaurant/Restaurant";
+import restaurantScreen from "../screens/Restaurant/Restaurant";
 
 const Stack = createNativeStackNavigator();
 
 export default function RootNavigator() {
   return (
     <Stack.Navigator
-      initialRouteName="Home"
       screenOptions={{
         headerShown: false,
       }}
     >
-      {/* <Stack.Screen name="HomeTabs" component={HomeTabs} /> */}
-      <Stack.Screen name="HomeTabs" component={Restaurant} />
+      <Stack.Screen name="HomeTabs" component={HomeTabs} />
     </Stack.Navigator>
   );
 }
@@ -32,7 +30,11 @@ const HomeTabs = () => {
     <Tab.Navigator
       initialRouteName="Home"
       inactiveColor="black"
-      barStyle={{ backgroundColor: "white" }}
+      barStyle={{
+        backgroundColor: "white",
+        borderTopColor: "#D6D6D6",
+        borderTopWidth: 0.5,
+      }}
       activeColor="#FF9A62"
     >
       <Tab.Screen
@@ -47,7 +49,7 @@ const HomeTabs = () => {
       />
       <Tab.Screen
         name="Home"
-        component={homeScreen}
+        component={HomeStackNavigator}
         options={{
           tabBarLabel: false,
           tabBarIcon: ({ color }) => (
@@ -71,19 +73,23 @@ const HomeTabs = () => {
       />
     </Tab.Navigator>
   );
+};
 
-  const HomeStackNavigator = () => {
-    return (
-      <HomeStack.Navigator>
-        <HomeStack.Screen name="Restaurants" component={HomeScreen} />
-        <HomeStack.Screen
-          name="Restaurant"
-          component={RestaurantDetailsScreen}
-          options={{ headerShown: false }}
-        />
-        <HomeStack.Screen name="Dish" component={DishDetailsScreen} />
-        <HomeStack.Screen name="Basket" component={Basket} />
-      </HomeStack.Navigator>
-    );
-  };
+const HomeStack = createNativeStackNavigator();
+
+const HomeStackNavigator = () => {
+  return (
+    <HomeStack.Navigator initialRouteName="RestaurantScreen">
+      <HomeStack.Screen
+        name="HomeScreen"
+        component={homeScreen}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="RestaurantScreen"
+        component={restaurantScreen}
+        options={{ headerShown: false }}
+      />
+    </HomeStack.Navigator>
+  );
 };

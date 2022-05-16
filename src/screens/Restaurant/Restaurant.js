@@ -59,15 +59,18 @@ export default function Restaurant() {
       </View>
 
       <View style={{ borderBottomColor: "#D6D6D6", borderBottomWidth: 0.5 }}>
-        <Text style={styles.itemsTried}>Items tried</Text>
+        <Text style={styles.itemsTriedTitle}>Items tried</Text>
       </View>
 
       <View>
         <FlatList
-          style={{ height: "100%" }}
+          style={{ height: "35%" }}
           data={USER.items}
           renderItem={({ item }) => <RestaurantItem item={item} />}
         />
+      </View>
+      <View style={styles.addButtonContainer}>
+        <Text style={styles.addButtonText}>Add item</Text>
       </View>
     </View>
   );

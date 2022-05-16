@@ -9,9 +9,14 @@ export default StyleSheet.create({
     borderBottomColor: "#D6D6D6",
     borderBottomWidth: 0.5,
   },
-  itemText: {
+  itemName: {
     fontFamily: "lato",
     fontSize: 18,
+  },
+  itemType: {
+    fontFamily: "lato",
+    fontSize: 18,
+    color: "#CCCC",
   },
   ratingContainer: {
     flexDirection: "row",
