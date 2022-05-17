@@ -8,6 +8,7 @@ import {
 
 import homeScreen from "../screens/Home/Home";
 import restaurantScreen from "../screens/Restaurant/Restaurant";
+import ProfileScreen from "../screens/Profile/Profile";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,14 +19,14 @@ export default function RootNavigator() {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="HomeTabs" component={HomeTabs} />
+      <Stack.Screen name="BottomTabs" component={BottomTabs} />
     </Stack.Navigator>
   );
 }
 
 const Tab = createMaterialBottomTabNavigator();
 
-const HomeTabs = () => {
+const BottomTabs = () => {
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -63,7 +64,7 @@ const HomeTabs = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={homeScreen}
+        component={ProfileScreen}
         options={{
           tabBarLabel: false,
           tabBarIcon: ({ color }) => (

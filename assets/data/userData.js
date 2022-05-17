@@ -2,8 +2,9 @@ const user = [
   {
     id: "1",
     name: "Norman Cade",
+    gender: "Male",
     birthday: "09/27/1996",
-    favoriteCuisine: "Asian",
+    favoriteCuisine: "Chinese",
     lat: 38.8954745,
     lng: -77.012497,
     restaurants: [
