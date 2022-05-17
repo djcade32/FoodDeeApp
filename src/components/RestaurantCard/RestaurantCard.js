@@ -1,12 +1,17 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, Pressable } from "react-native";
 import { useState } from "react";
 import React from "react";
 import styles from "../RestaurantCard/styles";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const RestaurantCard = (props) => {
+  const navigation = useNavigation();
+  function onPress() {
+    navigation.navigate("RestaurantScreen", { id: props.restaurant.id });
+  }
   return (
-    <View style={styles.restaurantCardContainer}>
+    <Pressable onPress={onPress} style={styles.restaurantCardContainer}>
       <Image style={styles.backgroundImage} source={props.restaurant.image} />
       <View style={styles.distanceContainer}>
         <Ionicons name="navigate-outline" size={29} color="white" />
@@ -37,7 +42,7 @@ const RestaurantCard = (props) => {
         <Text style={styles.restaurantName}>{props.restaurant.name}</Text>
         <Text style={styles.cuisine}>{props.restaurant.cuisine}</Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 

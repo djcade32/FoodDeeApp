@@ -8,8 +8,15 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const CustomMarker = ({ data }) => {
+  const navigation = useNavigation();
+
+  function onPress() {
+    navigation.navigate("RestaurantScreen", { id: data.id });
+  }
+
   let icon = null;
   switch (data.cuisine) {
     case "American":
@@ -30,6 +37,8 @@ const CustomMarker = ({ data }) => {
   }
   return (
     <Marker
+      tappable={false}
+      onPress={onPress}
       coordinate={{
         latitude: data.lat,
         longitude: data.lng,
