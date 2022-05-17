@@ -12,6 +12,12 @@ export default StyleSheet.create({
     width: "100%",
     height: "100%",
   },
+  backButton: {
+    position: "absolute",
+    flexDirection: "row",
+    left: 10,
+    top: 10,
+  },
   iconContainer: {
     position: "absolute",
     flexDirection: "row",
@@ -42,7 +48,8 @@ export default StyleSheet.create({
   rating: {
     fontFamily: "lato",
     fontSize: 24,
-    marginRight: 3,
+    // marginRight: 3,
+    color: "#FF9A62",
   },
   itemsTriedTitle: {
     fontFamily: "lato-bold",

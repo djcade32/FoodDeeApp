@@ -12,6 +12,8 @@ export default StyleSheet.create({
   itemName: {
     fontFamily: "lato",
     fontSize: 18,
+    // borderColor: "red",
+    // borderWidth: 1,
   },
   itemType: {
     fontFamily: "lato",
@@ -23,8 +25,12 @@ export default StyleSheet.create({
     marginLeft: "auto",
   },
   rating: {
+    color: "#FF9A62",
     fontFamily: "lato",
-    fontSize: 24,
-    marginRight: 3,
+    fontSize: 18,
+    marginRight: 10,
+    alignSelf: "center",
+    textAlign: "center",
+    width: 75,
   },
 });

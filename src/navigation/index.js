@@ -5,10 +5,12 @@ import {
   Ionicons,
   FontAwesome,
 } from "@expo/vector-icons";
+import { Button } from "react-native";
 
 import homeScreen from "../screens/Home/Home";
 import restaurantScreen from "../screens/Restaurant/Restaurant";
 import ProfileScreen from "../screens/Profile/Profile";
+import AddItemScreen from "../screens/AddItem/AddItem";
 
 const Stack = createNativeStackNavigator();
 
@@ -90,6 +92,17 @@ const HomeStackNavigator = () => {
         name="RestaurantScreen"
         component={restaurantScreen}
         options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="AddItemScreen"
+        component={AddItemScreen}
+        options={{
+          headerShown: true,
+          title: "Add item",
+          headerTitleStyle: { fontFamily: "lato" },
+          headerBackTitle: "Cancel",
+          headerBackTitleStyle: { fontFamily: "lato" },
+        }}
       />
     </HomeStack.Navigator>
   );

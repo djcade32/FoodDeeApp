@@ -1,4 +1,4 @@
-import { View, Text, Image, FlatList } from "react-native";
+import { View, Text, Image, FlatList, TouchableOpacity } from "react-native";
 import React from "react";
 import styles from "./styles";
 import userData from "../../../assets/data/userData";
@@ -8,16 +8,26 @@ import {
   AntDesign,
 } from "@expo/vector-icons";
 import RestaurantItem from "../../components/RestaurantItem/RestaurantItem";
+import { useNavigation } from "@react-navigation/native";
 
 const USER = userData[0];
 
 export default function Restaurant() {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.restaurantScreen}>
       <View style={styles.restaurantImageContainer}>
         <Image
           style={styles.restaurantImage}
           source={USER.restaurants[1].image}
+        />
+        <Ionicons
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}
+          name="arrow-back"
+          size={35}
+          color="white"
         />
         <View style={styles.iconContainer}>
           <MaterialCommunityIcons
@@ -53,8 +63,8 @@ export default function Restaurant() {
           </Text>
         </View>
         <View style={styles.ratingContainer}>
-          <Text style={styles.rating}>4.3</Text>
-          <AntDesign name="star" size={29} color={"#FFC700"} />
+          <Text style={styles.rating}>{USER.restaurants[0].rating}</Text>
+          {/* <AntDesign name="star" size={29} color={"#FFC700"} /> */}
         </View>
       </View>
 
@@ -69,9 +79,13 @@ export default function Restaurant() {
           renderItem={({ item }) => <RestaurantItem item={item} />}
         />
       </View>
-      <View style={styles.addButtonContainer}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("AddItemScreen")}
+        activeOpacity={0.5}
+        style={styles.addButtonContainer}
+      >
         <Text style={styles.addButtonText}>Add item</Text>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 }
