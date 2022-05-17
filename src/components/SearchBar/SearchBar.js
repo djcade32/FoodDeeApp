@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 const SearchBar = () => {
   return (
+    // <View style={styles.searchBarContainer}>
     <View style={styles.searchBarContainer}>
       <Ionicons
         style={styles.searchBarIcon}
@@ -18,6 +19,7 @@ const SearchBar = () => {
         placeholderTextColor="white"
       />
     </View>
+    // </View>
   );
 };
 
