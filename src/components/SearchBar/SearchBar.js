@@ -3,10 +3,10 @@ import React from "react";
 import styles from "./styles";
 import { Ionicons } from "@expo/vector-icons";
 
-const SearchBar = () => {
+const SearchBar = (props) => {
   return (
     // <View style={styles.searchBarContainer}>
-    <View style={styles.searchBarContainer}>
+    <View style={[styles.searchBarContainer, props.style]}>
       <Ionicons
         style={styles.searchBarIcon}
         name="search"
@@ -15,7 +15,7 @@ const SearchBar = () => {
       />
       <TextInput
         style={styles.searchBarInput}
-        placeholder="Search"
+        placeholder={props.placeHolderText}
         placeholderTextColor="white"
       />
     </View>

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import styles from "./styles";
 import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
 
-const Header = ({ viewTypeHandler, filterHandler }) => {
+const HomeHeader = ({ viewTypeHandler, filterHandler }) => {
   const [isMapIcon, setIsMapIcon] = useState(true);
   return (
     <View style={styles.headerContainer}>
@@ -36,4 +36,4 @@ const Header = ({ viewTypeHandler, filterHandler }) => {
   );
 };
 
-export default Header;
+export default HomeHeader;

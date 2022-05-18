@@ -7,6 +7,7 @@ import {
 } from "@expo/vector-icons";
 import { Button } from "react-native";
 
+import searchScreen from "../screens/Search/Search";
 import homeScreen from "../screens/Home/Home";
 import restaurantScreen from "../screens/Restaurant/Restaurant";
 import ProfileScreen from "../screens/Profile/Profile";
@@ -42,7 +43,7 @@ const BottomTabs = () => {
     >
       <Tab.Screen
         name="Search"
-        component={homeScreen}
+        component={searchScreen}
         options={{
           tabBarLabel: false,
           tabBarIcon: ({ color }) => (

@@ -1,13 +1,7 @@
-import {
-  View,
-  SafeAreaView,
-  FlatList,
-  useWindowDimensions,
-} from "react-native";
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import { View, Text, useWindowDimensions, FlatList } from "react-native";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import styles from "./styles";
-import HomeHeader from "../../components/Header/HomeHeader/HomeHeader";
-import SearchBar from "../../components/SearchBar/SearchBar";
+import SearchHeader from "../../components/Header/SearchHeader.js/SearchHeader";
 import RestaurantCard from "../../components/RestaurantCard/RestaurantCard";
 import userData from "../../../assets/data/userData";
 import MapView, { Marker } from "react-native-maps";
@@ -15,24 +9,17 @@ import CustomMarker from "../../components/CustomMarker";
 import * as Location from "expo-location";
 import BottomSheet from "@gorhom/bottom-sheet";
 
-import FilterScreen from "./FilterScreen/FilterScreen";
+import FilterScreen from "../Home/FilterScreen/FilterScreen";
 
 const USER = userData[0];
 
-const SEARCH_BAR_STYLES = {
-  marginTop: 25,
-  alignSelf: "center",
-  width: "85%",
-  marginBottom: 10,
-};
-
-const Home = () => {
+export default function Search() {
   const { width, height } = useWindowDimensions();
   const [isViewModeList, setIsViewModeList] = useState(true);
   const [userLocation, setUserLocation] = useState(null);
 
   const bottomSheetRef = useRef(null);
-  const snapPoints = useMemo(() => ["1", "100%"], []);
+  const snapPoints = useMemo(() => ["1%", "100%"], []);
 
   function handleViewType() {
     setIsViewModeList(!isViewModeList);
@@ -57,32 +44,16 @@ const Home = () => {
       });
     }
     getUserLocation();
-
-    // const foregroundSubscription = Location.watchPositionAsync(
-    //   {
-    //     accuracy: Location.Accuracy.High,
-    //     distanceInterval: 100,
-    //   },
-    //   (updatedLocation) => {
-    //     setDriverLocation({
-    //       latitude: updatedLocation.coords.latitude,
-    //       longitude: updatedLocation.coords.longitude,
-    //     });
-    //   }
-    // );
-    // return foregroundSubscription;
   }, []);
 
   return (
-    <View style={styles.homeScreenContainer}>
-      <HomeHeader
+    <View style={{ flex: 1, backgroundColor: "white" }}>
+      <SearchHeader
         viewTypeHandler={handleViewType}
         filterHandler={filterHandler}
       />
-
       {isViewModeList ? (
         <>
-          <SearchBar style={SEARCH_BAR_STYLES} placeHolderText={"Search"} />
           <FlatList
             style={{ marginBottom: 10 }}
             data={USER.restaurants}
@@ -105,7 +76,6 @@ const Home = () => {
             longitudeDelta: 0.07,
           }}
         >
-          <SearchBar style={SEARCH_BAR_STYLES} placeHolderText={"Search"} />
           {USER.restaurants.map((restaurant) => (
             <CustomMarker key={restaurant.id} data={restaurant} />
           ))}
@@ -125,6 +95,4 @@ const Home = () => {
       </BottomSheet>
     </View>
   );
-};
-
-export default Home;
+}
