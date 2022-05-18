@@ -7,8 +7,17 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 
 const RestaurantCard = (props) => {
   const navigation = useNavigation();
+  const [badgeStatus, setBadgeStatus] = useState(props.restaurant.status);
   function onPress() {
     navigation.navigate("RestaurantScreen", { id: props.restaurant.id });
+  }
+
+  function handleBadgePress() {
+    if (badgeStatus === "TRY") {
+      setBadgeStatus("TRIED");
+    } else {
+      setBadgeStatus("TRY");
+    }
   }
   return (
     <Pressable onPress={onPress} style={styles.restaurantCardContainer}>
@@ -18,25 +27,25 @@ const RestaurantCard = (props) => {
         <Text style={styles.distanceContainerText}>1.5 mi</Text>
       </View>
       <View style={styles.iconContainer}>
-        <MaterialCommunityIcons
-          style={{ marginRight: 10 }}
-          name="silverware-fork-knife"
-          size={35}
-          color={
-            props.restaurant.status === "TRY"
-              ? "white"
-              : "rgba(182, 182, 207, 0.62)"
-          }
-        />
-        <Ionicons
-          name="bookmark"
-          size={35}
-          color={
-            props.restaurant.status === "TRIED"
-              ? "white"
-              : "rgba(182, 182, 207, 0.62)"
-          }
-        />
+        <Pressable onPress={handleBadgePress}>
+          <MaterialCommunityIcons
+            style={{ marginRight: 10 }}
+            name="silverware-fork-knife"
+            size={35}
+            color={
+              badgeStatus === "TRY" ? "white" : "rgba(182, 182, 207, 0.62)"
+            }
+          />
+        </Pressable>
+        <Pressable onPress={handleBadgePress}>
+          <Ionicons
+            name="bookmark"
+            size={35}
+            color={
+              badgeStatus === "TRIED" ? "white" : "rgba(182, 182, 207, 0.62)"
+            }
+          />
+        </Pressable>
       </View>
       <View style={styles.restaurantNameContainer}>
         <Text style={styles.restaurantName}>{props.restaurant.name}</Text>
