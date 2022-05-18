@@ -1,5 +1,12 @@
-import { View, Text, Image, FlatList, TouchableOpacity } from "react-native";
-import React from "react";
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
+import React, { useState } from "react";
 import styles from "./styles";
 import userData from "../../../assets/data/userData";
 import {
@@ -14,6 +21,16 @@ const USER = userData[0];
 
 export default function Restaurant() {
   const navigation = useNavigation();
+
+  const [badgeStatus, setBadgeStatus] = useState(USER.restaurants[1].status);
+
+  function handleBadgePress() {
+    if (badgeStatus === "TRY") {
+      setBadgeStatus("TRIED");
+    } else {
+      setBadgeStatus("TRY");
+    }
+  }
 
   return (
     <View style={styles.restaurantScreen}>
@@ -30,25 +47,25 @@ export default function Restaurant() {
           color="white"
         />
         <View style={styles.iconContainer}>
-          <MaterialCommunityIcons
-            style={{ marginRight: 10 }}
-            name="silverware-fork-knife"
-            size={35}
-            color={
-              USER.restaurants[1].status === "TRY"
-                ? "white"
-                : "rgba(182, 182, 207, 0.62)"
-            }
-          />
-          <Ionicons
-            name="bookmark"
-            size={35}
-            color={
-              USER.restaurants[1].status === "TRIED"
-                ? "white"
-                : "rgba(182, 182, 207, 0.62)"
-            }
-          />
+          <Pressable onPress={handleBadgePress}>
+            <MaterialCommunityIcons
+              style={{ marginRight: 10 }}
+              name="silverware-fork-knife"
+              size={35}
+              color={
+                badgeStatus === "TRY" ? "white" : "rgba(182, 182, 207, 0.62)"
+              }
+            />
+          </Pressable>
+          <Pressable onPress={handleBadgePress}>
+            <Ionicons
+              name="bookmark"
+              size={35}
+              color={
+                badgeStatus === "TRIED" ? "white" : "rgba(182, 182, 207, 0.62)"
+              }
+            />
+          </Pressable>
         </View>
       </View>
 
