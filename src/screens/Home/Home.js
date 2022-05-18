@@ -25,6 +25,7 @@ import Slider from "@react-native-community/slider";
 const USER = userData[0];
 
 const Home = () => {
+  const selectDropdownRef = useRef(null);
   const CUISINES = [
     "None",
     "American",
@@ -38,8 +39,28 @@ const Home = () => {
   const [isViewModeList, setIsViewModeList] = useState(true);
   const [userLocation, setUserLocation] = useState(null);
 
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const [isTryEnabled, setIsTryEnabled] = useState(false);
+  const [isTriedEnabled, setIsTriedEnabled] = useState(false);
+
+  function toggleSwitch(e) {
+    if (e === "Try") {
+      if (isTriedEnabled && !isTryEnabled) {
+        setIsTryEnabled(true);
+        setIsTriedEnabled(false);
+      } else {
+        setIsTryEnabled(!isTryEnabled);
+      }
+    } else {
+      if (isTryEnabled && !isTriedEnabled) {
+        setIsTriedEnabled(true);
+        setIsTryEnabled(false);
+      } else {
+        setIsTriedEnabled(!isTriedEnabled);
+      }
+    }
+  }
+
+  const [sliderValue, setSliderValue] = useState(10);
 
   const bottomSheetRef = useRef(null);
   const snapPoints = useMemo(() => ["1%", "100%"], []);
@@ -50,6 +71,12 @@ const Home = () => {
 
   function filterHandler() {
     bottomSheetRef.current?.expand();
+  }
+  function handleClearFiltersPress() {
+    setIsTryEnabled(false);
+    setIsTriedEnabled(false);
+    selectDropdownRef.current?.reset();
+    setSliderValue(50);
   }
 
   useEffect(() => {
@@ -139,8 +166,8 @@ const Home = () => {
               }}
               thumbColor={"white"}
               ios_backgroundColor="rgba(182, 182, 207, 0.62)"
-              onValueChange={toggleSwitch}
-              value={isEnabled}
+              onValueChange={() => toggleSwitch("Try")}
+              value={isTryEnabled}
             />
           </View>
           <View style={styles.inputContainer}>
@@ -152,14 +179,15 @@ const Home = () => {
               }}
               thumbColor={"white"}
               ios_backgroundColor="rgba(182, 182, 207, 0.62)"
-              onValueChange={toggleSwitch}
-              value={isEnabled}
+              onValueChange={() => toggleSwitch("Tried")}
+              value={isTriedEnabled}
             />
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>Cuisine</Text>
             <SelectDropdown
-              defaultValueByIndex={0}
+              ref={selectDropdownRef}
+              defaultButtonText={"None"}
               renderDropdownIcon={() => (
                 <Entypo name="chevron-small-down" size={24} color="black" />
               )}
@@ -190,16 +218,35 @@ const Home = () => {
               }}
             >
               <Text style={styles.inputLabel}>Distance Radius</Text>
-              <Text style={styles.inputLabel}>15 mi</Text>
+              <Text style={styles.inputLabel}>{sliderValue} mi</Text>
             </View>
             <Slider
-              style={{ width: 200, height: 40 }}
+              style={{ width: 250, height: 40, alignSelf: "center" }}
               minimumValue={0}
-              maximumValue={1}
-              minimumTrackTintColor="#FFFFFF"
-              maximumTrackTintColor="#000000"
+              maximumValue={50}
+              value={sliderValue}
+              onValueChange={(value) => setSliderValue(value)}
+              onSlidingComplete={(value) => console.log(value + " is chosen")}
+              step={1}
+              minimumTrackTintColor="#FF9A62"
+              maximumTrackTintColor="#D6D6D6"
             />
           </View>
+          <TouchableOpacity
+            onPress={handleClearFiltersPress}
+            activeOpacity={0.5}
+            style={styles.clearButtonContainer}
+          >
+            <Text style={styles.clearButtonText}>Clear filters</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => bottomSheetRef.current?.close()}
+            activeOpacity={0.5}
+            style={styles.filterButtonContainer}
+          >
+            <Text style={styles.filterButtonText}>Filter</Text>
+          </TouchableOpacity>
         </View>
       </BottomSheet>
     </View>
