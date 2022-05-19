@@ -83,11 +83,11 @@ const Home = () => {
       {isViewModeList ? (
         <>
           <SearchBar style={SEARCH_BAR_STYLES} placeHolderText={"Search"} />
-          <FlatList
+          {/* <FlatList
             style={{ marginBottom: 10 }}
             data={USER.restaurants}
             renderItem={({ item }) => <RestaurantCard restaurant={item} />}
-          />
+          /> */}
         </>
       ) : (
         <MapView

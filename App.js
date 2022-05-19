@@ -4,12 +4,19 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   SafeAreaView,
+  View,
+  Text,
 } from "react-native";
 import { useState } from "react";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import RootNavigator from "./src/navigation";
 import { NavigationContainer } from "@react-navigation/native";
+// import { Amplify, Analytics } from "aws-amplify";
+// import config from "./src/aws-exports";
+// import { withAuthenticator } from "aws-amplify-react-native";
+
+// Amplify.configure({ ...config, Analytics: { disabled: true } });
 
 // Loading fonts
 function fetchFonts() {
@@ -22,7 +29,7 @@ function fetchFonts() {
   });
 }
 
-export default function App() {
+function App() {
   const [fontLoaded, setFontLoaded] = useState(false);
 
   if (!fontLoaded) {
@@ -54,3 +61,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
 });
+
+export default App;
+// export default withAuthenticator(App);

@@ -7,9 +7,15 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 
 const RestaurantCard = (props) => {
   const navigation = useNavigation();
-  const [badgeStatus, setBadgeStatus] = useState(props.restaurant.status);
+  // const [badgeStatus, setBadgeStatus] = useState(props.restaurant.status);
+  const [badgeStatus, setBadgeStatus] = useState("TRY");
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   function onPress() {
-    navigation.navigate("RestaurantScreen", { id: props.restaurant.id });
+    navigation.navigate("RestaurantScreen", { id: props.restaurant.item.id });
   }
 
   function handleBadgePress() {
@@ -21,10 +27,15 @@ const RestaurantCard = (props) => {
   }
   return (
     <Pressable onPress={onPress} style={styles.restaurantCardContainer}>
-      <Image style={styles.backgroundImage} source={props.restaurant.image} />
+      <Image
+        style={styles.backgroundImage}
+        source={{ uri: props.restaurant.item.image_url }}
+      />
       <View style={styles.distanceContainer}>
         <Ionicons name="navigate-outline" size={29} color="white" />
-        <Text style={styles.distanceContainerText}>1.5 mi</Text>
+        <Text style={styles.distanceContainerText}>
+          {(props.restaurant.item.distance * 0.000621371192).toFixed(1)} mi
+        </Text>
       </View>
       <View style={styles.iconContainer}>
         <Pressable onPress={handleBadgePress}>
@@ -33,7 +44,7 @@ const RestaurantCard = (props) => {
             name="silverware-fork-knife"
             size={35}
             color={
-              badgeStatus === "TRY" ? "white" : "rgba(182, 182, 207, 0.62)"
+              badgeStatus === "TRIED" ? "white" : "rgba(182, 182, 207, 0.62)"
             }
           />
         </Pressable>
@@ -42,14 +53,16 @@ const RestaurantCard = (props) => {
             name="bookmark"
             size={35}
             color={
-              badgeStatus === "TRIED" ? "white" : "rgba(182, 182, 207, 0.62)"
+              badgeStatus === "TRY" ? "white" : "rgba(182, 182, 207, 0.62)"
             }
           />
         </Pressable>
       </View>
       <View style={styles.restaurantNameContainer}>
-        <Text style={styles.restaurantName}>{props.restaurant.name}</Text>
-        <Text style={styles.cuisine}>{props.restaurant.cuisine}</Text>
+        <Text style={styles.restaurantName}>{props.restaurant.item.name}</Text>
+        <Text style={styles.cuisine}>
+          {capitalizeFirstLetter(props.restaurant.item.categories[0].alias)}
+        </Text>
       </View>
     </Pressable>
   );

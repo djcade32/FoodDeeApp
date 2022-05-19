@@ -1,4 +1,10 @@
-import { View, Text, useWindowDimensions, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  useWindowDimensions,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import styles from "./styles";
 import SearchHeader from "../../components/Header/SearchHeader.js/SearchHeader";
@@ -14,6 +20,40 @@ import FilterScreen from "../Home/FilterScreen/FilterScreen";
 const USER = userData[0];
 
 export default function Search() {
+  const [fetchedRestaurants, setfetchedRestaurants] = useState([]);
+  const [restaurantsFetched, setRestaurantsFetched] = useState(false);
+
+  const config = {
+    headers: {
+      Authorization:
+        "Bearer dgXHpVg08PkfCjE9SPgWb3uzYBH9kNDn3n5NpyJonG5aMQHr5GjNayvwujkrjzJGQcxJmMCrcn4naNgxno9Zu7bARvYZ2qtMz2_6zNHEhnm7WBsayoDbJPFBe2CGYnYx",
+    },
+  };
+
+  //Fetch restaurants from Yelp API
+  const getRestaurants = async () => {
+    try {
+      const response = await fetch(
+        "https://api.yelp.com/v3/businesses/search?latitude=38.7955888&longitude=-77.0506745&limit=50",
+        config
+      );
+      const json = await response.json();
+      setfetchedRestaurants(json.businesses);
+      return;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      console.log("Done fetching restaurants");
+    }
+  };
+
+  useEffect(() => {
+    if (fetchedRestaurants.length <= 0) {
+      getRestaurants();
+      setRestaurantsFetched(true);
+    }
+  }, []);
+
   const { width, height } = useWindowDimensions();
   const [isViewModeList, setIsViewModeList] = useState(true);
   const [userLocation, setUserLocation] = useState(null);
@@ -56,8 +96,10 @@ export default function Search() {
         <>
           <FlatList
             style={{ marginBottom: 10 }}
-            data={USER.restaurants}
-            renderItem={({ item }) => <RestaurantCard restaurant={item} />}
+            data={fetchedRestaurants}
+            renderItem={(restaurant) => (
+              <RestaurantCard restaurant={restaurant} />
+            )}
           />
         </>
       ) : (
