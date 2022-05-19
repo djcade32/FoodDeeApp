@@ -61,7 +61,7 @@ const RestaurantCard = (props) => {
       <View style={styles.restaurantNameContainer}>
         <Text style={styles.restaurantName}>{props.restaurant.item.name}</Text>
         <Text style={styles.cuisine}>
-          {capitalizeFirstLetter(props.restaurant.item.categories[0].alias)}
+          {props.restaurant.item.categories[0].title}
         </Text>
       </View>
     </Pressable>

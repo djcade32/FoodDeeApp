@@ -18,7 +18,7 @@ const CustomMarker = ({ data }) => {
   }
 
   let icon = null;
-  switch (data.cuisine) {
+  switch (data.categories[0].title) {
     case "American":
       icon = <FontAwesome5 name="hamburger" size={24} color="white" />;
       break;
@@ -33,6 +33,13 @@ const CustomMarker = ({ data }) => {
       break;
 
     default:
+      icon = (
+        <MaterialCommunityIcons
+          name="silverware-fork-knife"
+          size={24}
+          color="white"
+        />
+      );
       break;
   }
   return (
@@ -40,11 +47,11 @@ const CustomMarker = ({ data }) => {
       tappable={false}
       onPress={onPress}
       coordinate={{
-        latitude: data.lat,
-        longitude: data.lng,
+        latitude: data.coordinates.latitude,
+        longitude: data.coordinates.longitude,
       }}
       title={data.name}
-      description={data.address}
+      description={data.location.display_address[0]}
     >
       <View
         style={{ backgroundColor: "#FF9A62", padding: 5, borderRadius: "50%" }}

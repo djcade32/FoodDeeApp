@@ -21,53 +21,11 @@ const USER = userData[0];
 
 export default function Search() {
   const [fetchedRestaurants, setfetchedRestaurants] = useState([]);
-  const [restaurantsFetched, setRestaurantsFetched] = useState(false);
-
-  const config = {
-    headers: {
-      Authorization:
-        "Bearer dgXHpVg08PkfCjE9SPgWb3uzYBH9kNDn3n5NpyJonG5aMQHr5GjNayvwujkrjzJGQcxJmMCrcn4naNgxno9Zu7bARvYZ2qtMz2_6zNHEhnm7WBsayoDbJPFBe2CGYnYx",
-    },
-  };
-
-  //Fetch restaurants from Yelp API
-  const getRestaurants = async () => {
-    try {
-      const response = await fetch(
-        "https://api.yelp.com/v3/businesses/search?latitude=38.7955888&longitude=-77.0506745&limit=50",
-        config
-      );
-      const json = await response.json();
-      setfetchedRestaurants(json.businesses);
-      return;
-    } catch (error) {
-      console.error(error);
-    } finally {
-      console.log("Done fetching restaurants");
-    }
-  };
-
-  useEffect(() => {
-    if (fetchedRestaurants.length <= 0) {
-      getRestaurants();
-      setRestaurantsFetched(true);
-    }
-  }, []);
-
   const { width, height } = useWindowDimensions();
   const [isViewModeList, setIsViewModeList] = useState(true);
   const [userLocation, setUserLocation] = useState(null);
-
   const bottomSheetRef = useRef(null);
   const snapPoints = useMemo(() => ["1%", "100%"], []);
-
-  function handleViewType() {
-    setIsViewModeList(!isViewModeList);
-  }
-
-  function filterHandler() {
-    bottomSheetRef.current?.expand();
-  }
 
   useEffect(() => {
     async function getUserLocation() {
@@ -85,6 +43,48 @@ export default function Search() {
     }
     getUserLocation();
   }, []);
+
+  const config = {
+    headers: {
+      Authorization:
+        "Bearer dgXHpVg08PkfCjE9SPgWb3uzYBH9kNDn3n5NpyJonG5aMQHr5GjNayvwujkrjzJGQcxJmMCrcn4naNgxno9Zu7bARvYZ2qtMz2_6zNHEhnm7WBsayoDbJPFBe2CGYnYx",
+    },
+  };
+
+  //Fetch restaurants from Yelp API
+  const getRestaurants = async () => {
+    try {
+      const response = await fetch(
+        "https://api.yelp.com/v3/businesses/search?latitude=" +
+          userLocation?.latitude +
+          "&longitude=" +
+          userLocation?.longitude +
+          "&limit=50",
+        config
+      );
+      const json = await response.json();
+      setfetchedRestaurants(json.businesses);
+      return;
+    } catch (error) {
+      console.error("Can't fetch restaurants: " + error);
+    } finally {
+      console.log("Done fetching restaurants");
+    }
+  };
+
+  useEffect(() => {
+    if (fetchedRestaurants?.length <= 0 && userLocation) {
+      getRestaurants();
+    }
+  }, [userLocation]);
+
+  function handleViewType() {
+    setIsViewModeList(!isViewModeList);
+  }
+
+  function filterHandler() {
+    bottomSheetRef.current?.expand();
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
@@ -104,6 +104,7 @@ export default function Search() {
         </>
       ) : (
         <MapView
+          showsPointsOfInterest={false}
           showsCompass={false}
           mapType="mutedStandard"
           style={{
@@ -118,7 +119,7 @@ export default function Search() {
             longitudeDelta: 0.07,
           }}
         >
-          {USER.restaurants.map((restaurant) => (
+          {fetchedRestaurants.map((restaurant) => (
             <CustomMarker key={restaurant.id} data={restaurant} />
           ))}
         </MapView>

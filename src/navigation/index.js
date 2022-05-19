@@ -43,7 +43,7 @@ const BottomTabs = () => {
     >
       <Tab.Screen
         name="Search"
-        component={searchScreen}
+        component={SearchStackNavigator}
         options={{
           tabBarLabel: false,
           tabBarIcon: ({ color }) => (
@@ -106,5 +106,35 @@ const HomeStackNavigator = () => {
         }}
       />
     </HomeStack.Navigator>
+  );
+};
+
+const SearchStack = createNativeStackNavigator();
+
+const SearchStackNavigator = () => {
+  return (
+    <SearchStack.Navigator initialRouteName="HomeScreen">
+      <SearchStack.Screen
+        name="SearchScreen"
+        component={searchScreen}
+        options={{ headerShown: false }}
+      />
+      <SearchStack.Screen
+        name="RestaurantScreen"
+        component={restaurantScreen}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="AddItemScreen"
+        component={AddItemScreen}
+        options={{
+          headerShown: true,
+          title: "Add item",
+          headerTitleStyle: { fontFamily: "lato" },
+          headerBackTitle: "Cancel",
+          headerBackTitleStyle: { fontFamily: "lato" },
+        }}
+      />
+    </SearchStack.Navigator>
   );
 };

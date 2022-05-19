@@ -40,6 +40,7 @@ export default StyleSheet.create({
     position: "absolute",
     bottom: 10,
     left: 10,
+    paddingRight: 10,
   },
   restaurantName: {
     color: "white",

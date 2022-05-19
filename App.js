@@ -12,6 +12,7 @@ import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import RootNavigator from "./src/navigation";
 import { NavigationContainer } from "@react-navigation/native";
+
 // import { Amplify, Analytics } from "aws-amplify";
 // import config from "./src/aws-exports";
 // import { withAuthenticator } from "aws-amplify-react-native";
