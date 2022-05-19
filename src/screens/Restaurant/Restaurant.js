@@ -15,20 +15,32 @@ import {
   AntDesign,
 } from "@expo/vector-icons";
 import RestaurantItem from "../../components/RestaurantItem/RestaurantItem";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { ScrollView } from "react-native-gesture-handler";
 
 const USER = userData[0];
 
 export default function Restaurant() {
   const navigation = useNavigation();
+  const route = useRoute();
+  // const id = route.params?.id;
+  const restaurant = route.params;
 
   const [badgeStatus, setBadgeStatus] = useState(USER.restaurants[1].status);
 
-  function handleBadgePress() {
-    if (badgeStatus === "TRY") {
+  function handleBadgePress(badgeType) {
+    if (badgeStatus === "TRY" && badgeType === "triedBadge") {
       setBadgeStatus("TRIED");
-    } else {
+    } else if (badgeStatus === "TRY" && badgeType === "tryBadge") {
+      setBadgeStatus();
+    } else if (badgeStatus === "TRIED" && badgeType === "tryBadge") {
       setBadgeStatus("TRY");
+    } else if (badgeStatus === "TRIED" && badgeType === "triedBadge") {
+      setBadgeStatus();
+    } else if (!badgeStatus && badgeType === "tryBadge") {
+      setBadgeStatus("TRY");
+    } else if (!badgeStatus && badgeType === "triedBadge") {
+      setBadgeStatus("TRIED");
     }
   }
 
@@ -37,7 +49,7 @@ export default function Restaurant() {
       <View style={styles.restaurantImageContainer}>
         <Image
           style={styles.restaurantImage}
-          source={USER.restaurants[1].image}
+          source={{ uri: restaurant.image }}
         />
         <Ionicons
           onPress={() => navigation.goBack()}
@@ -47,7 +59,7 @@ export default function Restaurant() {
           color="white"
         />
         <View style={styles.iconContainer}>
-          <Pressable onPress={handleBadgePress}>
+          <Pressable onPress={() => handleBadgePress("tryBadge")}>
             <MaterialCommunityIcons
               style={{ marginRight: 10 }}
               name="silverware-fork-knife"
@@ -57,7 +69,7 @@ export default function Restaurant() {
               }
             />
           </Pressable>
-          <Pressable onPress={handleBadgePress}>
+          <Pressable onPress={() => handleBadgePress("triedBadge")}>
             <Ionicons
               name="bookmark"
               size={35}
@@ -71,16 +83,16 @@ export default function Restaurant() {
 
       <View style={styles.detailsContainer}>
         <View style={{ width: "75%" }}>
-          <Text style={styles.restaurantName}>{USER.restaurants[0].name}</Text>
+          <Text style={styles.restaurantName}>{restaurant.name}</Text>
           <Text style={styles.restaurantExtraDetails}>
-            {USER.restaurants[0].cuisine} • 1.5 mi • {USER.restaurants[0].cost}
+            {restaurant.cuisine} • {restaurant.distance} mi • {restaurant.cost}
           </Text>
           <Text style={styles.restaurantExtraDetails}>
-            {USER.restaurants[1].address} 22314
+            {restaurant.address}
           </Text>
         </View>
         <View style={styles.ratingContainer}>
-          <Text style={styles.rating}>{USER.restaurants[0].rating}</Text>
+          <Text style={styles.rating}>{restaurant.rating}</Text>
           {/* <AntDesign name="star" size={29} color={"#FFC700"} /> */}
         </View>
       </View>
@@ -88,7 +100,6 @@ export default function Restaurant() {
       <View style={{ borderBottomColor: "#D6D6D6", borderBottomWidth: 0.5 }}>
         <Text style={styles.itemsTriedTitle}>Items tried</Text>
       </View>
-
       <View>
         <FlatList
           style={{ height: "35%" }}

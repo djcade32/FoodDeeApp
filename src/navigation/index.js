@@ -5,7 +5,6 @@ import {
   Ionicons,
   FontAwesome,
 } from "@expo/vector-icons";
-import { Button } from "react-native";
 
 import searchScreen from "../screens/Search/Search";
 import homeScreen from "../screens/Home/Home";

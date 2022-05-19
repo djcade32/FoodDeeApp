@@ -51,7 +51,11 @@ const CustomMarker = ({ data }) => {
         longitude: data.coordinates.longitude,
       }}
       title={data.name}
-      description={data.location.display_address[0]}
+      description={
+        data.location.display_address[0] +
+        " " +
+        data.location.display_address[1]
+      }
     >
       <View
         style={{ backgroundColor: "#FF9A62", padding: 5, borderRadius: "50%" }}

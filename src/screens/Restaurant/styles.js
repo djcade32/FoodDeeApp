@@ -56,7 +56,7 @@ export default StyleSheet.create({
     fontSize: 24,
     marginTop: 25,
     marginLeft: 15,
-    marginBottom: 15,
+    paddingBottom: 15,
   },
   addButtonContainer: {
     backgroundColor: "rgba(182, 182, 207, 0.62)",
