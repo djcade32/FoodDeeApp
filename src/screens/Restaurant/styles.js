@@ -48,8 +48,7 @@ export default StyleSheet.create({
   rating: {
     fontFamily: "lato",
     fontSize: 24,
-    // marginRight: 3,
-    color: "#FF9A62",
+    marginRight: 3,
   },
   itemsTriedTitle: {
     fontFamily: "lato-bold",

@@ -8,7 +8,6 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import styles from "./styles";
 import HomeHeader from "../../components/Header/HomeHeader/HomeHeader";
 import SearchBar from "../../components/SearchBar/SearchBar";
-import RestaurantCard from "../../components/RestaurantCard/RestaurantCard";
 import userData from "../../../assets/data/userData";
 import MapView, { Marker } from "react-native-maps";
 import CustomMarker from "../../components/CustomMarker";

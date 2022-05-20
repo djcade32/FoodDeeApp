@@ -1,30 +1,28 @@
 import {
-  View,
   Text,
+  View,
   useWindowDimensions,
   FlatList,
   ActivityIndicator,
 } from "react-native";
 import React, { useState, useMemo, useRef, useEffect } from "react";
-import styles from "./styles";
 import SearchHeader from "../../components/Header/SearchHeader.js/SearchHeader";
 import RestaurantCard from "../../components/RestaurantCard/RestaurantCard";
-import userData from "../../../assets/data/userData";
 import MapView, { Marker } from "react-native-maps";
 import CustomMarker from "../../components/CustomMarker";
 import * as Location from "expo-location";
 import BottomSheet from "@gorhom/bottom-sheet";
-
 import FilterScreen from "../Home/FilterScreen/FilterScreen";
-
-const USER = userData[0];
 
 export default function Search() {
   const [fetchedRestaurants, setfetchedRestaurants] = useState([]);
+  const [fetchLimit, setFetchLimit] = useState(5);
+  const [fetchTotal, setFetchTotal] = useState(null);
   const { width, height } = useWindowDimensions();
   const [isViewModeList, setIsViewModeList] = useState(true);
   const [userLocation, setUserLocation] = useState(null);
   const bottomSheetRef = useRef(null);
+
   const snapPoints = useMemo(() => ["1%", "100%"], []);
 
   useEffect(() => {
@@ -43,7 +41,6 @@ export default function Search() {
     }
     getUserLocation();
   }, []);
-
   const config = {
     headers: {
       Authorization:
@@ -52,18 +49,32 @@ export default function Search() {
   };
 
   //Fetch restaurants from Yelp API
-  const getRestaurants = async () => {
+  const fetchRestaurants = async (limit, offset) => {
+    console.log("Running fetch function");
     try {
       const response = await fetch(
-        "https://api.yelp.com/v3/businesses/search?latitude=" +
+        "https://api.yelp.com/v3/businesses/search?term=restaurants&latitude=" +
           userLocation?.latitude +
           "&longitude=" +
           userLocation?.longitude +
-          "&limit=50",
+          "&limit=" +
+          limit +
+          "&sort_by=distance&offset=" +
+          offset +
+          "",
         config
       );
       const json = await response.json();
-      setfetchedRestaurants(json.businesses);
+      // setfetchedRestaurants(json.businesses);
+      if (fetchedRestaurants.length === 0) {
+        setfetchedRestaurants(json.businesses);
+      } else {
+        setfetchedRestaurants((previousState) => [
+          ...previousState,
+          json.businesses,
+        ]);
+      }
+
       return;
     } catch (error) {
       console.error("Can't fetch restaurants: " + error);
@@ -72,9 +83,15 @@ export default function Search() {
     }
   };
 
+  const fetchMoreRestaurants = async () => {
+    console.log("End Reached");
+    await fetchRestaurants(fetchLimit, fetchLimit);
+    return;
+  };
+
   useEffect(() => {
-    if (fetchedRestaurants?.length <= 0 && userLocation) {
-      getRestaurants();
+    if (fetchedRestaurants.length === 0 && userLocation) {
+      fetchRestaurants(fetchLimit, 0);
     }
   }, [userLocation]);
 
@@ -92,9 +109,21 @@ export default function Search() {
         viewTypeHandler={handleViewType}
         filterHandler={filterHandler}
       />
+      {fetchedRestaurants.length === 0 && (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            backgroundColor: "white",
+          }}
+        >
+          <ActivityIndicator size={35} color={"grey"} />
+        </View>
+      )}
       {isViewModeList ? (
         <>
           <FlatList
+            onEndReached={fetchMoreRestaurants}
             style={{ marginBottom: 10 }}
             data={fetchedRestaurants}
             renderItem={(restaurant) => (

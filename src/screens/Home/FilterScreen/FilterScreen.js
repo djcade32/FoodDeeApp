@@ -38,13 +38,13 @@ export default function FilterScreen({ closeBottomSheet }) {
     }
   }
 
-  const [sliderValue, setSliderValue] = useState(50);
+  const [sliderValue, setSliderValue] = useState(25);
 
   function handleClearFiltersPress() {
     setIsTryEnabled(false);
     setIsTriedEnabled(false);
     selectDropdownRef.current?.reset();
-    setSliderValue(50);
+    setSliderValue(25);
   }
   return (
     <View style={styles.contentContainer}>
@@ -118,7 +118,7 @@ export default function FilterScreen({ closeBottomSheet }) {
         <Slider
           style={{ width: 250, height: 40, alignSelf: "center" }}
           minimumValue={0}
-          maximumValue={50}
+          maximumValue={25}
           value={sliderValue}
           onValueChange={(value) => setSliderValue(value)}
           onSlidingComplete={(value) => console.log(value + " is chosen")}

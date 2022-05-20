@@ -16,7 +16,7 @@ import {
 } from "@expo/vector-icons";
 import RestaurantItem from "../../components/RestaurantItem/RestaurantItem";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { ScrollView } from "react-native-gesture-handler";
+import defaultImage from "../../../assets/images/foodee_default_img.jpg";
 
 const USER = userData[0];
 
@@ -47,10 +47,14 @@ export default function Restaurant() {
   return (
     <View style={styles.restaurantScreen}>
       <View style={styles.restaurantImageContainer}>
-        <Image
-          style={styles.restaurantImage}
-          source={{ uri: restaurant.image }}
-        />
+        {restaurant.image !== "" ? (
+          <Image
+            style={styles.restaurantImage}
+            source={{ uri: restaurant.image }}
+          />
+        ) : (
+          <Image style={styles.restaurantImage} source={defaultImage} />
+        )}
         <Ionicons
           onPress={() => navigation.goBack()}
           style={styles.backButton}
@@ -93,7 +97,7 @@ export default function Restaurant() {
         </View>
         <View style={styles.ratingContainer}>
           <Text style={styles.rating}>{restaurant.rating}</Text>
-          {/* <AntDesign name="star" size={29} color={"#FFC700"} /> */}
+          <AntDesign name="star" size={29} color={"#FFC700"} />
         </View>
       </View>
 
