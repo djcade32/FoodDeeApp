@@ -13,8 +13,22 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 const CustomMarker = ({ data }) => {
   const navigation = useNavigation();
 
+  const restaurantDistance = (data.distance * 0.000621371192).toFixed(1);
+
+  const restaurantData = {
+    id: data.id,
+    name: data.name,
+    image: data.image_url,
+    address:
+      data.location.display_address[0] + " " + data.location.display_address[1],
+    distance: restaurantDistance,
+    cuisine: data.categories[0].title,
+    rating: data.rating,
+    cost: data.price,
+  };
+
   function onPress() {
-    navigation.navigate("RestaurantScreen", { id: data.id });
+    navigation.navigate("RestaurantScreen", restaurantData);
   }
 
   let icon = null;
