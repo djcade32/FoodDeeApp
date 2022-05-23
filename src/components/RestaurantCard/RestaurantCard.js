@@ -10,7 +10,6 @@ const RestaurantCard = (props) => {
   const restaurantDistance = (
     props.restaurant.item.distance * 0.000621371192
   ).toFixed(1);
-  console.log(props.restaurant.item.name);
   const restaurantData = {
     id: props.restaurant.item?.id,
     name: props.restaurant.item?.name,

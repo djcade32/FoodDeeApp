@@ -16,7 +16,7 @@ import FilterScreen from "../Home/FilterScreen/FilterScreen";
 
 export default function Search() {
   const [fetchedRestaurants, setfetchedRestaurants] = useState([]);
-  const [fetchLimit, setFetchLimit] = useState(5);
+  const [fetchLimit, setFetchLimit] = useState(50);
   const [fetchTotal, setFetchTotal] = useState(null);
   const { width, height } = useWindowDimensions();
   const [isViewModeList, setIsViewModeList] = useState(true);
@@ -65,13 +65,13 @@ export default function Search() {
         config
       );
       const json = await response.json();
-      // setfetchedRestaurants(json.businesses);
+      console.log(json.total);
       if (fetchedRestaurants.length === 0) {
         setfetchedRestaurants(json.businesses);
       } else {
         setfetchedRestaurants((previousState) => [
           ...previousState,
-          json.businesses,
+          ...json.businesses,
         ]);
       }
 
@@ -83,11 +83,11 @@ export default function Search() {
     }
   };
 
-  const fetchMoreRestaurants = async () => {
+  function fetchMoreRestaurants() {
     console.log("End Reached");
-    await fetchRestaurants(fetchLimit, fetchLimit);
+    fetchRestaurants(fetchLimit, fetchedRestaurants.length);
     return;
-  };
+  }
 
   useEffect(() => {
     if (fetchedRestaurants.length === 0 && userLocation) {
@@ -153,6 +153,7 @@ export default function Search() {
           ))}
         </MapView>
       )}
+
       <BottomSheet
         ref={bottomSheetRef}
         index={0}
@@ -160,6 +161,7 @@ export default function Search() {
         enableContentPanningGesture={false}
         enableHandlePanningGesture={false}
         handleIndicatorStyle={{ width: "0%" }}
+        bottomInset={-50}
       >
         <FilterScreen
           closeBottomSheet={() => bottomSheetRef.current?.close()}

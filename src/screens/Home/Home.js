@@ -31,7 +31,8 @@ const Home = () => {
   const [userLocation, setUserLocation] = useState(null);
 
   const bottomSheetRef = useRef(null);
-  const snapPoints = useMemo(() => ["1", "100%"], []);
+
+  const snapPoints = useMemo(() => ["1%", "100%"], []);
 
   function handleViewType() {
     setIsViewModeList(!isViewModeList);
@@ -104,10 +105,10 @@ const Home = () => {
             longitudeDelta: 0.07,
           }}
         >
-          <SearchBar style={SEARCH_BAR_STYLES} placeHolderText={"Search"} />
+          {/* <SearchBar style={SEARCH_BAR_STYLES} placeHolderText={"Search"} />
           {USER.restaurants.map((restaurant) => (
             <CustomMarker key={restaurant.id} data={restaurant} />
-          ))}
+          ))} */}
         </MapView>
       )}
       <BottomSheet
@@ -117,6 +118,7 @@ const Home = () => {
         enableContentPanningGesture={false}
         enableHandlePanningGesture={false}
         handleIndicatorStyle={{ width: "0%" }}
+        bottomInset={-50}
       >
         <FilterScreen
           closeBottomSheet={() => bottomSheetRef.current?.close()}
