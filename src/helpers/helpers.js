@@ -198,3 +198,34 @@ export function getCuisineIcon(categoryList) {
   }
   return icon;
 }
+
+export function getApiCategory(cuisine) {
+  switch (cuisine) {
+    case "American":
+      return "newamerican, tradamerican, southern, burgers, barbeque, hotdogs, sandwiches, fishnchips";
+    case "Bakery":
+      return "bakeries";
+    case "Cafe":
+      return "cafes, coffee";
+    case "German":
+      return "german";
+    case "Italian":
+      return "italian, pizza";
+    case "Mexican":
+      return "mexican, tacos";
+    case "Mediterranean":
+      return "mediterranean, mideastern, lebanese, egyptian";
+    case "Chinese":
+      return "chinese";
+    case "Japanese":
+      return "japanese, conveyorsushi, sushi";
+    case "Thai":
+      return "thai";
+    case "Vietnamese":
+      return "vietnamese, bubbletea";
+    case "Irish":
+      return "irish, irish_pubs";
+    default:
+      break;
+  }
+}

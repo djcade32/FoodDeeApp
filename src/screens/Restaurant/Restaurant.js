@@ -25,9 +25,7 @@ const USER = userData[0];
 export default function Restaurant() {
   const navigation = useNavigation();
   const route = useRoute();
-  // const id = route.params?.id;
   const restaurant = route.params;
-  console.log(restaurant.cuisine);
   const [badgeStatus, setBadgeStatus] = useState(USER.restaurants[1].status);
 
   function handleBadgePress(badgeType) {

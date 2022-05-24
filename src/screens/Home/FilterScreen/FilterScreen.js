@@ -4,10 +4,17 @@ import styles from "./styles";
 import SelectDropdown from "react-native-select-dropdown";
 import { Entypo } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
+import { getApiCategory } from "../../../helpers/helpers";
 
-export default function FilterScreen({ closeBottomSheet, setFilterConfig }) {
+export default function FilterScreen({
+  closeBottomSheet,
+  setFilterConfig,
+  filterTrigger,
+  filterConfigRef,
+}) {
   const selectDropdownRef = useRef(null);
   const CUISINES = [
+    "None",
     "American",
     "Italian",
     "Japanese",
@@ -25,32 +32,48 @@ export default function FilterScreen({ closeBottomSheet, setFilterConfig }) {
   CUISINES.sort();
 
   let filterConfig = {
-    categories: "",
-    distanceRadius: "",
-    try: false,
-    tried: false,
+    categories: filterConfigRef?.categories,
+    distanceRadius: filterConfigRef?.distanceRadius,
+    try: filterConfigRef?.try,
+    tried: filterConfigRef?.tried,
   };
 
   const [isTryEnabled, setIsTryEnabled] = useState(false);
   const [isTriedEnabled, setIsTriedEnabled] = useState(false);
+  const [filterConfigCopy, setFilterConfigCopy] = useState(filterConfig);
 
   function toggleSwitch(e) {
     if (e === "Try") {
       if (isTriedEnabled && !isTryEnabled) {
-        filterConfig.try = true;
+        setFilterConfigCopy((prevState) => ({
+          ...prevState,
+          ...{ try: true, tried: false },
+        }));
         setIsTryEnabled(true);
         setIsTriedEnabled(false);
       } else {
-        filterConfig.try = !isTryEnabled;
+        setFilterConfigCopy((prevState) => ({
+          ...prevState,
+          ...{ try: !isTryEnabled },
+        }));
+        // filterConfig.try = !isTryEnabled;
         setIsTryEnabled(!isTryEnabled);
       }
     } else {
       if (isTryEnabled && !isTriedEnabled) {
-        filterConfig.tried = true;
+        setFilterConfigCopy((prevState) => ({
+          ...prevState,
+          ...{ tried: true, try: false },
+        }));
+        // filterConfig.tried = true;
         setIsTriedEnabled(true);
         setIsTryEnabled(false);
       } else {
-        filterConfig.tried = !isTriedEnabled;
+        setFilterConfigCopy((prevState) => ({
+          ...prevState,
+          ...{ tried: !isTriedEnabled },
+        }));
+        // filterConfig.tried = !isTriedEnabled;
         setIsTriedEnabled(!isTriedEnabled);
       }
     }
@@ -59,6 +82,13 @@ export default function FilterScreen({ closeBottomSheet, setFilterConfig }) {
   const [sliderValue, setSliderValue] = useState(25);
 
   function handleClearFiltersPress() {
+    filterConfig = {
+      categories: "",
+      distanceRadius: "",
+      try: false,
+      tried: false,
+    };
+    setFilterConfigCopy(filterConfig);
     setIsTryEnabled(false);
     setIsTriedEnabled(false);
     selectDropdownRef.current?.reset();
@@ -108,12 +138,16 @@ export default function FilterScreen({ closeBottomSheet, setFilterConfig }) {
           buttonStyle={styles.dropDown}
           data={CUISINES}
           onSelect={(selectedItem, index) => {
-            console.log(selectedItem, index);
+            // console.log(getApiCategory(selectedItem));
+            // filterConfig.categories = getApiCategory(selectedItem);
+            setFilterConfigCopy((prevState) => ({
+              ...prevState,
+              ...{ categories: getApiCategory(selectedItem) },
+            }));
           }}
           buttonTextAfterSelection={(selectedItem, index) => {
             // text represented after item is selected
             // if data array is an array of objects then return selectedItem.property to render after item is selected
-            filterConfig.categories = selectedItem;
             return selectedItem;
           }}
           rowTextForSelection={(item, index) => {
@@ -141,9 +175,19 @@ export default function FilterScreen({ closeBottomSheet, setFilterConfig }) {
           value={sliderValue}
           onValueChange={(value) => {
             setSliderValue(value);
-            filterConfig.distanceRadius = value;
           }}
-          onSlidingComplete={(value) => console.log(value + " is chosen")}
+          onSlidingComplete={(value) => {
+            console.log(value + " is chosen");
+            let milesToMeters = (value * 1609.344).toFixed(0);
+            if (milesToMeters > 40000) {
+              milesToMeters = 40000;
+            }
+            // filterConfig.distanceRadius = milesToMeters;
+            setFilterConfigCopy((prevState) => ({
+              ...prevState,
+              ...{ distanceRadius: milesToMeters },
+            }));
+          }}
           step={1}
           minimumTrackTintColor="#FF9A62"
           maximumTrackTintColor="#D6D6D6"
@@ -159,7 +203,9 @@ export default function FilterScreen({ closeBottomSheet, setFilterConfig }) {
 
       <TouchableOpacity
         onPress={() => {
-          setFilterConfig(filterConfig);
+          console.log(filterConfigCopy);
+          setFilterConfig(filterConfigCopy);
+          filterTrigger(true);
           closeBottomSheet();
         }}
         activeOpacity={0.5}

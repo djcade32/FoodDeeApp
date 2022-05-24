@@ -18,8 +18,10 @@ export default function Search() {
   const FETCH_LIMIT = 50;
 
   const [fetchedRestaurants, setfetchedRestaurants] = useState([]);
+  const [fetchedTotal, setFetchedTotal] = useState(0);
+  const [filterAdded, setFilterAdded] = useState(false);
   const [filterConfig, setFilterConfig] = useState({
-    categories: "newamerican",
+    categories: "",
     distanceRadius: "",
     try: false,
     tried: false,
@@ -67,7 +69,7 @@ export default function Search() {
           limit +
           "&sort_by=distance&categories=" +
           filterConfig.categories +
-          "&" +
+          "&radius=" +
           filterConfig.distanceRadius +
           "&offset=" +
           offset +
@@ -75,9 +77,12 @@ export default function Search() {
         config
       );
       const json = await response.json();
-
-      if (fetchedRestaurants.length === 0) {
+      setFetchedTotal(json.total);
+      if (fetchedRestaurants.length === 0 || filterAdded) {
         setfetchedRestaurants(json.businesses);
+        if (filterAdded) {
+          setFilterAdded(false);
+        }
       } else {
         setfetchedRestaurants((previousState) => [
           ...previousState,
@@ -95,7 +100,9 @@ export default function Search() {
 
   function fetchMoreRestaurants() {
     console.log("End Reached");
-    fetchRestaurants(FETCH_LIMIT, fetchedRestaurants.length);
+    if (fetchedRestaurants.length !== fetchedTotal) {
+      fetchRestaurants(FETCH_LIMIT, fetchedRestaurants.length);
+    }
     return;
   }
 
@@ -106,10 +113,12 @@ export default function Search() {
   }, [userLocation]);
 
   useEffect(() => {
-    if (fetchedRestaurants.length > 0) {
+    console.log("Filter Added");
+    if (filterAdded) {
+      console.log("Inside Filter effect if statement");
       fetchRestaurants(FETCH_LIMIT, 0);
     }
-  }, [filterConfig]);
+  }, [filterAdded]);
 
   function handleViewType() {
     setIsViewModeList(!isViewModeList);
@@ -182,6 +191,8 @@ export default function Search() {
         <FilterScreen
           closeBottomSheet={() => bottomSheetRef.current?.close()}
           setFilterConfig={setFilterConfig}
+          filterTrigger={setFilterAdded}
+          filterConfigRef={filterConfig}
         />
       </BottomSheet>
     </View>
