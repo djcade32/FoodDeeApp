@@ -5,17 +5,31 @@ import SelectDropdown from "react-native-select-dropdown";
 import { Entypo } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
 
-export default function FilterScreen({ closeBottomSheet }) {
+export default function FilterScreen({ closeBottomSheet, setFilterConfig }) {
   const selectDropdownRef = useRef(null);
   const CUISINES = [
-    "None",
     "American",
     "Italian",
     "Japanese",
-    "Spanish",
+    "Mexican",
     "Chinese",
     "Mediterranean",
+    "Irish",
+    "Vietnamese",
+    "French",
+    "Bakery",
+    "German",
+    "Thai",
+    "Cafe",
   ];
+  CUISINES.sort();
+
+  let filterConfig = {
+    categories: "",
+    distanceRadius: "",
+    try: false,
+    tried: false,
+  };
 
   const [isTryEnabled, setIsTryEnabled] = useState(false);
   const [isTriedEnabled, setIsTriedEnabled] = useState(false);
@@ -23,16 +37,20 @@ export default function FilterScreen({ closeBottomSheet }) {
   function toggleSwitch(e) {
     if (e === "Try") {
       if (isTriedEnabled && !isTryEnabled) {
+        filterConfig.try = true;
         setIsTryEnabled(true);
         setIsTriedEnabled(false);
       } else {
+        filterConfig.try = !isTryEnabled;
         setIsTryEnabled(!isTryEnabled);
       }
     } else {
       if (isTryEnabled && !isTriedEnabled) {
+        filterConfig.tried = true;
         setIsTriedEnabled(true);
         setIsTryEnabled(false);
       } else {
+        filterConfig.tried = !isTriedEnabled;
         setIsTriedEnabled(!isTriedEnabled);
       }
     }
@@ -95,6 +113,7 @@ export default function FilterScreen({ closeBottomSheet }) {
           buttonTextAfterSelection={(selectedItem, index) => {
             // text represented after item is selected
             // if data array is an array of objects then return selectedItem.property to render after item is selected
+            filterConfig.categories = selectedItem;
             return selectedItem;
           }}
           rowTextForSelection={(item, index) => {
@@ -120,7 +139,10 @@ export default function FilterScreen({ closeBottomSheet }) {
           minimumValue={0}
           maximumValue={25}
           value={sliderValue}
-          onValueChange={(value) => setSliderValue(value)}
+          onValueChange={(value) => {
+            setSliderValue(value);
+            filterConfig.distanceRadius = value;
+          }}
           onSlidingComplete={(value) => console.log(value + " is chosen")}
           step={1}
           minimumTrackTintColor="#FF9A62"
@@ -136,7 +158,10 @@ export default function FilterScreen({ closeBottomSheet }) {
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={closeBottomSheet}
+        onPress={() => {
+          setFilterConfig(filterConfig);
+          closeBottomSheet();
+        }}
         activeOpacity={0.5}
         style={styles.filterButtonContainer}
       >

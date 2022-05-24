@@ -18,6 +18,12 @@ export default function Search() {
   const FETCH_LIMIT = 50;
 
   const [fetchedRestaurants, setfetchedRestaurants] = useState([]);
+  const [filterConfig, setFilterConfig] = useState({
+    categories: "newamerican",
+    distanceRadius: "",
+    try: false,
+    tried: false,
+  });
   const { width, height } = useWindowDimensions();
   const [isViewModeList, setIsViewModeList] = useState(true);
   const [userLocation, setUserLocation] = useState(null);
@@ -59,7 +65,11 @@ export default function Search() {
           userLocation?.longitude +
           "&limit=" +
           limit +
-          "&sort_by=distance&offset=" +
+          "&sort_by=distance&categories=" +
+          filterConfig.categories +
+          "&" +
+          filterConfig.distanceRadius +
+          "&offset=" +
           offset +
           "",
         config
@@ -80,7 +90,6 @@ export default function Search() {
       console.error("Can't fetch restaurants: " + error);
     } finally {
       console.log("Done fetching restaurants");
-      // console.log(json.businesses);
     }
   };
 
@@ -95,6 +104,12 @@ export default function Search() {
       fetchRestaurants(FETCH_LIMIT, 0);
     }
   }, [userLocation]);
+
+  useEffect(() => {
+    if (fetchedRestaurants.length > 0) {
+      fetchRestaurants(FETCH_LIMIT, 0);
+    }
+  }, [filterConfig]);
 
   function handleViewType() {
     setIsViewModeList(!isViewModeList);
@@ -166,6 +181,7 @@ export default function Search() {
       >
         <FilterScreen
           closeBottomSheet={() => bottomSheetRef.current?.close()}
+          setFilterConfig={setFilterConfig}
         />
       </BottomSheet>
     </View>
