@@ -6,10 +6,13 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import defaultImage from "../../../assets/images/foodee_default_img.jpg";
 
+import { getCuisine } from "../../helpers/helpers";
+
 const RestaurantCard = (props) => {
   const restaurantDistance = (
     props.restaurant.item.distance * 0.000621371192
   ).toFixed(1);
+
   const restaurantData = {
     id: props.restaurant.item?.id,
     name: props.restaurant.item?.name,
@@ -19,7 +22,7 @@ const RestaurantCard = (props) => {
       " " +
       props.restaurant.item.location?.display_address[1],
     distance: restaurantDistance,
-    cuisine: props.restaurant.item?.categories[0].title,
+    cuisine: getCuisine(props.restaurant.item.categories),
     rating: props.restaurant.item?.rating,
     cost: props.restaurant.item?.price,
   };
@@ -27,10 +30,6 @@ const RestaurantCard = (props) => {
   const navigation = useNavigation();
   // const [badgeStatus, setBadgeStatus] = useState(props.restaurant.status);
   const [badgeStatus, setBadgeStatus] = useState();
-
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
 
   function onPress() {
     navigation.navigate("RestaurantScreen", restaurantData);

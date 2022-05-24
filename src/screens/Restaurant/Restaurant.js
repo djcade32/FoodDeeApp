@@ -18,6 +18,8 @@ import RestaurantItem from "../../components/RestaurantItem/RestaurantItem";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import defaultImage from "../../../assets/images/foodee_default_img.jpg";
 
+import { getCuisine } from "../../helpers/helpers";
+
 const USER = userData[0];
 
 export default function Restaurant() {
@@ -25,7 +27,7 @@ export default function Restaurant() {
   const route = useRoute();
   // const id = route.params?.id;
   const restaurant = route.params;
-
+  console.log(restaurant.cuisine);
   const [badgeStatus, setBadgeStatus] = useState(USER.restaurants[1].status);
 
   function handleBadgePress(badgeType) {
@@ -55,13 +57,12 @@ export default function Restaurant() {
         ) : (
           <Image style={styles.restaurantImage} source={defaultImage} />
         )}
-        <Ionicons
-          onPress={() => navigation.goBack()}
+        <Pressable
           style={styles.backButton}
-          name="arrow-back"
-          size={35}
-          color="white"
-        />
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="arrow-back" size={35} color="white" />
+        </Pressable>
         <View style={styles.iconContainer}>
           <Pressable onPress={() => handleBadgePress("tryBadge")}>
             <MaterialCommunityIcons

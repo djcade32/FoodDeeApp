@@ -15,9 +15,9 @@ import BottomSheet from "@gorhom/bottom-sheet";
 import FilterScreen from "../Home/FilterScreen/FilterScreen";
 
 export default function Search() {
+  const FETCH_LIMIT = 50;
+
   const [fetchedRestaurants, setfetchedRestaurants] = useState([]);
-  const [fetchLimit, setFetchLimit] = useState(50);
-  const [fetchTotal, setFetchTotal] = useState(null);
   const { width, height } = useWindowDimensions();
   const [isViewModeList, setIsViewModeList] = useState(true);
   const [userLocation, setUserLocation] = useState(null);
@@ -65,7 +65,7 @@ export default function Search() {
         config
       );
       const json = await response.json();
-      console.log(json.total);
+
       if (fetchedRestaurants.length === 0) {
         setfetchedRestaurants(json.businesses);
       } else {
@@ -80,18 +80,19 @@ export default function Search() {
       console.error("Can't fetch restaurants: " + error);
     } finally {
       console.log("Done fetching restaurants");
+      // console.log(json.businesses);
     }
   };
 
   function fetchMoreRestaurants() {
     console.log("End Reached");
-    fetchRestaurants(fetchLimit, fetchedRestaurants.length);
+    fetchRestaurants(FETCH_LIMIT, fetchedRestaurants.length);
     return;
   }
 
   useEffect(() => {
     if (fetchedRestaurants.length === 0 && userLocation) {
-      fetchRestaurants(fetchLimit, 0);
+      fetchRestaurants(FETCH_LIMIT, 0);
     }
   }, [userLocation]);
 

@@ -10,6 +10,8 @@ import {
 } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
+import { getCuisine, getCuisineIcon } from "../../helpers/helpers";
+
 const CustomMarker = ({ data }) => {
   const navigation = useNavigation();
 
@@ -22,7 +24,7 @@ const CustomMarker = ({ data }) => {
     address:
       data.location.display_address[0] + " " + data.location.display_address[1],
     distance: restaurantDistance,
-    cuisine: data.categories[0].title,
+    cuisine: getCuisine(data.categories),
     rating: data.rating,
     cost: data.price,
   };
@@ -31,31 +33,8 @@ const CustomMarker = ({ data }) => {
     navigation.navigate("RestaurantScreen", restaurantData);
   }
 
-  let icon = null;
-  switch (data.categories[0].title) {
-    case "American":
-      icon = <FontAwesome5 name="hamburger" size={24} color="white" />;
-      break;
-    case "Cafe":
-      icon = <Ionicons name="cafe" size={24} color="white" />;
-      break;
-    case "Italian":
-      icon = <Ionicons name="pizza" size={24} color="white" />;
-      break;
-    case "Japanese" || "Asain":
-      icon = <MaterialCommunityIcons name="rice" size={24} color="white" />;
-      break;
+  const icon = getCuisineIcon(data.categories);
 
-    default:
-      icon = (
-        <MaterialCommunityIcons
-          name="silverware-fork-knife"
-          size={24}
-          color="white"
-        />
-      );
-      break;
-  }
   return (
     <Marker
       tappable={false}
