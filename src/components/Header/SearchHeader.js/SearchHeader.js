@@ -12,7 +12,8 @@ const SearchHeader = ({
   viewTypeHandler,
   filterHandler,
   placeHolderText,
-  searchValue,
+  setSearchValue,
+  setIsSearching,
 }) => {
   const [isMapIcon, setIsMapIcon] = useState(true);
   return (
@@ -20,7 +21,8 @@ const SearchHeader = ({
       <SearchBar
         style={SEARCH_BAR_STYLES}
         placeHolderText={"Search on FooDee"}
-        setSearchValue={searchValue}
+        setSearchValue={setSearchValue}
+        setIsSearching={setIsSearching}
       />
       <View style={styles.iconContainer}>
         <TouchableOpacity
