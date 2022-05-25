@@ -203,7 +203,6 @@ export default function FilterScreen({
 
       <TouchableOpacity
         onPress={() => {
-          console.log(filterConfigCopy);
           setFilterConfig(filterConfigCopy);
           filterTrigger(true);
           closeBottomSheet();

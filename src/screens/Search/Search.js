@@ -29,6 +29,7 @@ export default function Search() {
   const { width, height } = useWindowDimensions();
   const [isViewModeList, setIsViewModeList] = useState(true);
   const [userLocation, setUserLocation] = useState(null);
+  const [searchValue, setSearchValue] = useState("");
   const bottomSheetRef = useRef(null);
 
   const snapPoints = useMemo(() => ["1%", "100%"], []);
@@ -113,6 +114,12 @@ export default function Search() {
   }, [userLocation]);
 
   useEffect(() => {
+    if (searchValue !== "") {
+      console.log("Search value: " + searchValue);
+    }
+  }, [searchValue]);
+
+  useEffect(() => {
     console.log("Filter Added");
     if (filterAdded) {
       console.log("Inside Filter effect if statement");
@@ -133,6 +140,7 @@ export default function Search() {
       <SearchHeader
         viewTypeHandler={handleViewType}
         filterHandler={filterHandler}
+        searchValue={setSearchValue}
       />
       {fetchedRestaurants.length === 0 && (
         <View
