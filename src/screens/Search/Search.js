@@ -29,6 +29,7 @@ export default function Search() {
   const { width, height } = useWindowDimensions();
   const [isViewModeList, setIsViewModeList] = useState(true);
   const [userLocation, setUserLocation] = useState(null);
+  const [searchValue, setSearchValue] = useState("");
   const bottomSheetRef = useRef(null);
 
   const snapPoints = useMemo(() => ["1%", "100%"], []);
@@ -61,7 +62,9 @@ export default function Search() {
     console.log("Running fetch function");
     try {
       const response = await fetch(
-        "https://api.yelp.com/v3/businesses/search?term=restaurants&latitude=" +
+        "https://api.yelp.com/v3/businesses/search?term=" +
+          searchValue +
+          "&latitude=" +
           userLocation?.latitude +
           "&longitude=" +
           userLocation?.longitude +
@@ -77,8 +80,15 @@ export default function Search() {
         config
       );
       const json = await response.json();
+      console.log(json.total);
+      console.log("restaurants state: " + fetchedRestaurants);
       setFetchedTotal(json.total);
-      if (fetchedRestaurants.length === 0 || filterAdded) {
+      if (
+        fetchedRestaurants.length === 0 ||
+        filterAdded ||
+        searchValue !== ""
+      ) {
+        console.log("Clearing fetched restaurants state");
         setfetchedRestaurants(json.businesses);
         if (filterAdded) {
           setFilterAdded(false);
@@ -107,10 +117,23 @@ export default function Search() {
   }
 
   useEffect(() => {
+    console.log("user location use effect");
     if (fetchedRestaurants.length === 0 && userLocation) {
       fetchRestaurants(FETCH_LIMIT, 0);
     }
   }, [userLocation]);
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      console.log(searchValue);
+      // if (searchValue === "") {
+      //   setfetchedRestaurants([]);
+      // }
+      fetchRestaurants(FETCH_LIMIT, 0);
+    }, 1000);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchValue]);
 
   useEffect(() => {
     console.log("Filter Added");
@@ -133,6 +156,7 @@ export default function Search() {
       <SearchHeader
         viewTypeHandler={handleViewType}
         filterHandler={filterHandler}
+        setSearchValue={setSearchValue}
       />
       {fetchedRestaurants.length === 0 && (
         <View
