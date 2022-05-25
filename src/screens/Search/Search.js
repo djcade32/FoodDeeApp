@@ -30,6 +30,9 @@ export default function Search() {
   const [isViewModeList, setIsViewModeList] = useState(true);
   const [userLocation, setUserLocation] = useState(null);
   const bottomSheetRef = useRef(null);
+  const [searchValue, setSearchValue] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  const [endIsReached, setEndIsReached] = useState(false);
 
   const snapPoints = useMemo(() => ["1%", "100%"], []);
 
@@ -61,7 +64,9 @@ export default function Search() {
     console.log("Running fetch function");
     try {
       const response = await fetch(
-        "https://api.yelp.com/v3/businesses/search?term=restaurants&latitude=" +
+        "https://api.yelp.com/v3/businesses/search?term=restaurant " +
+          searchValue +
+          "&latitude=" +
           userLocation?.latitude +
           "&longitude=" +
           userLocation?.longitude +
@@ -83,6 +88,10 @@ export default function Search() {
         if (filterAdded) {
           setFilterAdded(false);
         }
+      } else if (isSearching && !endIsReached) {
+        console.log("in correct if statement");
+        setfetchedRestaurants(json.businesses);
+        setIsSearching(false);
       } else {
         setfetchedRestaurants((previousState) => [
           ...previousState,
@@ -101,10 +110,27 @@ export default function Search() {
   function fetchMoreRestaurants() {
     console.log("End Reached");
     if (fetchedRestaurants.length !== fetchedTotal) {
+      setEndIsReached(true);
       fetchRestaurants(FETCH_LIMIT, fetchedRestaurants.length);
     }
     return;
   }
+
+  useEffect(() => {
+    console.log("Search Use Effect");
+    if (isSearching) {
+      console.log("inside search if statemnt");
+      setEndIsReached(false);
+      const delayDebounceFn = setTimeout(() => {
+        if (searchValue === "") {
+          setfetchedRestaurants([]);
+        }
+        fetchRestaurants(FETCH_LIMIT, 0);
+      }, 1000);
+
+      return () => clearTimeout(delayDebounceFn);
+    }
+  }, [searchValue]);
 
   useEffect(() => {
     if (fetchedRestaurants.length === 0 && userLocation) {
@@ -133,6 +159,8 @@ export default function Search() {
       <SearchHeader
         viewTypeHandler={handleViewType}
         filterHandler={filterHandler}
+        setSearchValue={setSearchValue}
+        setIsSearching={setIsSearching}
       />
       {fetchedRestaurants.length === 0 && (
         <View
