@@ -13,10 +13,10 @@ import CustomMarker from "../../components/CustomMarker";
 import * as Location from "expo-location";
 import BottomSheet from "@gorhom/bottom-sheet";
 import FilterScreen from "../Home/FilterScreen/FilterScreen";
+import styles from "./styles";
 
 export default function Search() {
   const FETCH_LIMIT = 50;
-
   const [fetchedRestaurants, setfetchedRestaurants] = useState([]);
   const [fetchedTotal, setFetchedTotal] = useState(0);
   const [filterAdded, setFilterAdded] = useState(false);
@@ -33,7 +33,6 @@ export default function Search() {
   const bottomSheetRef = useRef(null);
   const [isSearching, setIsSearching] = useState(false);
   const [endIsReached, setEndIsReached] = useState(false);
-
   const snapPoints = useMemo(() => ["1%", "100%"], []);
 
   useEffect(() => {
@@ -119,7 +118,6 @@ export default function Search() {
   useEffect(() => {
     console.log("Search Use Effect");
     if (isSearching) {
-      console.log("inside search if statemnt");
       setEndIsReached(false);
       const delayDebounceFn = setTimeout(() => {
         if (searchValue === "") {
@@ -137,12 +135,6 @@ export default function Search() {
       fetchRestaurants(FETCH_LIMIT, 0);
     }
   }, [userLocation]);
-
-  useEffect(() => {
-    if (searchValue !== "") {
-      console.log("Search value: " + searchValue);
-    }
-  }, [searchValue]);
 
   useEffect(() => {
     console.log("Filter Added");
@@ -177,6 +169,7 @@ export default function Search() {
           }}
         >
           <ActivityIndicator size={35} color={"grey"} />
+          <Text style={styles.loadingText}>Fetching nearby restaurants</Text>
         </View>
       )}
       {isViewModeList ? (

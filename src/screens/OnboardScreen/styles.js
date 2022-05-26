@@ -26,7 +26,6 @@ export default StyleSheet.create({
   input: {
     fontFamily: "lato",
     fontSize: 18,
-    color: "#D6D6D6",
   },
   dropDown: {
     backgroundColor: "white",
@@ -48,10 +47,10 @@ export default StyleSheet.create({
     color: "white",
     textAlign: "center",
   },
-  signOutButton: {
-    marginTop: 30,
+  nextButton: {
+    marginTop: 50,
     textAlign: "center",
-    color: "#CCCCCC",
+    color: "#FF9A62",
     fontSize: 18,
     fontFamily: "lato",
   },

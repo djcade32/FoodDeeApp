@@ -1,0 +1,38 @@
+enum ItemType {
+  FOOD
+  DRINK
+}
+
+type Item @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  nam: String!
+  rating: String!
+  type: ItemType!
+}
+
+enum RestaurantStatus {
+  TRY
+  TRIED
+}
+
+type Restaurant @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  address: String!
+  cuisine: String!
+  status: RestaurantStatus!
+  image: String
+  cost: String!
+  rating: Float!
+  itemsID: [ID]
+}
+
+type User @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  gender: String!
+  birthday: String!
+  restaurantsID: [ID]
+  sub: String!
+  favoriteCuisine: String!
+}

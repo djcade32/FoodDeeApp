@@ -1,14 +1,6 @@
 import { ModelInit, MutableModel, PersistentModelConstructor } from "@aws-amplify/datastore";
 
-export enum ItemRatingOptions {
-  TERRIBLE = "TERRIBLE",
-  BAD = "BAD",
-  OK = "OK",
-  GOOD = "GOOD",
-  AMAZING = "AMAZING"
-}
-
-export enum ItemTypes {
+export enum ItemType {
   FOOD = "FOOD",
   DRINK = "DRINK"
 }
@@ -16,11 +8,6 @@ export enum ItemTypes {
 export enum RestaurantStatus {
   TRY = "TRY",
   TRIED = "TRIED"
-}
-
-export enum GenderOptions {
-  MALE = "MALE",
-  FEMALE = "FEMALE"
 }
 
 
@@ -39,14 +26,11 @@ type UserMetaData = {
 
 export declare class Item {
   readonly id: string;
-  readonly name: string;
-  readonly type: ItemTypes | keyof typeof ItemTypes;
-  readonly rating: ItemRatingOptions | keyof typeof ItemRatingOptions;
-  readonly Restaurant?: Restaurant | null;
-  readonly Users?: (User | null)[] | null;
+  readonly nam: string;
+  readonly rating: string;
+  readonly type: ItemType | keyof typeof ItemType;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  readonly itemRestaurantId?: string | null;
   constructor(init: ModelInit<Item, ItemMetaData>);
   static copyOf(source: Item, mutator: (draft: MutableModel<Item, ItemMetaData>) => MutableModel<Item, ItemMetaData> | void): Item;
 }
@@ -54,12 +38,13 @@ export declare class Item {
 export declare class Restaurant {
   readonly id: string;
   readonly name: string;
-  readonly cuisine: string;
   readonly address: string;
+  readonly cuisine: string;
+  readonly status: RestaurantStatus | keyof typeof RestaurantStatus;
   readonly image?: string | null;
   readonly cost: string;
   readonly rating: number;
-  readonly status?: RestaurantStatus | keyof typeof RestaurantStatus | null;
+  readonly itemsID?: (string | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Restaurant, RestaurantMetaData>);
@@ -69,11 +54,11 @@ export declare class Restaurant {
 export declare class User {
   readonly id: string;
   readonly name: string;
-  readonly gender: GenderOptions | keyof typeof GenderOptions;
+  readonly gender: string;
   readonly birthday: string;
+  readonly restaurantsID?: (string | null)[] | null;
+  readonly sub: string;
   readonly favoriteCuisine: string;
-  readonly itemID: string;
-  readonly RestaurantsID?: (string | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<User, UserMetaData>);

@@ -10,8 +10,15 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "name": {
-                    "name": "name",
+                "nam": {
+                    "name": "nam",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "rating": {
+                    "name": "rating",
                     "isArray": false,
                     "type": "String",
                     "isRequired": true,
@@ -21,47 +28,10 @@ export const schema = {
                     "name": "type",
                     "isArray": false,
                     "type": {
-                        "enum": "ItemTypes"
+                        "enum": "ItemType"
                     },
                     "isRequired": true,
                     "attributes": []
-                },
-                "rating": {
-                    "name": "rating",
-                    "isArray": false,
-                    "type": {
-                        "enum": "ItemRatingOptions"
-                    },
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "Restaurant": {
-                    "name": "Restaurant",
-                    "isArray": false,
-                    "type": {
-                        "model": "Restaurant"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "HAS_ONE",
-                        "associatedWith": "id",
-                        "targetName": "itemRestaurantId"
-                    }
-                },
-                "Users": {
-                    "name": "Users",
-                    "isArray": true,
-                    "type": {
-                        "model": "User"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "itemID"
-                    }
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -78,13 +48,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": [],
                     "isReadOnly": true
-                },
-                "itemRestaurantId": {
-                    "name": "itemRestaurantId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
                 }
             },
             "syncable": true,
@@ -129,6 +92,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "address": {
+                    "name": "address",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
                 "cuisine": {
                     "name": "cuisine",
                     "isArray": false,
@@ -136,10 +106,12 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "address": {
-                    "name": "address",
+                "status": {
+                    "name": "status",
                     "isArray": false,
-                    "type": "String",
+                    "type": {
+                        "enum": "RestaurantStatus"
+                    },
                     "isRequired": true,
                     "attributes": []
                 },
@@ -164,14 +136,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "status": {
-                    "name": "status",
-                    "isArray": false,
-                    "type": {
-                        "enum": "RestaurantStatus"
-                    },
+                "itemsID": {
+                    "name": "itemsID",
+                    "isArray": true,
+                    "type": "ID",
                     "isRequired": false,
-                    "attributes": []
+                    "attributes": [],
+                    "isArrayNullable": true
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -235,14 +206,27 @@ export const schema = {
                 "gender": {
                     "name": "gender",
                     "isArray": false,
-                    "type": {
-                        "enum": "GenderOptions"
-                    },
+                    "type": "String",
                     "isRequired": true,
                     "attributes": []
                 },
                 "birthday": {
                     "name": "birthday",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "restaurantsID": {
+                    "name": "restaurantsID",
+                    "isArray": true,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true
+                },
+                "sub": {
+                    "name": "sub",
                     "isArray": false,
                     "type": "String",
                     "isRequired": true,
@@ -254,21 +238,6 @@ export const schema = {
                     "type": "String",
                     "isRequired": true,
                     "attributes": []
-                },
-                "itemID": {
-                    "name": "itemID",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "RestaurantsID": {
-                    "name": "RestaurantsID",
-                    "isArray": true,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -295,15 +264,6 @@ export const schema = {
                     "properties": {}
                 },
                 {
-                    "type": "key",
-                    "properties": {
-                        "name": "byItem",
-                        "fields": [
-                            "itemID"
-                        ]
-                    }
-                },
-                {
                     "type": "auth",
                     "properties": {
                         "rules": [
@@ -323,18 +283,8 @@ export const schema = {
         }
     },
     "enums": {
-        "ItemRatingOptions": {
-            "name": "ItemRatingOptions",
-            "values": [
-                "TERRIBLE",
-                "BAD",
-                "OK",
-                "GOOD",
-                "AMAZING"
-            ]
-        },
-        "ItemTypes": {
-            "name": "ItemTypes",
+        "ItemType": {
+            "name": "ItemType",
             "values": [
                 "FOOD",
                 "DRINK"
@@ -346,15 +296,8 @@ export const schema = {
                 "TRY",
                 "TRIED"
             ]
-        },
-        "GenderOptions": {
-            "name": "GenderOptions",
-            "values": [
-                "MALE",
-                "FEMALE"
-            ]
         }
     },
     "nonModels": {},
-    "version": "bededc279fb25e831ff2422ab7a47a1f"
+    "version": "0d2ab80e1ed318b287d6b2f5e0989150"
 };

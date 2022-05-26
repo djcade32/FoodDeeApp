@@ -10,20 +10,14 @@ import React, { useState } from "react";
 import styles from "./styles";
 import SelectDropdown from "react-native-select-dropdown";
 import { Entypo } from "@expo/vector-icons";
-import { Auth, DataStore } from "aws-amplify";
-import { useAuthContext } from "../../contexts/AuthContext";
+import userData from "../../../assets/data/userData";
+import { DataStore } from "aws-amplify";
 import { User } from "../../models";
+import { useAuthContext } from "../../contexts/AuthContext";
 
-export default function Profile() {
-  const { dbUser, setDbUser } = useAuthContext();
-  const [editEnabled, setEditEnabled] = useState(false);
-  const [name, setName] = useState(dbUser.name);
-  const [gender, setGender] = useState(dbUser.gender);
-  const [birthday, setBirthday] = useState(dbUser.birthday);
-  const [favoriteCuisine, setFavoriteCuisine] = useState(
-    dbUser.favoriteCuisine
-  );
+const USER = userData[0];
 
+export default function OnboardScreen() {
   const GENDERS = ["Male", "Female", "Rather not say", "Other"];
   const CUISINES = [
     "American",
@@ -38,53 +32,50 @@ export default function Profile() {
     "Vietnamese",
     "Irish",
   ];
+  const [name, setName] = useState("");
+  const [gender, setGender] = useState("Male");
+  const [birthday, setBirthday] = useState();
+  const [favoriteCuisine, setFavoriteCuisine] = useState("None");
+  const { sub, setDbUser } = useAuthContext();
+
   CUISINES.sort();
 
-  async function handleButtonPress() {
-    if (editEnabled) {
-      await updateUser();
-    }
-    setEditEnabled(!editEnabled);
-  }
-
-  async function updateUser() {
-    console.log("fav cuisine: " + favoriteCuisine);
-
+  async function onNext() {
     try {
       const user = await DataStore.save(
-        User.copyOf(dbUser, (updated) => {
-          updated.name = name;
-          updated.gender = gender;
-          updated.birthday = birthday;
-          updated.favoriteCuisine = favoriteCuisine;
+        new User({
+          name,
+          gender,
+          birthday,
+          favoriteCuisine,
+          sub,
         })
       );
       console.log(user);
       setDbUser(user);
     } catch (e) {
+      console.log("Error creating user:");
       console.log(e);
     }
   }
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <View style={styles.profileHeaderContainer}>
-          <Text style={styles.headerText}>Profile</Text>
+          <Text style={styles.headerText}>
+            <Text style={{ color: "#FF9A62" }}>Foo</Text>Dee
+          </Text>
         </View>
 
         <View>
           <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>Name</Text>
             <TextInput
-              editable={editEnabled}
+              style={styles.input}
               onChangeText={(value) => setName(value)}
-              style={
-                editEnabled ? [styles.input, { color: "black" }] : styles.input
-              }
               placeholder="Name"
-            >
-              {name}
-            </TextInput>
+            ></TextInput>
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>Gender</Text>
@@ -93,10 +84,7 @@ export default function Profile() {
               renderDropdownIcon={() => (
                 <Entypo name="chevron-small-down" size={24} color="black" />
               )}
-              buttonTextStyle={
-                editEnabled ? [styles.input, { color: "black" }] : styles.input
-              }
-              disabled={!editEnabled}
+              buttonTextStyle={styles.input}
               buttonStyle={styles.dropDown}
               data={GENDERS}
               onSelect={(selectedItem) => {
@@ -107,15 +95,10 @@ export default function Profile() {
           <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>Birthday</Text>
             <TextInput
-              editable={editEnabled}
-              onChangeText={(value) => setBirthday(value)}
-              style={
-                editEnabled ? [styles.input, { color: "black" }] : styles.input
-              }
+              style={styles.input}
               placeholder="MM/DD/YYYY"
-            >
-              {birthday}
-            </TextInput>
+              onChangeText={(value) => setBirthday(value)}
+            ></TextInput>
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>Favorite cuisine</Text>
@@ -124,35 +107,18 @@ export default function Profile() {
               renderDropdownIcon={() => (
                 <Entypo name="chevron-small-down" size={24} color="black" />
               )}
-              buttonTextStyle={
-                editEnabled ? [styles.input, { color: "black" }] : styles.input
-              }
-              disabled={!editEnabled}
+              buttonTextStyle={styles.input}
               buttonStyle={styles.dropDown}
               data={CUISINES}
               onSelect={(selectedItem) => {
                 setFavoriteCuisine(selectedItem);
-                console.log(selectedItem);
               }}
             />
           </View>
         </View>
 
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={handleButtonPress}
-          style={
-            editEnabled
-              ? [styles.buttonContainer, { backgroundColor: "black" }]
-              : styles.buttonContainer
-          }
-        >
-          <Text style={styles.buttonText}>
-            {editEnabled ? "Save profile" : "Edit profile"}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.5} onPress={() => Auth.signOut()}>
-          <Text style={styles.signOutButton}>Sign out</Text>
+        <TouchableOpacity activeOpacity={0.5} onPress={() => onNext()}>
+          <Text style={styles.nextButton}>Next</Text>
         </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>

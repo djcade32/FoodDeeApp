@@ -13,6 +13,7 @@ import MapView, { Marker } from "react-native-maps";
 import CustomMarker from "../../components/CustomMarker";
 import * as Location from "expo-location";
 import BottomSheet from "@gorhom/bottom-sheet";
+import { useAuthContext } from "../../contexts/AuthContext";
 
 import FilterScreen from "./FilterScreen/FilterScreen";
 
@@ -26,6 +27,7 @@ const SEARCH_BAR_STYLES = {
 };
 
 const Home = () => {
+  const { dbUser } = useAuthContext();
   const { width, height } = useWindowDimensions();
   const [isViewModeList, setIsViewModeList] = useState(true);
   const [userLocation, setUserLocation] = useState(null);
