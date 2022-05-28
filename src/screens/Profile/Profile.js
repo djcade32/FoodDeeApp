@@ -40,6 +40,7 @@ export default function Profile() {
   ];
   CUISINES.sort();
 
+  // Determines if user is trying to edit profile or save profile
   async function handleButtonPress() {
     if (editEnabled) {
       await updateUser();
@@ -48,8 +49,6 @@ export default function Profile() {
   }
 
   async function updateUser() {
-    console.log("fav cuisine: " + favoriteCuisine);
-
     try {
       const user = await DataStore.save(
         User.copyOf(dbUser, (updated) => {
@@ -65,6 +64,15 @@ export default function Profile() {
       console.log(e);
     }
   }
+
+  // A work around that is used to update and sync Amplify's Cloud DB
+  useEffect(() => {
+    const subscription = DataStore.observe(User).subscribe(({ element }) => {
+      setDbUser(element);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={{ flex: 1, backgroundColor: "white" }}>
@@ -151,7 +159,7 @@ export default function Profile() {
             {editEnabled ? "Save profile" : "Edit profile"}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.5} onPress={() => Auth.signOut()}>
+        <TouchableOpacity activeOpacity={0.5} onPress={Auth.signOut}>
           <Text style={styles.signOutButton}>Sign out</Text>
         </TouchableOpacity>
       </View>

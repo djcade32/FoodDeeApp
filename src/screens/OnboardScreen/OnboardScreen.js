@@ -10,12 +10,9 @@ import React, { useState } from "react";
 import styles from "./styles";
 import SelectDropdown from "react-native-select-dropdown";
 import { Entypo } from "@expo/vector-icons";
-import userData from "../../../assets/data/userData";
 import { DataStore } from "aws-amplify";
 import { User } from "../../models";
 import { useAuthContext } from "../../contexts/AuthContext";
-
-const USER = userData[0];
 
 export default function OnboardScreen() {
   const GENDERS = ["Male", "Female", "Rather not say", "Other"];
@@ -40,6 +37,7 @@ export default function OnboardScreen() {
 
   CUISINES.sort();
 
+  // When user taps next button a new user is created
   async function onNext() {
     try {
       const user = await DataStore.save(
@@ -117,7 +115,7 @@ export default function OnboardScreen() {
           </View>
         </View>
 
-        <TouchableOpacity activeOpacity={0.5} onPress={() => onNext()}>
+        <TouchableOpacity activeOpacity={0.5} onPress={onNext}>
           <Text style={styles.nextButton}>Next</Text>
         </TouchableOpacity>
       </View>

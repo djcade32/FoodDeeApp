@@ -18,8 +18,7 @@ import awsconfig from "./src/aws-exports";
 import { withAuthenticator } from "aws-amplify-react-native";
 import AuthContextProvider from "./src/contexts/AuthContext";
 
-Amplify.configure(awsconfig);
-Amplify.Logger.LOG_LEVEL = "DEBUG";
+Amplify.configure({ ...awsconfig, Analytics: { disabled: true } });
 
 // Loading fonts
 function fetchFonts() {
