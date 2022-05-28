@@ -12,12 +12,12 @@ const RestaurantStatus = {
   "TRIED": "TRIED"
 };
 
-const { Item, Restaurant, User } = initSchema(schema);
+const { User, Item, Restaurant } = initSchema(schema);
 
 export {
-  Item,
-  Restaurant,
   User,
   ItemType,
-  RestaurantStatus
+  RestaurantStatus,
+  Item,
+  Restaurant
 };

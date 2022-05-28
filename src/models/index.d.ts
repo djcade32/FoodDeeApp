@@ -10,33 +10,16 @@ export enum RestaurantStatus {
   TRIED = "TRIED"
 }
 
-
-
-type ItemMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-}
-
-type RestaurantMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-}
-
-type UserMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-}
-
 export declare class Item {
-  readonly id: string;
-  readonly nam: string;
+  readonly id?: string | null;
+  readonly name?: string | null;
   readonly rating: string;
   readonly type: ItemType | keyof typeof ItemType;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-  constructor(init: ModelInit<Item, ItemMetaData>);
-  static copyOf(source: Item, mutator: (draft: MutableModel<Item, ItemMetaData>) => MutableModel<Item, ItemMetaData> | void): Item;
+  constructor(init: ModelInit<Item>);
 }
 
 export declare class Restaurant {
-  readonly id: string;
+  readonly id?: string | null;
   readonly name: string;
   readonly address: string;
   readonly cuisine: string;
@@ -44,11 +27,12 @@ export declare class Restaurant {
   readonly image?: string | null;
   readonly cost: string;
   readonly rating: number;
-  readonly itemsID?: (string | null)[] | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-  constructor(init: ModelInit<Restaurant, RestaurantMetaData>);
-  static copyOf(source: Restaurant, mutator: (draft: MutableModel<Restaurant, RestaurantMetaData>) => MutableModel<Restaurant, RestaurantMetaData> | void): Restaurant;
+  readonly itemsID?: (Item | null)[] | null;
+  constructor(init: ModelInit<Restaurant>);
+}
+
+type UserMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
 export declare class User {
@@ -59,6 +43,7 @@ export declare class User {
   readonly restaurantsID?: (string | null)[] | null;
   readonly sub: string;
   readonly favoriteCuisine: string;
+  readonly restaurants?: (Restaurant | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<User, UserMetaData>);
