@@ -36,6 +36,7 @@ export default function Search() {
 
   const snapPoints = useMemo(() => ["1%", "100%"], []);
 
+  // Ask user permission for location if not already granted
   useEffect(() => {
     async function getUserLocation() {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -52,6 +53,8 @@ export default function Search() {
     }
     getUserLocation();
   }, []);
+
+  // Config containing API Key for Yelp API
   const config = {
     headers: {
       Authorization:
@@ -107,6 +110,7 @@ export default function Search() {
     }
   };
 
+  // Fetch more restaurants if end of flat list is reached
   function fetchMoreRestaurants() {
     console.log("End Reached");
     if (fetchedRestaurants.length !== fetchedTotal) {
@@ -116,6 +120,14 @@ export default function Search() {
     return;
   }
 
+  // Fetch restaurants if user is filtering
+  useEffect(() => {
+    if (fetchedRestaurants.length === 0 && userLocation) {
+      fetchRestaurants(FETCH_LIMIT, 0);
+    }
+  }, [userLocation]);
+
+  // Allows restaurants to load as user is typing in search bar
   useEffect(() => {
     console.log("Search Use Effect");
     if (isSearching) {
@@ -132,18 +144,7 @@ export default function Search() {
     }
   }, [searchValue]);
 
-  useEffect(() => {
-    if (fetchedRestaurants.length === 0 && userLocation) {
-      fetchRestaurants(FETCH_LIMIT, 0);
-    }
-  }, [userLocation]);
-
-  useEffect(() => {
-    if (searchValue !== "") {
-      console.log("Search value: " + searchValue);
-    }
-  }, [searchValue]);
-
+  // Fetch restaurants if user is filtering
   useEffect(() => {
     console.log("Filter Added");
     if (filterAdded) {

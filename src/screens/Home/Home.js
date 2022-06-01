@@ -31,14 +31,17 @@ const Home = () => {
 
   const snapPoints = useMemo(() => ["1%", "100%"], []);
 
+  // Determines if view mode is map or list
   function handleViewType() {
     setIsViewModeList(!isViewModeList);
   }
 
+  // Opens bottom sheet
   function filterHandler() {
     bottomSheetRef.current?.expand();
   }
 
+  // Ask user permission for location if not already granted
   useEffect(() => {
     async function getUserLocation() {
       let { status } = await Location.requestForegroundPermissionsAsync();
