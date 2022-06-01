@@ -48,11 +48,4 @@ export default StyleSheet.create({
     color: "white",
     textAlign: "center",
   },
-  signOutButton: {
-    marginTop: 30,
-    textAlign: "center",
-    color: "#CCCCCC",
-    fontSize: 18,
-    fontFamily: "lato",
-  },
 });

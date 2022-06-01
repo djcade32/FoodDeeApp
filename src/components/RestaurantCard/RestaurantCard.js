@@ -26,6 +26,7 @@ const RestaurantCard = (props) => {
     rating: props.restaurant.item?.rating,
     cost: props.restaurant.item?.price,
   };
+
   const navigation = useNavigation();
   // const [badgeStatus, setBadgeStatus] = useState(props.restaurant.status);
   const [badgeStatus, setBadgeStatus] = useState();

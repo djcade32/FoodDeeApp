@@ -1,19 +1,19 @@
 {
   "staging": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-foodee-staging-12136-authRole",
-      "UnauthRoleArn": "arn:aws:iam::969827016454:role/amplify-foodee-staging-12136-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::969827016454:role/amplify-foodee-staging-12136-authRole",
+      "AuthRoleName": "amplify-fooddeeapp-staging-135801-authRole",
+      "UnauthRoleArn": "arn:aws:iam::969827016454:role/amplify-fooddeeapp-staging-135801-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::969827016454:role/amplify-fooddeeapp-staging-135801-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-foodee-staging-12136-deployment",
-      "UnauthRoleName": "amplify-foodee-staging-12136-unauthRole",
-      "StackName": "amplify-foodee-staging-12136",
-      "StackId": "arn:aws:cloudformation:us-east-1:969827016454:stack/amplify-foodee-staging-12136/304f44c0-dc92-11ec-9312-0a113c698723",
-      "AmplifyAppId": "d2ovv0lf96mxjh"
+      "DeploymentBucketName": "amplify-fooddeeapp-staging-135801-deployment",
+      "UnauthRoleName": "amplify-fooddeeapp-staging-135801-unauthRole",
+      "StackName": "amplify-fooddeeapp-staging-135801",
+      "StackId": "arn:aws:cloudformation:us-east-1:969827016454:stack/amplify-fooddeeapp-staging-135801/b26d0080-d77b-11ec-a155-125e8cda30d5",
+      "AmplifyAppId": "d353w671yh3i1w"
     },
     "categories": {
       "auth": {
-        "FooDee": {}
+        "FoodDeeApp": {}
       }
     }
   }

@@ -1,0 +1,52 @@
+enum ItemRatingOptions {
+  TERRIBLE
+  BAD
+  OK
+  GOOD
+  AMAZING
+}
+
+enum ItemTypes {
+  FOOD
+  DRINK
+}
+
+type Item @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  type: ItemTypes!
+  rating: ItemRatingOptions!
+  Restaurant: Restaurant @hasOne
+  Users: [User] @hasMany(indexName: "byItem", fields: ["id"])
+}
+
+enum RestaurantStatus {
+  TRY
+  TRIED
+}
+
+type Restaurant @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  cuisine: String!
+  address: String!
+  image: String
+  cost: String!
+  rating: Float!
+  status: RestaurantStatus
+}
+
+enum GenderOptions {
+  MALE
+  FEMALE
+}
+
+type User @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  gender: GenderOptions!
+  birthday: String!
+  favoriteCuisine: String!
+  itemID: ID! @index(name: "byItem")
+  RestaurantsID: [ID]
+}

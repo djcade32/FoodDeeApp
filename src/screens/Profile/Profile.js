@@ -10,69 +10,25 @@ import React, { useState } from "react";
 import styles from "./styles";
 import SelectDropdown from "react-native-select-dropdown";
 import { Entypo } from "@expo/vector-icons";
-import { Auth, DataStore } from "aws-amplify";
-import { useAuthContext } from "../../contexts/AuthContext";
-import { User } from "../../models";
+import userData from "../../../assets/data/userData";
+
+const USER = userData[0];
 
 export default function Profile() {
-  const { dbUser, setDbUser } = useAuthContext();
   const [editEnabled, setEditEnabled] = useState(false);
-  const [name, setName] = useState(dbUser.name);
-  const [gender, setGender] = useState(dbUser.gender);
-  const [birthday, setBirthday] = useState(dbUser.birthday);
-  const [favoriteCuisine, setFavoriteCuisine] = useState(
-    dbUser.favoriteCuisine
-  );
-
-  const GENDERS = ["Male", "Female", "Rather not say", "Other"];
+  const GENDERS = ["Male", "Female"];
   const CUISINES = [
     "American",
     "Italian",
     "Japanese",
-    "Mexican",
+    "Spanish",
     "Chinese",
     "Mediterranean",
-    "German",
-    "French",
-    "Thai",
-    "Vietnamese",
-    "Irish",
   ];
-  CUISINES.sort();
 
-  // Determines if user is trying to edit profile or save profile
-  async function handleButtonPress() {
-    if (editEnabled) {
-      await updateUser();
-    }
+  function handleButtonPress() {
     setEditEnabled(!editEnabled);
   }
-
-  async function updateUser() {
-    try {
-      const user = await DataStore.save(
-        User.copyOf(dbUser, (updated) => {
-          updated.name = name;
-          updated.gender = gender;
-          updated.birthday = birthday;
-          updated.favoriteCuisine = favoriteCuisine;
-        })
-      );
-      console.log(user);
-      setDbUser(user);
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  // A work around that is used to update and sync Amplify's Cloud DB
-  useEffect(() => {
-    const subscription = DataStore.observe(User).subscribe(({ element }) => {
-      setDbUser(element);
-    });
-    return () => subscription.unsubscribe();
-  }, []);
-
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={{ flex: 1, backgroundColor: "white" }}>
@@ -85,19 +41,18 @@ export default function Profile() {
             <Text style={styles.inputLabel}>Name</Text>
             <TextInput
               editable={editEnabled}
-              onChangeText={(value) => setName(value)}
               style={
                 editEnabled ? [styles.input, { color: "black" }] : styles.input
               }
               placeholder="Name"
             >
-              {name}
+              {USER.name}
             </TextInput>
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>Gender</Text>
             <SelectDropdown
-              defaultButtonText={gender}
+              defaultButtonText={USER.gender}
               renderDropdownIcon={() => (
                 <Entypo name="chevron-small-down" size={24} color="black" />
               )}
@@ -107,8 +62,18 @@ export default function Profile() {
               disabled={!editEnabled}
               buttonStyle={styles.dropDown}
               data={GENDERS}
-              onSelect={(selectedItem) => {
-                setGender(selectedItem);
+              onSelect={(selectedItem, index) => {
+                console.log(selectedItem, index);
+              }}
+              buttonTextAfterSelection={(selectedItem, index) => {
+                // text represented after item is selected
+                // if data array is an array of objects then return selectedItem.property to render after item is selected
+                return selectedItem;
+              }}
+              rowTextForSelection={(item, index) => {
+                // text represented for each item in dropdown
+                // if data array is an array of objects then return item.property to represent item in dropdown
+                return item;
               }}
             />
           </View>
@@ -116,19 +81,18 @@ export default function Profile() {
             <Text style={styles.inputLabel}>Birthday</Text>
             <TextInput
               editable={editEnabled}
-              onChangeText={(value) => setBirthday(value)}
               style={
                 editEnabled ? [styles.input, { color: "black" }] : styles.input
               }
               placeholder="MM/DD/YYYY"
             >
-              {birthday}
+              {USER.birthday}
             </TextInput>
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>Favorite cuisine</Text>
             <SelectDropdown
-              defaultButtonText={favoriteCuisine}
+              defaultButtonText={USER.favoriteCuisine}
               renderDropdownIcon={() => (
                 <Entypo name="chevron-small-down" size={24} color="black" />
               )}
@@ -138,9 +102,18 @@ export default function Profile() {
               disabled={!editEnabled}
               buttonStyle={styles.dropDown}
               data={CUISINES}
-              onSelect={(selectedItem) => {
-                setFavoriteCuisine(selectedItem);
-                console.log(selectedItem);
+              onSelect={(selectedItem, index) => {
+                console.log(selectedItem, index);
+              }}
+              buttonTextAfterSelection={(selectedItem, index) => {
+                // text represented after item is selected
+                // if data array is an array of objects then return selectedItem.property to render after item is selected
+                return selectedItem;
+              }}
+              rowTextForSelection={(item, index) => {
+                // text represented for each item in dropdown
+                // if data array is an array of objects then return item.property to represent item in dropdown
+                return item;
               }}
             />
           </View>
@@ -158,9 +131,6 @@ export default function Profile() {
           <Text style={styles.buttonText}>
             {editEnabled ? "Save profile" : "Edit profile"}
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.5} onPress={Auth.signOut}>
-          <Text style={styles.signOutButton}>Sign out</Text>
         </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>

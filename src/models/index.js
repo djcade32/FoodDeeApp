@@ -2,7 +2,15 @@
 import { initSchema } from '@aws-amplify/datastore';
 import { schema } from './schema';
 
-const ItemType = {
+const ItemRatingOptions = {
+  "TERRIBLE": "TERRIBLE",
+  "BAD": "BAD",
+  "OK": "OK",
+  "GOOD": "GOOD",
+  "AMAZING": "AMAZING"
+};
+
+const ItemTypes = {
   "FOOD": "FOOD",
   "DRINK": "DRINK"
 };
@@ -12,12 +20,19 @@ const RestaurantStatus = {
   "TRIED": "TRIED"
 };
 
-const { User, Item, Restaurant } = initSchema(schema);
+const GenderOptions = {
+  "MALE": "MALE",
+  "FEMALE": "FEMALE"
+};
+
+const { Item, Restaurant, User } = initSchema(schema);
 
 export {
-  User,
-  ItemType,
-  RestaurantStatus,
   Item,
-  Restaurant
+  Restaurant,
+  User,
+  ItemRatingOptions,
+  ItemTypes,
+  RestaurantStatus,
+  GenderOptions
 };

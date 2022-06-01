@@ -10,25 +10,18 @@ import searchScreen from "../screens/Search/Search";
 import homeScreen from "../screens/Home/Home";
 import restaurantScreen from "../screens/Restaurant/Restaurant";
 import ProfileScreen from "../screens/Profile/Profile";
-import OnboardScreen from "../screens/OnboardScreen/OnboardScreen";
 import AddItemScreen from "../screens/AddItem/AddItem";
-import { useAuthContext } from "../contexts/AuthContext";
 
 const Stack = createNativeStackNavigator();
 
 export default function RootNavigator() {
-  const { dbUser } = useAuthContext();
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
       }}
     >
-      {dbUser ? (
-        <Stack.Screen name="BottomTabs" component={BottomTabs} />
-      ) : (
-        <Stack.Screen name="OnboardScreen" component={OnboardScreen} />
-      )}
+      <Stack.Screen name="BottomTabs" component={BottomTabs} />
     </Stack.Navigator>
   );
 }
