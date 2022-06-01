@@ -1,5 +1,5 @@
 import { View, Text, Image, Pressable } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 import styles from "../RestaurantCard/styles";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -7,8 +7,13 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import defaultImage from "../../../assets/images/foodee_default_img.jpg";
 
 import { getCuisine } from "../../helpers/helpers";
+import { useAuthContext } from "../../contexts/AuthContext";
+import { User, RestaurantStatus, Restaurant } from "../../models";
+import { DataStore } from "aws-amplify";
 
 const RestaurantCard = (props) => {
+  const { dbUser, userRestaurantList, setUserRestaurantList } =
+    useAuthContext();
   const restaurantDistance = (
     props.restaurant.item.distance * 0.000621371192
   ).toFixed(1);
@@ -28,7 +33,6 @@ const RestaurantCard = (props) => {
   };
 
   const navigation = useNavigation();
-  // const [badgeStatus, setBadgeStatus] = useState(props.restaurant.status);
   const [badgeStatus, setBadgeStatus] = useState();
 
   function onPress() {
@@ -36,20 +40,58 @@ const RestaurantCard = (props) => {
   }
 
   function handleBadgePress(badgeType) {
-    if (badgeStatus === "TRY" && badgeType === "triedBadge") {
-      setBadgeStatus("TRIED");
-    } else if (badgeStatus === "TRY" && badgeType === "tryBadge") {
+    if (badgeStatus === RestaurantStatus.TRY && badgeType === "triedBadge") {
+      setBadgeStatus(RestaurantStatus.TRIED);
+    } else if (
+      badgeStatus === RestaurantStatus.TRY &&
+      badgeType === "tryBadge"
+    ) {
       setBadgeStatus();
-    } else if (badgeStatus === "TRIED" && badgeType === "tryBadge") {
-      setBadgeStatus("TRY");
-    } else if (badgeStatus === "TRIED" && badgeType === "triedBadge") {
+    } else if (
+      badgeStatus === RestaurantStatus.TRIED &&
+      badgeType === "tryBadge"
+    ) {
+      setBadgeStatus(RestaurantStatus.TRY);
+    } else if (
+      badgeStatus === RestaurantStatus.TRIED &&
+      badgeType === "triedBadge"
+    ) {
       setBadgeStatus();
     } else if (!badgeStatus && badgeType === "tryBadge") {
-      setBadgeStatus("TRY");
+      setBadgeStatus(RestaurantStatus.TRY);
+      addRestaurant(RestaurantStatus.TRY);
     } else if (!badgeStatus && badgeType === "triedBadge") {
-      setBadgeStatus("TRIED");
+      setBadgeStatus(RestaurantStatus.TRIED);
+      addRestaurant(RestaurantStatus.TRIED);
     }
   }
+
+  async function addRestaurant(status) {
+    try {
+      const user = await DataStore.save(
+        User.copyOf(dbUser, (updated) => {
+          updated.restaurants = [
+            ...updated.restaurants,
+            {
+              id: restaurantData.id,
+              name: restaurantData.name,
+              address: restaurantData.address,
+              cuisine: restaurantData.cuisine,
+              status: status,
+              image: restaurantData.image,
+              cost: restaurantData.cost,
+              rating: restaurantData.rating,
+            },
+          ];
+        })
+      );
+      console.log(user);
+      setUserRestaurantList((oldList) => [...oldList, ...user.restaurants]);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <Pressable onPress={onPress} style={styles.restaurantCardContainer}>
       {restaurantData.image !== "" ? (

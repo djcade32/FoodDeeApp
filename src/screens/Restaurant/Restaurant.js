@@ -43,7 +43,6 @@ export default function Restaurant() {
       setBadgeStatus("TRIED");
     }
   }
-
   return (
     <View style={styles.restaurantScreen}>
       <View style={styles.restaurantImageContainer}>
@@ -87,9 +86,16 @@ export default function Restaurant() {
       <View style={styles.detailsContainer}>
         <View style={{ width: "75%" }}>
           <Text style={styles.restaurantName}>{restaurant.name}</Text>
-          <Text style={styles.restaurantExtraDetails}>
-            {restaurant.cuisine} • {restaurant.distance} mi • {restaurant.cost}
-          </Text>
+
+          {restaurant.cost ? (
+            <Text style={styles.restaurantExtraDetails}>
+              {restaurant.cuisine} • {restaurant.distance} mi •{restaurant.cost}
+            </Text>
+          ) : (
+            <Text style={styles.restaurantExtraDetails}>
+              {restaurant.cuisine} • {restaurant.distance} mi
+            </Text>
+          )}
           <Text style={styles.restaurantExtraDetails}>
             {restaurant.address}
           </Text>
