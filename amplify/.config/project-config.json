@@ -2,7 +2,7 @@
   "providers": [
     "awscloudformation"
   ],
-  "projectName": "FoodDeeApp",
+  "projectName": "FooDee",
   "version": "3.1",
   "frontend": "javascript",
   "javascript": {
