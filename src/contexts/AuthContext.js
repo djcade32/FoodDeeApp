@@ -7,6 +7,7 @@ const AuthContext = createContext({});
 const AuthContextProvider = (props) => {
   const [authUser, setAuthUser] = useState(null);
   const [dbUser, setDbUser] = useState(null);
+  const [userRestaurantList, setUserRestaurantList] = useState([]);
   const sub = authUser?.attributes?.sub;
 
   useEffect(() => {
@@ -18,11 +19,29 @@ const AuthContextProvider = (props) => {
     DataStore.query(User, (user) => user.sub("eq", sub)).then((users) => {
       console.log(users[0]);
       setDbUser(users[0]);
+      if (dbUser) {
+        setUserRestaurantList(users[0].restaurants);
+      }
     });
   }, [sub]);
 
+  useEffect(() => {
+    if (userRestaurantList) {
+      console.log("List found:", userRestaurantList);
+    }
+  }, [userRestaurantList]);
+
   return (
-    <AuthContext.Provider value={{ authUser, dbUser, sub, setDbUser }}>
+    <AuthContext.Provider
+      value={{
+        authUser,
+        dbUser,
+        sub,
+        setDbUser,
+        userRestaurantList,
+        setUserRestaurantList,
+      }}
+    >
       {props.children}
     </AuthContext.Provider>
   );

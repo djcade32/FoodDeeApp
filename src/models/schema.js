@@ -31,14 +31,6 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "restaurantsID": {
-                    "name": "restaurantsID",
-                    "isArray": true,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true
-                },
                 "sub": {
                     "name": "sub",
                     "isArray": false,
@@ -209,7 +201,7 @@ export const schema = {
                     "name": "cost",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": true,
+                    "isRequired": false,
                     "attributes": []
                 },
                 "rating": {
@@ -232,5 +224,5 @@ export const schema = {
             }
         }
     },
-    "version": "7fcc9aa03fe68b8f82b7f5ad6246d77a"
+    "version": "f9ad9223f67c9d3b3c06fb045f5657c1"
 };

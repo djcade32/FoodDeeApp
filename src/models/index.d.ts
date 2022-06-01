@@ -25,7 +25,7 @@ export declare class Restaurant {
   readonly cuisine: string;
   readonly status: RestaurantStatus | keyof typeof RestaurantStatus;
   readonly image?: string | null;
-  readonly cost: string;
+  readonly cost?: string | null;
   readonly rating: number;
   readonly itemsID?: (Item | null)[] | null;
   constructor(init: ModelInit<Restaurant>);
@@ -40,7 +40,6 @@ export declare class User {
   readonly name: string;
   readonly gender: string;
   readonly birthday: string;
-  readonly restaurantsID?: (string | null)[] | null;
   readonly sub: string;
   readonly favoriteCuisine: string;
   readonly restaurants?: (Restaurant | null)[] | null;
