@@ -11,8 +11,8 @@ import SearchBar from "../../components/SearchBar/SearchBar";
 import { Marker } from "react-native-maps";
 import CustomMarker from "../../components/CustomMarker";
 import * as Location from "expo-location";
-import BottomSheet from "@gorhom/bottom-sheet";
 import Map from "../../components/Map/Map";
+import BottomSheet from "../../components/BottomSheet/BottomSheet";
 
 import FilterScreen from "./FilterScreen/FilterScreen";
 
@@ -24,7 +24,6 @@ const SEARCH_BAR_STYLES = {
 };
 
 const Home = () => {
-  const { width, height } = useWindowDimensions();
   const [isViewModeList, setIsViewModeList] = useState(true);
   const [userLocation, setUserLocation] = useState(null);
 
@@ -95,15 +94,7 @@ const Home = () => {
           ))} */}
         </Map>
       )}
-      <BottomSheet
-        ref={bottomSheetRef}
-        index={0}
-        snapPoints={snapPoints}
-        enableContentPanningGesture={false}
-        enableHandlePanningGesture={false}
-        handleIndicatorStyle={{ width: "0%" }}
-        bottomInset={-50}
-      >
+      <BottomSheet reference={bottomSheetRef} index={0} snapPoints={snapPoints}>
         <FilterScreen
           closeBottomSheet={() => bottomSheetRef.current?.close()}
         />

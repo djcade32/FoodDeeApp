@@ -11,9 +11,9 @@ import RestaurantCard from "../../components/RestaurantCard/RestaurantCard";
 import { Marker } from "react-native-maps";
 import CustomMarker from "../../components/CustomMarker";
 import * as Location from "expo-location";
-import BottomSheet from "@gorhom/bottom-sheet";
 import FilterScreen from "../Home/FilterScreen/FilterScreen";
 import Map from "../../components/Map/Map";
+import BottomSheet from "../../components/BottomSheet/BottomSheet";
 
 export default function Search() {
   const FETCH_LIMIT = 50;
@@ -27,7 +27,6 @@ export default function Search() {
     try: false,
     tried: false,
   });
-  const { width, height } = useWindowDimensions();
   const [isViewModeList, setIsViewModeList] = useState(true);
   const [userLocation, setUserLocation] = useState(null);
   const [searchValue, setSearchValue] = useState("");
@@ -199,15 +198,7 @@ export default function Search() {
         </Map>
       )}
 
-      <BottomSheet
-        ref={bottomSheetRef}
-        index={0}
-        snapPoints={snapPoints}
-        enableContentPanningGesture={false}
-        enableHandlePanningGesture={false}
-        handleIndicatorStyle={{ width: "0%" }}
-        bottomInset={-50}
-      >
+      <BottomSheet reference={bottomSheetRef} index={0} snapPoints={snapPoints}>
         <FilterScreen
           closeBottomSheet={() => bottomSheetRef.current?.close()}
           setFilterConfig={setFilterConfig}
