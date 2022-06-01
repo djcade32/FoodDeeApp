@@ -13,11 +13,12 @@ import AppLoading from "expo-app-loading";
 import RootNavigator from "./src/navigation";
 import { NavigationContainer } from "@react-navigation/native";
 
-// import { Amplify, Analytics } from "aws-amplify";
-// import config from "./src/aws-exports";
-// import { withAuthenticator } from "aws-amplify-react-native";
+import { Amplify, Analytics } from "aws-amplify";
+import awsconfig from "./src/aws-exports";
+import { withAuthenticator } from "aws-amplify-react-native";
+import AuthContextProvider from "./src/contexts/AuthContext";
 
-// Amplify.configure({ ...config, Analytics: { disabled: true } });
+Amplify.configure({ ...awsconfig, Analytics: { disabled: true } });
 
 // Loading fonts
 function fetchFonts() {
@@ -47,9 +48,11 @@ function App() {
   return (
     <NavigationContainer>
       <SafeAreaView style={styles.container}>
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-          <RootNavigator />
-        </TouchableWithoutFeedback>
+        <AuthContextProvider>
+          <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+            <RootNavigator />
+          </TouchableWithoutFeedback>
+        </AuthContextProvider>
         <StatusBar style="auto" />
       </SafeAreaView>
     </NavigationContainer>
@@ -63,5 +66,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
-// export default withAuthenticator(App);
+export default withAuthenticator(App);

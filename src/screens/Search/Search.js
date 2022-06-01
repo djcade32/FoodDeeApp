@@ -8,15 +8,15 @@ import {
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import SearchHeader from "../../components/Header/SearchHeader.js/SearchHeader";
 import RestaurantCard from "../../components/RestaurantCard/RestaurantCard";
-import MapView, { Marker } from "react-native-maps";
+import Map from "../../components/Map/Map";
+import BottomSheet from "../../components/BottomSheet/BottomSheet";
 import CustomMarker from "../../components/CustomMarker";
 import * as Location from "expo-location";
-import BottomSheet from "@gorhom/bottom-sheet";
 import FilterScreen from "../Home/FilterScreen/FilterScreen";
+import styles from "./styles";
 
 export default function Search() {
   const FETCH_LIMIT = 50;
-
   const [fetchedRestaurants, setfetchedRestaurants] = useState([]);
   const [fetchedTotal, setFetchedTotal] = useState(0);
   const [filterAdded, setFilterAdded] = useState(false);
@@ -33,9 +33,9 @@ export default function Search() {
   const bottomSheetRef = useRef(null);
   const [isSearching, setIsSearching] = useState(false);
   const [endIsReached, setEndIsReached] = useState(false);
-
   const snapPoints = useMemo(() => ["1%", "100%"], []);
 
+  // Ask user permission for location if not already granted
   useEffect(() => {
     async function getUserLocation() {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -52,6 +52,8 @@ export default function Search() {
     }
     getUserLocation();
   }, []);
+
+  // Config containing API Key for Yelp API
   const config = {
     headers: {
       Authorization:
@@ -107,6 +109,7 @@ export default function Search() {
     }
   };
 
+  // Fetch more restaurants if end of flat list is reached
   function fetchMoreRestaurants() {
     console.log("End Reached");
     if (fetchedRestaurants.length !== fetchedTotal) {
@@ -116,10 +119,17 @@ export default function Search() {
     return;
   }
 
+  // Fetch restaurants if user location changes
+  useEffect(() => {
+    if (fetchedRestaurants.length === 0 && userLocation) {
+      fetchRestaurants(FETCH_LIMIT, 0);
+    }
+  }, [userLocation]);
+
+  // Allows restaurants to load as user is typing in search bar
   useEffect(() => {
     console.log("Search Use Effect");
     if (isSearching) {
-      console.log("inside search if statemnt");
       setEndIsReached(false);
       const delayDebounceFn = setTimeout(() => {
         if (searchValue === "") {
@@ -132,18 +142,7 @@ export default function Search() {
     }
   }, [searchValue]);
 
-  useEffect(() => {
-    if (fetchedRestaurants.length === 0 && userLocation) {
-      fetchRestaurants(FETCH_LIMIT, 0);
-    }
-  }, [userLocation]);
-
-  useEffect(() => {
-    if (searchValue !== "") {
-      console.log("Search value: " + searchValue);
-    }
-  }, [searchValue]);
-
+  // Fetch restaurants if user is filtering
   useEffect(() => {
     console.log("Filter Added");
     if (filterAdded) {
@@ -177,6 +176,7 @@ export default function Search() {
           }}
         >
           <ActivityIndicator size={35} color={"grey"} />
+          <Text style={styles.loadingText}>Fetching nearby restaurants</Text>
         </View>
       )}
       {isViewModeList ? (
@@ -191,37 +191,14 @@ export default function Search() {
           />
         </>
       ) : (
-        <MapView
-          showsPointsOfInterest={false}
-          showsCompass={false}
-          mapType="mutedStandard"
-          style={{
-            height: height,
-            width: width,
-          }}
-          showsUserLocation
-          initialRegion={{
-            latitude: userLocation?.latitude,
-            longitude: userLocation?.longitude,
-            latitudeDelta: 0.07,
-            longitudeDelta: 0.07,
-          }}
-        >
+        <Map userLocation={userLocation}>
           {fetchedRestaurants.map((restaurant) => (
             <CustomMarker key={restaurant.id} data={restaurant} />
           ))}
-        </MapView>
+        </Map>
       )}
 
-      <BottomSheet
-        ref={bottomSheetRef}
-        index={0}
-        snapPoints={snapPoints}
-        enableContentPanningGesture={false}
-        enableHandlePanningGesture={false}
-        handleIndicatorStyle={{ width: "0%" }}
-        bottomInset={-50}
-      >
+      <BottomSheet ref={bottomSheetRef} index={0} snapPoints={snapPoints}>
         <FilterScreen
           closeBottomSheet={() => bottomSheetRef.current?.close()}
           setFilterConfig={setFilterConfig}
