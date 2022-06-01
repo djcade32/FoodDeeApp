@@ -8,11 +8,12 @@ import {
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import SearchHeader from "../../components/Header/SearchHeader.js/SearchHeader";
 import RestaurantCard from "../../components/RestaurantCard/RestaurantCard";
-import MapView, { Marker } from "react-native-maps";
+import { Marker } from "react-native-maps";
 import CustomMarker from "../../components/CustomMarker";
 import * as Location from "expo-location";
 import BottomSheet from "@gorhom/bottom-sheet";
 import FilterScreen from "../Home/FilterScreen/FilterScreen";
+import Map from "../../components/Map/Map";
 
 export default function Search() {
   const FETCH_LIMIT = 50;
@@ -191,26 +192,11 @@ export default function Search() {
           />
         </>
       ) : (
-        <MapView
-          showsPointsOfInterest={false}
-          showsCompass={false}
-          mapType="mutedStandard"
-          style={{
-            height: height,
-            width: width,
-          }}
-          showsUserLocation
-          initialRegion={{
-            latitude: userLocation?.latitude,
-            longitude: userLocation?.longitude,
-            latitudeDelta: 0.07,
-            longitudeDelta: 0.07,
-          }}
-        >
+        <Map userLocation={userLocation}>
           {fetchedRestaurants.map((restaurant) => (
             <CustomMarker key={restaurant.id} data={restaurant} />
           ))}
-        </MapView>
+        </Map>
       )}
 
       <BottomSheet

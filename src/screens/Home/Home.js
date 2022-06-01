@@ -8,15 +8,13 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import styles from "./styles";
 import HomeHeader from "../../components/Header/HomeHeader/HomeHeader";
 import SearchBar from "../../components/SearchBar/SearchBar";
-import userData from "../../../assets/data/userData";
-import MapView, { Marker } from "react-native-maps";
+import { Marker } from "react-native-maps";
 import CustomMarker from "../../components/CustomMarker";
 import * as Location from "expo-location";
 import BottomSheet from "@gorhom/bottom-sheet";
+import Map from "../../components/Map/Map";
 
 import FilterScreen from "./FilterScreen/FilterScreen";
-
-const USER = userData[0];
 
 const SEARCH_BAR_STYLES = {
   marginTop: 25,
@@ -90,26 +88,12 @@ const Home = () => {
           /> */}
         </>
       ) : (
-        <MapView
-          showsCompass={false}
-          mapType="mutedStandard"
-          style={{
-            height: height,
-            width: width,
-          }}
-          showsUserLocation
-          initialRegion={{
-            latitude: userLocation?.latitude,
-            longitude: userLocation?.longitude,
-            latitudeDelta: 0.07,
-            longitudeDelta: 0.07,
-          }}
-        >
+        <Map userLocation={userLocation}>
           {/* <SearchBar style={SEARCH_BAR_STYLES} placeHolderText={"Search"} />
           {USER.restaurants.map((restaurant) => (
             <CustomMarker key={restaurant.id} data={restaurant} />
           ))} */}
-        </MapView>
+        </Map>
       )}
       <BottomSheet
         ref={bottomSheetRef}

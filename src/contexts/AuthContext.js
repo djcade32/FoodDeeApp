@@ -8,7 +8,6 @@ const AuthContextProvider = (props) => {
   const [authUser, setAuthUser] = useState(null);
   const [dbUser, setDbUser] = useState(null);
   const sub = authUser?.attributes?.sub;
-  console.log("Sub:", sub);
 
   useEffect(() => {
     console.log("Fetching auth user");
