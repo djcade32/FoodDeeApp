@@ -29,9 +29,6 @@ export default function FilterScreen({
     "Thai",
     "Cafe",
   ];
-  const [sliderValue, setSliderValue] = useState(25);
-  const [isTryEnabled, setIsTryEnabled] = useState(false);
-  const [isTriedEnabled, setIsTriedEnabled] = useState(false);
   CUISINES.sort();
 
   let filterConfig = {
@@ -41,6 +38,8 @@ export default function FilterScreen({
     tried: filterConfigRef?.tried,
   };
 
+  const [isTryEnabled, setIsTryEnabled] = useState(false);
+  const [isTriedEnabled, setIsTriedEnabled] = useState(false);
   const [filterConfigCopy, setFilterConfigCopy] = useState(filterConfig);
 
   function toggleSwitch(e) {
@@ -57,6 +56,7 @@ export default function FilterScreen({
           ...prevState,
           ...{ try: !isTryEnabled },
         }));
+        // filterConfig.try = !isTryEnabled;
         setIsTryEnabled(!isTryEnabled);
       }
     } else {
@@ -65,6 +65,7 @@ export default function FilterScreen({
           ...prevState,
           ...{ tried: true, try: false },
         }));
+        // filterConfig.tried = true;
         setIsTriedEnabled(true);
         setIsTryEnabled(false);
       } else {
@@ -72,10 +73,13 @@ export default function FilterScreen({
           ...prevState,
           ...{ tried: !isTriedEnabled },
         }));
+        // filterConfig.tried = !isTriedEnabled;
         setIsTriedEnabled(!isTriedEnabled);
       }
     }
   }
+
+  const [sliderValue, setSliderValue] = useState(25);
 
   function handleClearFiltersPress() {
     filterConfig = {
@@ -90,19 +94,6 @@ export default function FilterScreen({
     selectDropdownRef.current?.reset();
     setSliderValue(25);
   }
-
-  function handleSlider(value) {
-    console.log(value + " is chosen");
-    let milesToMeters = (value * 1609.344).toFixed(0);
-    if (milesToMeters > 40000) {
-      milesToMeters = 40000;
-    }
-    setFilterConfigCopy((prevState) => ({
-      ...prevState,
-      ...{ distanceRadius: milesToMeters },
-    }));
-  }
-
   return (
     <View style={styles.contentContainer}>
       <View style={styles.filterHeaderContainer}>
@@ -147,10 +138,22 @@ export default function FilterScreen({
           buttonStyle={styles.dropDown}
           data={CUISINES}
           onSelect={(selectedItem, index) => {
+            // console.log(getApiCategory(selectedItem));
+            // filterConfig.categories = getApiCategory(selectedItem);
             setFilterConfigCopy((prevState) => ({
               ...prevState,
               ...{ categories: getApiCategory(selectedItem) },
             }));
+          }}
+          buttonTextAfterSelection={(selectedItem, index) => {
+            // text represented after item is selected
+            // if data array is an array of objects then return selectedItem.property to render after item is selected
+            return selectedItem;
+          }}
+          rowTextForSelection={(item, index) => {
+            // text represented for each item in dropdown
+            // if data array is an array of objects then return item.property to represent item in dropdown
+            return item;
           }}
         />
       </View>
@@ -173,7 +176,18 @@ export default function FilterScreen({
           onValueChange={(value) => {
             setSliderValue(value);
           }}
-          onSlidingComplete={(value) => handleSlider(value)}
+          onSlidingComplete={(value) => {
+            console.log(value + " is chosen");
+            let milesToMeters = (value * 1609.344).toFixed(0);
+            if (milesToMeters > 40000) {
+              milesToMeters = 40000;
+            }
+            // filterConfig.distanceRadius = milesToMeters;
+            setFilterConfigCopy((prevState) => ({
+              ...prevState,
+              ...{ distanceRadius: milesToMeters },
+            }));
+          }}
           step={1}
           minimumTrackTintColor="#FF9A62"
           maximumTrackTintColor="#D6D6D6"

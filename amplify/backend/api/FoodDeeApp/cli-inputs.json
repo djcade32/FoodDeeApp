@@ -1,9 +1,9 @@
 {
   "version": 1,
   "serviceConfiguration": {
-    "apiName": "FooDee",
+    "apiName": "FoodDeeApp",
     "serviceName": "AppSync",
-    "gqlSchemaPath": "/tmp/amplify-2a8343db-c30c-4b9e-8da9-2fc07ed5dba1/amplify/backend/api/FooDee/schema.graphql",
+    "gqlSchemaPath": "/tmp/amplify-1cf7e1ba-62d4-495b-9d96-0317cff3e677/amplify/backend/api/FoodDeeApp/schema.graphql",
     "defaultAuthType": {
       "mode": "API_KEY",
       "keyDescription": "api key description",

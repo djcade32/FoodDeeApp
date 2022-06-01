@@ -1,6 +1,6 @@
 {
   "auth": {
-    "FooDee": {
+    "FoodDeeApp": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
@@ -12,13 +12,8 @@
         ],
         "signupAttributes": [],
         "passwordProtectionSettings": {
-          "passwordPolicyMinLength": 8,
-          "passwordPolicyCharacters": [
-            "REQUIRES_LOWERCASE",
-            "REQUIRES_NUMBERS",
-            "REQUIRES_SYMBOLS",
-            "REQUIRES_UPPERCASE"
-          ]
+          "passwordPolicyMinLength": 6,
+          "passwordPolicyCharacters": []
         },
         "mfaConfiguration": "OFF",
         "mfaTypes": [
@@ -31,7 +26,7 @@
     }
   },
   "api": {
-    "FooDee": {
+    "FoodDeeApp": {
       "service": "AppSync",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
