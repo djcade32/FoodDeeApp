@@ -1,3 +1,8 @@
+type Coordinates {
+  latitude: Float!
+  longitude: Float!
+}
+
 type Item {
   id: ID
   name: String
@@ -15,6 +20,7 @@ type Restaurant {
   cost: String
   rating: Float!
   itemsID: [Item]
+  coordinates: Coordinates!
 }
 
 enum ItemType {

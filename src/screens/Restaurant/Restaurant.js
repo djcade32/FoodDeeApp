@@ -17,32 +17,109 @@ import {
 import RestaurantItem from "../../components/RestaurantItem/RestaurantItem";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import defaultImage from "../../../assets/images/foodee_default_img.jpg";
+import { useAuthContext } from "../../contexts/AuthContext";
+import { User, RestaurantStatus } from "../../models";
+import { DataStore } from "aws-amplify";
 
 import { getCuisine } from "../../helpers/helpers";
 
 const USER = userData[0];
 
 export default function Restaurant() {
+  const { setDbUser, dbUser, userRestaurantList, setUserRestaurantList } =
+    useAuthContext();
   const navigation = useNavigation();
   const route = useRoute();
   const restaurant = route.params;
   const [badgeStatus, setBadgeStatus] = useState(restaurant?.status);
+  console.log("Restaurant:", restaurant);
 
   function handleBadgePress(badgeType) {
-    if (badgeStatus === "TRY" && badgeType === "triedBadge") {
-      setBadgeStatus("TRIED");
-    } else if (badgeStatus === "TRY" && badgeType === "tryBadge") {
-      setBadgeStatus();
-    } else if (badgeStatus === "TRIED" && badgeType === "tryBadge") {
-      setBadgeStatus("TRY");
-    } else if (badgeStatus === "TRIED" && badgeType === "triedBadge") {
-      setBadgeStatus();
-    } else if (!badgeStatus && badgeType === "tryBadge") {
-      setBadgeStatus("TRY");
-    } else if (!badgeStatus && badgeType === "triedBadge") {
-      setBadgeStatus("TRIED");
+    // Switch to opposite status if one is highlighted already
+    if (badgeStatus === RestaurantStatus.TRY && badgeType === "triedBadge") {
+      setBadgeStatus(RestaurantStatus.TRIED);
+      switchRestaurantStatus(RestaurantStatus.TRIED);
+    } else if (
+      badgeStatus === RestaurantStatus.TRIED &&
+      badgeType === "tryBadge"
+    ) {
+      setBadgeStatus(RestaurantStatus.TRY);
+      switchRestaurantStatus(RestaurantStatus.TRY);
+    }
+    // Make both icons not highlighted
+    else if (badgeStatus === RestaurantStatus.TRY && badgeType === "tryBadge") {
+      setBadgeStatus(null);
+      removeRestaurantStatus();
+    } else if (
+      badgeStatus === RestaurantStatus.TRIED &&
+      badgeType === "triedBadge"
+    ) {
+      setBadgeStatus(null);
+      removeRestaurantStatus();
+    }
+    // Neither icon is highlighted
+    // else if (!badgeStatus && badgeType === "tryBadge") {
+    //   setBadgeStatus(RestaurantStatus.TRY);
+    //   addRestaurantStatus(RestaurantStatus.TRY);
+    // } else if (!badgeStatus && badgeType === "triedBadge") {
+    //   setBadgeStatus(RestaurantStatus.TRIED);
+    //   addRestaurantStatus(RestaurantStatus.TRIED);
+    // }
+  }
+
+  async function removeRestaurantStatus() {
+    const filteredList = userRestaurantList.filter(
+      (restaurant) => restaurant.id !== restaurant?.id
+    );
+    console.log("Filtered List: ", filteredList);
+    try {
+      const user = await DataStore.save(
+        User.copyOf(dbUser, (updated) => {
+          updated.restaurants = filteredList;
+        })
+      );
+      setDbUser(user);
+      setUserRestaurantList(filteredList);
+    } catch (e) {
+      console.log(e);
     }
   }
+
+  async function switchRestaurantStatus(status) {
+    let filteredList = userRestaurantList.filter(
+      (restaurant) => restaurant.id !== restaurant?.id
+    );
+    console.log("Filtered List: ", filteredList);
+    filteredList = [
+      ...filteredList,
+      {
+        id: restaurant.id,
+        name: restaurant.name,
+        address: restaurant.address,
+        cuisine: restaurant.cuisine,
+        status: status,
+        image: restaurant.image,
+        cost: restaurant.cost,
+        rating: restaurant.rating,
+        coordinates: {
+          latitude: restaurant.coordinates.latitude,
+          longitude: restaurant.coordinates.longitude,
+        },
+      },
+    ];
+    try {
+      const user = await DataStore.save(
+        User.copyOf(dbUser, (updated) => {
+          updated.restaurants = filteredList;
+        })
+      );
+      setDbUser(user);
+      setUserRestaurantList(filteredList);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <View style={styles.restaurantScreen}>
       <View style={styles.restaurantImageContainer}>

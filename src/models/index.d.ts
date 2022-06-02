@@ -10,6 +10,12 @@ export enum RestaurantStatus {
   TRIED = "TRIED"
 }
 
+export declare class Coordinates {
+  readonly latitude: number;
+  readonly longitude: number;
+  constructor(init: ModelInit<Coordinates>);
+}
+
 export declare class Item {
   readonly id?: string | null;
   readonly name?: string | null;
@@ -28,6 +34,7 @@ export declare class Restaurant {
   readonly cost?: string | null;
   readonly rating: number;
   readonly itemsID?: (Item | null)[] | null;
+  readonly coordinates: Coordinates;
   constructor(init: ModelInit<Restaurant>);
 }
 
