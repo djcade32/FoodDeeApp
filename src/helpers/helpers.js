@@ -149,9 +149,16 @@ export function getCuisine(categoryList) {
   return category;
 }
 
-export function getCuisineIcon(categoryList) {
+export function getCuisineIcon(category) {
   let icon = null;
-  switch (getCuisine(categoryList)) {
+  let cuisine;
+  if (Array.isArray(category)) {
+    cuisine = getCuisine(category);
+  } else {
+    cuisine = category;
+  }
+
+  switch (cuisine) {
     case "American":
       icon = <FontAwesome5 name="hamburger" size={24} color="white" />;
       break;

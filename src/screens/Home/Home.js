@@ -10,7 +10,7 @@ import styles from "./styles";
 import HomeHeader from "../../components/Header/HomeHeader/HomeHeader";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import { Marker } from "react-native-maps";
-import CustomMarker from "../../components/CustomMarker";
+import HomeCustomMarker from "../../components/HomeCustomMarker";
 import * as Location from "expo-location";
 import Map from "../../components/Map/Map";
 import BottomSheet from "../../components/BottomSheet/BottomSheet";
@@ -104,10 +104,14 @@ const Home = () => {
             </>
           ) : (
             <Map userLocation={userLocation}>
-              {/* <SearchBar style={SEARCH_BAR_STYLES} placeHolderText={"Search"} />
-          {USER.restaurants.map((restaurant) => (
-            <CustomMarker key={restaurant.id} data={restaurant} />
-          ))} */}
+              <SearchBar style={SEARCH_BAR_STYLES} placeHolderText={"Search"} />
+              {userRestaurantList.map((restaurant) => (
+                <HomeCustomMarker
+                  key={restaurant.id}
+                  data={restaurant}
+                  userLocation={userLocation}
+                />
+              ))}
             </Map>
           )}
           <BottomSheet
