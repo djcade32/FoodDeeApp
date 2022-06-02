@@ -36,12 +36,12 @@ const HomeRestaurantCard = (props) => {
     coordinates: props.restaurant.coordinates,
   };
 
-  // useEffect(() => {
-  //   const foundRestaurant = userRestaurantList.find(
-  //     (restaurant) => restaurant.id === props.restaurant.item?.id
-  //   );
-  //   setBadgeStatus(foundRestaurant?.status);
-  // }, [userRestaurantList]);
+  useEffect(() => {
+    const foundRestaurant = userRestaurantList.find(
+      (restaurant) => restaurant.id === props.restaurant.id
+    );
+    setBadgeStatus(foundRestaurant?.status);
+  }, [userRestaurantList]);
 
   function onPress() {
     navigation.navigate("RestaurantScreen", restaurantData);
@@ -126,6 +126,7 @@ const HomeRestaurantCard = (props) => {
   }
 
   async function switchRestaurantStatus(status) {
+    console.log("Switching Status");
     let filteredList = userRestaurantList.filter(
       (restaurant) => restaurant.id !== props.restaurant?.id
     );

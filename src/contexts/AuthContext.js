@@ -32,7 +32,7 @@ const AuthContextProvider = (props) => {
 
   useEffect(() => {
     if (userRestaurantList) {
-      console.log("List found:", userRestaurantList);
+      // console.log("List found:", userRestaurantList);
     }
   }, [userRestaurantList]);
 

@@ -32,7 +32,6 @@ export default function Restaurant() {
   const route = useRoute();
   const restaurant = route.params;
   const [badgeStatus, setBadgeStatus] = useState(restaurant?.status);
-  console.log("Restaurant:", restaurant);
 
   function handleBadgePress(badgeType) {
     // Switch to opposite status if one is highlighted already
@@ -86,8 +85,9 @@ export default function Restaurant() {
   }
 
   async function switchRestaurantStatus(status) {
+    console.log("switching status again");
     let filteredList = userRestaurantList.filter(
-      (restaurant) => restaurant.id !== restaurant?.id
+      (element) => element.id !== restaurant?.id
     );
     console.log("Filtered List: ", filteredList);
     filteredList = [
@@ -107,6 +107,8 @@ export default function Restaurant() {
         },
       },
     ];
+    // console.log("Filtered List 2: ", filteredList);
+
     try {
       const user = await DataStore.save(
         User.copyOf(dbUser, (updated) => {

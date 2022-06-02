@@ -129,10 +129,11 @@ const RestaurantCard = (props) => {
   }
 
   async function switchRestaurantStatus(status) {
+    console.log("Switch to:", status);
     let filteredList = userRestaurantList.filter(
       (restaurant) => restaurant.id !== props.restaurant.item?.id
     );
-    console.log("Filtered List: ", filteredList);
+    // console.log("Filtered List: ", filteredList);
     filteredList = [
       ...filteredList,
       {
@@ -156,6 +157,7 @@ const RestaurantCard = (props) => {
           updated.restaurants = filteredList;
         })
       );
+      // console.log("Filter List 2: ", filteredList);
       setDbUser(user);
       setUserRestaurantList(filteredList);
     } catch (e) {

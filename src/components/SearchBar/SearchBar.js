@@ -18,7 +18,9 @@ const SearchBar = (props) => {
         placeholder={props.placeHolderText}
         placeholderTextColor="white"
         onChangeText={(value) => {
-          props.setIsSearching(true);
+          if (props.setIsSearching) {
+            props.setIsSearching(true);
+          }
           props.setSearchValue(value);
         }}
       />

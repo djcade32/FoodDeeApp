@@ -32,6 +32,9 @@ const Home = () => {
     useAuthContext();
   const [isViewModeList, setIsViewModeList] = useState(true);
   const [userLocation, setUserLocation] = useState(null);
+  const [searchValue, setSearchValue] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchedList, setSearchedList] = useState([]);
 
   const bottomSheetRef = useRef(null);
 
@@ -79,6 +82,29 @@ const Home = () => {
     // return foregroundSubscription;
   }, []);
 
+  // useEffect(() => {
+  //   let testList = [1, 2, 3];
+  //   console.log("Reversed:", userRestaurantList);
+  // }, [userRestaurantList]);
+
+  useEffect(() => {
+    setSearchedList([]);
+    if (searchValue !== "") {
+      const delayDebounceFn = setTimeout(() => {
+        userRestaurantList.map((restaurant) => {
+          const name = restaurant.name.toLowerCase();
+          if (name.includes(searchValue.toLowerCase())) {
+            setSearchedList((oldList) => [...oldList, restaurant]);
+          }
+        });
+      }, 1000);
+
+      return () => clearTimeout(delayDebounceFn);
+    } else {
+      setIsSearching(false);
+    }
+  }, [searchValue]);
+
   return (
     <>
       {userLocation ? (
@@ -90,10 +116,15 @@ const Home = () => {
 
           {isViewModeList ? (
             <>
-              <SearchBar style={SEARCH_BAR_STYLES} placeHolderText={"Search"} />
+              <SearchBar
+                style={SEARCH_BAR_STYLES}
+                placeHolderText={"Search"}
+                setSearchValue={setSearchValue}
+                setIsSearching={setIsSearching}
+              />
               <FlatList
                 style={{ marginBottom: 10 }}
-                data={userRestaurantList}
+                data={isSearching ? searchedList : userRestaurantList}
                 renderItem={({ item }) => (
                   <HomeRestaurantCard
                     userLocation={userLocation}
