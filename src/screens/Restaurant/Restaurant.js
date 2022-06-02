@@ -26,7 +26,7 @@ export default function Restaurant() {
   const navigation = useNavigation();
   const route = useRoute();
   const restaurant = route.params;
-  const [badgeStatus, setBadgeStatus] = useState(USER.restaurants[1].status);
+  const [badgeStatus, setBadgeStatus] = useState(restaurant?.status);
 
   function handleBadgePress(badgeType) {
     if (badgeStatus === "TRY" && badgeType === "triedBadge") {
@@ -61,22 +61,22 @@ export default function Restaurant() {
           <Ionicons name="arrow-back" size={35} color="white" />
         </Pressable>
         <View style={styles.iconContainer}>
-          <Pressable onPress={() => handleBadgePress("tryBadge")}>
+          <Pressable onPress={() => handleBadgePress("triedBadge")}>
             <MaterialCommunityIcons
-              style={{ marginRight: 10 }}
               name="silverware-fork-knife"
               size={35}
               color={
-                badgeStatus === "TRY" ? "white" : "rgba(182, 182, 207, 0.62)"
+                badgeStatus === "TRIED" ? "white" : "rgba(182, 182, 207, 0.62)"
               }
             />
           </Pressable>
-          <Pressable onPress={() => handleBadgePress("triedBadge")}>
+          <Pressable onPress={() => handleBadgePress("tryBadge")}>
             <Ionicons
+              style={{ marginRight: 10 }}
               name="bookmark"
               size={35}
               color={
-                badgeStatus === "TRIED" ? "white" : "rgba(182, 182, 207, 0.62)"
+                badgeStatus === "TRY" ? "white" : "rgba(182, 182, 207, 0.62)"
               }
             />
           </Pressable>

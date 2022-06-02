@@ -16,14 +16,19 @@ const AuthContextProvider = (props) => {
   }, []);
 
   useEffect(() => {
+    console.log("Finding User in DB");
     DataStore.query(User, (user) => user.sub("eq", sub)).then((users) => {
       console.log(users[0]);
       setDbUser(users[0]);
-      if (dbUser) {
-        setUserRestaurantList(users[0].restaurants);
-      }
     });
   }, [sub]);
+
+  useEffect(() => {
+    if (dbUser) {
+      console.log("Setting restaurants");
+      setUserRestaurantList(dbUser.restaurants);
+    }
+  }, [dbUser]);
 
   useEffect(() => {
     if (userRestaurantList) {
