@@ -70,15 +70,16 @@ const HomeRestaurantCard = (props) => {
       setBadgeStatus(null);
       removeRestaurantStatus();
     }
-    // Neither icon is highlighted
-    else if (!badgeStatus && badgeType === "tryBadge") {
-      setBadgeStatus(RestaurantStatus.TRY);
-      addRestaurantStatus(RestaurantStatus.TRY);
-    } else if (!badgeStatus && badgeType === "triedBadge") {
-      setBadgeStatus(RestaurantStatus.TRIED);
-      addRestaurantStatus(RestaurantStatus.TRIED);
-    }
   }
+  // Neither icon is highlighted
+  //   else if (!badgeStatus && badgeType === "tryBadge") {
+  //     setBadgeStatus(RestaurantStatus.TRY);
+  //     addRestaurantStatus(RestaurantStatus.TRY);
+  //   } else if (!badgeStatus && badgeType === "triedBadge") {
+  //     setBadgeStatus(RestaurantStatus.TRIED);
+  //     addRestaurantStatus(RestaurantStatus.TRIED);
+  //   }
+  // }
 
   // async function addRestaurantStatus(status) {
   //   try {
