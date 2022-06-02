@@ -10,38 +10,38 @@ import { getCuisine } from "../../helpers/helpers";
 import { useAuthContext } from "../../contexts/AuthContext";
 import { User, RestaurantStatus } from "../../models";
 import { DataStore } from "aws-amplify";
+import { calculateDistance } from "../../helpers/helpers";
 
-const RestaurantCard = (props) => {
+const HomeRestaurantCard = (props) => {
   const { setDbUser, dbUser, userRestaurantList, setUserRestaurantList } =
     useAuthContext();
-  const restaurantDistance = (
-    props.restaurant.item?.distance * 0.000621371192
+  const restaurantDistance = calculateDistance(
+    props.userLocation?.latitude,
+    props.restaurant?.coordinates.latitude,
+    props.userLocation?.longitude,
+    props.restaurant?.coordinates.longitude
   ).toFixed(1);
   const navigation = useNavigation();
-  const [badgeStatus, setBadgeStatus] = useState(null);
-
+  const [badgeStatus, setBadgeStatus] = useState(props.restaurant.status);
   const restaurantData = {
-    id: props.restaurant.item?.id,
-    name: props.restaurant.item?.name,
-    image: props.restaurant.item?.image_url,
-    address:
-      props.restaurant.item.location?.display_address[0] +
-      " " +
-      props.restaurant.item.location?.display_address[1],
+    id: props.restaurant.id,
+    name: props.restaurant.name,
+    image: props.restaurant.image,
+    address: props.restaurant.address,
     distance: restaurantDistance,
-    cuisine: getCuisine(props.restaurant.item.categories),
-    rating: props.restaurant.item?.rating,
-    cost: props.restaurant.item?.price,
-    status: badgeStatus,
-    coordinates: props.restaurant.item?.coordinates,
+    cuisine: props.restaurant.cuisine,
+    rating: props.restaurant.rating,
+    cost: props.restaurant.cost,
+    status: props.restaurant.status,
+    coordinates: props.restaurant.coordinates,
   };
 
-  useEffect(() => {
-    const foundRestaurant = userRestaurantList.find(
-      (restaurant) => restaurant.id === props.restaurant.item?.id
-    );
-    setBadgeStatus(foundRestaurant?.status);
-  }, [userRestaurantList]);
+  // useEffect(() => {
+  //   const foundRestaurant = userRestaurantList.find(
+  //     (restaurant) => restaurant.id === props.restaurant.item?.id
+  //   );
+  //   setBadgeStatus(foundRestaurant?.status);
+  // }, [userRestaurantList]);
 
   function onPress() {
     navigation.navigate("RestaurantScreen", restaurantData);
@@ -80,39 +80,35 @@ const RestaurantCard = (props) => {
     }
   }
 
-  async function addRestaurantStatus(status) {
-    try {
-      const user = await DataStore.save(
-        User.copyOf(dbUser, (updated) => {
-          updated.restaurants = [
-            ...updated.restaurants,
-            {
-              id: restaurantData.id,
-              name: restaurantData.name,
-              address: restaurantData.address,
-              cuisine: restaurantData.cuisine,
-              status: status,
-              image: restaurantData.image,
-              cost: restaurantData.cost,
-              rating: restaurantData.rating,
-              coordinates: {
-                latitude: restaurantData.coordinates.latitude,
-                longitude: restaurantData.coordinates.longitude,
-              },
-            },
-          ];
-        })
-      );
-      setDbUser(user);
-      setUserRestaurantList((oldList) => [...oldList, ...user.restaurants]);
-    } catch (e) {
-      console.log(e);
-    }
-  }
+  // async function addRestaurantStatus(status) {
+  //   try {
+  //     const user = await DataStore.save(
+  //       User.copyOf(dbUser, (updated) => {
+  //         updated.restaurants = [
+  //           ...updated.restaurants,
+  //           {
+  //             id: restaurantData.id,
+  //             name: restaurantData.name,
+  //             address: restaurantData.address,
+  //             cuisine: restaurantData.cuisine,
+  //             status: status,
+  //             image: restaurantData.image,
+  //             cost: restaurantData.cost,
+  //             rating: restaurantData.rating,
+  //           },
+  //         ];
+  //       })
+  //     );
+  //     setDbUser(user);
+  //     setUserRestaurantList((oldList) => [...oldList, ...user.restaurants]);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // }
 
   async function removeRestaurantStatus() {
     const filteredList = userRestaurantList.filter(
-      (restaurant) => restaurant.id !== props.restaurant.item?.id
+      (restaurant) => restaurant.id !== props.restaurant?.id
     );
     console.log("Filtered List: ", filteredList);
     try {
@@ -130,7 +126,7 @@ const RestaurantCard = (props) => {
 
   async function switchRestaurantStatus(status) {
     let filteredList = userRestaurantList.filter(
-      (restaurant) => restaurant.id !== props.restaurant.item?.id
+      (restaurant) => restaurant.id !== props.restaurant?.id
     );
     console.log("Filtered List: ", filteredList);
     filteredList = [
@@ -172,7 +168,7 @@ const RestaurantCard = (props) => {
   }, []);
 
   return (
-    <Pressable onPress={onPress} style={styles.restaurantCardContainer}>
+    <Pressable onPress={() => onPress()} style={styles.restaurantCardContainer}>
       {restaurantData.image !== "" ? (
         <Image
           style={styles.backgroundImage}
@@ -216,4 +212,4 @@ const RestaurantCard = (props) => {
   );
 };
 
-export default RestaurantCard;
+export default HomeRestaurantCard;

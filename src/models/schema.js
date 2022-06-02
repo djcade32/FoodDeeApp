@@ -115,6 +115,25 @@ export const schema = {
         }
     },
     "nonModels": {
+        "Coordinates": {
+            "name": "Coordinates",
+            "fields": {
+                "latitude": {
+                    "name": "latitude",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "longitude": {
+                    "name": "longitude",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": true,
+                    "attributes": []
+                }
+            }
+        },
         "Item": {
             "name": "Item",
             "fields": {
@@ -220,9 +239,18 @@ export const schema = {
                     "isRequired": false,
                     "attributes": [],
                     "isArrayNullable": true
+                },
+                "coordinates": {
+                    "name": "coordinates",
+                    "isArray": false,
+                    "type": {
+                        "nonModel": "Coordinates"
+                    },
+                    "isRequired": true,
+                    "attributes": []
                 }
             }
         }
     },
-    "version": "f9ad9223f67c9d3b3c06fb045f5657c1"
+    "version": "5fc1fce17c940f27e8bb9d25fdfa8457"
 };
