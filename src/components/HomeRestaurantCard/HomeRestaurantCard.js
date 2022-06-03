@@ -127,35 +127,21 @@ const HomeRestaurantCard = (props) => {
 
   async function switchRestaurantStatus(status) {
     console.log("Switching Status");
-    let filteredList = userRestaurantList.filter(
-      (restaurant) => restaurant.id !== props.restaurant?.id
-    );
-    console.log("Filtered List: ", filteredList);
-    filteredList = [
-      ...filteredList,
-      {
-        id: restaurantData.id,
-        name: restaurantData.name,
-        address: restaurantData.address,
-        cuisine: restaurantData.cuisine,
-        status: status,
-        image: restaurantData.image,
-        cost: restaurantData.cost,
-        rating: restaurantData.rating,
-        coordinates: {
-          latitude: restaurantData.coordinates.latitude,
-          longitude: restaurantData.coordinates.longitude,
-        },
-      },
-    ];
+
+    const updatedRestaurantList = userRestaurantList.map((restaurant) => {
+      if (restaurantData.id === restaurant.id) {
+        return { ...restaurant, status: status };
+      }
+      return restaurant;
+    });
     try {
       const user = await DataStore.save(
         User.copyOf(dbUser, (updated) => {
-          updated.restaurants = filteredList;
+          updated.restaurants = updatedRestaurantList;
         })
       );
       setDbUser(user);
-      setUserRestaurantList(filteredList);
+      setUserRestaurantList(updatedRestaurantList);
     } catch (e) {
       console.log(e);
     }
