@@ -96,7 +96,7 @@ const Home = () => {
     setSearchedList([]);
     if (searchValue !== "") {
       const delayDebounceFn = setTimeout(() => {
-        userRestaurantList.map((restaurant) => {
+        (filterAdded ? filterList : userRestaurantList).map((restaurant) => {
           const name = restaurant.name.toLowerCase();
           if (name.includes(searchValue.toLowerCase())) {
             setSearchedList((oldList) => [...oldList, restaurant]);
@@ -168,13 +168,15 @@ const Home = () => {
           ) : (
             <Map userLocation={userLocation}>
               <SearchBar style={SEARCH_BAR_STYLES} placeHolderText={"Search"} />
-              {userRestaurantList.map((restaurant) => (
-                <HomeCustomMarker
-                  key={restaurant.id}
-                  data={restaurant}
-                  userLocation={userLocation}
-                />
-              ))}
+              {(filterAdded ? filterList : userRestaurantList).map(
+                (restaurant) => (
+                  <HomeCustomMarker
+                    key={restaurant.id}
+                    data={restaurant}
+                    userLocation={userLocation}
+                  />
+                )
+              )}
             </Map>
           )}
           <BottomSheet
