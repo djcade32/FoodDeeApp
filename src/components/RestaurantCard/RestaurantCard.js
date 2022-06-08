@@ -25,9 +25,11 @@ const RestaurantCard = (props) => {
     name: props.restaurant.item?.name,
     image: props.restaurant.item?.image_url,
     address:
-      props.restaurant.item.location?.display_address[0] +
-      " " +
-      props.restaurant.item.location?.display_address[1],
+      props.restaurant.item.location?.display_address.length > 1
+        ? props.restaurant.item.location?.display_address[0] +
+          " " +
+          props.restaurant.item.location?.display_address[1]
+        : props.restaurant.item.location?.display_address[0],
     distance: restaurantDistance,
     cuisine: getCuisine(props.restaurant.item.categories),
     rating: props.restaurant.item?.rating,
