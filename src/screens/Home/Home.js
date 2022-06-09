@@ -111,22 +111,30 @@ const Home = () => {
   }, [searchValue]);
 
   useEffect(() => {
-    setFilterList([]);
     if (!isEquivalent(filterConfig, INITIAL_CONFIG_STATE)) {
+      let filteredList =
+        filterList.length === 0 ? userRestaurantList : filterList;
       if (filterConfig.try) {
-        const filteredList = userRestaurantList.filter(
+        filteredList = filteredList.filter(
           (restaurant) => restaurant.status === RestaurantStatus.TRY
         );
-        setFilterList((oldList) => [...oldList, ...filteredList]);
       }
 
       if (filterConfig.tried) {
-        const filteredList = userRestaurantList.filter(
+        filteredList = filteredList.filter(
           (restaurant) => restaurant.status === RestaurantStatus.TRIED
         );
-        setFilterList((oldList) => [...oldList, ...filteredList]);
       }
+
+      if (filterConfig.categories !== "") {
+        filteredList = filteredList.filter(
+          (restaurant) => restaurant.cuisine === filterConfig.categories
+        );
+      }
+
+      setFilterList(filteredList);
     } else {
+      setFilterList([]);
       setFilterAdded(false);
     }
   }, [filterConfig]);
