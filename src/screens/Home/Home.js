@@ -17,9 +17,10 @@ import BottomSheet from "../../components/BottomSheet/BottomSheet";
 import { useAuthContext } from "../../contexts/AuthContext";
 import { User, RestaurantStatus } from "../../models";
 import HomeRestaurantCard from "../../components/HomeRestaurantCard/HomeRestaurantCard";
-import { isEquivalent } from "../../helpers/helpers";
+import { calculateDistance, isEquivalent } from "../../helpers/helpers";
 
 import FilterScreen from "./FilterScreen/FilterScreen";
+import { configure } from "@react-native-community/netinfo";
 
 const SEARCH_BAR_STYLES = {
   marginTop: 25,
@@ -111,30 +112,42 @@ const Home = () => {
   }, [searchValue]);
 
   useEffect(() => {
+    setFilterList([]);
     if (!isEquivalent(filterConfig, INITIAL_CONFIG_STATE)) {
-      let filteredList =
-        filterList.length === 0 ? userRestaurantList : filterList;
-      if (filterConfig.try) {
-        filteredList = filteredList.filter(
-          (restaurant) => restaurant.status === RestaurantStatus.TRY
-        );
-      }
+      userRestaurantList.map((restaurant) => {
+        if (filterConfig.try && restaurant.status !== RestaurantStatus.TRY) {
+          return;
+        }
+        if (
+          filterConfig.tried &&
+          restaurant.status !== RestaurantStatus.TRIED
+        ) {
+          return;
+        }
 
-      if (filterConfig.tried) {
-        filteredList = filteredList.filter(
-          (restaurant) => restaurant.status === RestaurantStatus.TRIED
-        );
-      }
+        if (
+          filterConfig.categories !== "" &&
+          restaurant.cuisine !== filterConfig.categories
+        ) {
+          return;
+        }
 
-      if (filterConfig.categories !== "") {
-        filteredList = filteredList.filter(
-          (restaurant) => restaurant.cuisine === filterConfig.categories
-        );
-      }
+        if (filterConfig.distanceRadius !== "") {
+          let distanceInMeters =
+            calculateDistance(
+              userLocation.latitude,
+              restaurant.coordinates.latitude,
+              userLocation.longitude,
+              restaurant.coordinates.longitude
+            ) * 1609.344;
+          if (distanceInMeters > filterConfig.distanceRadius) {
+            return;
+          }
+        }
 
-      setFilterList(filteredList);
+        setFilterList((oldList) => [...oldList, restaurant]);
+      });
     } else {
-      setFilterList([]);
       setFilterAdded(false);
     }
   }, [filterConfig]);

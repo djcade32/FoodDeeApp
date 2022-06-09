@@ -92,7 +92,6 @@ export default function FilterScreen({
   }
 
   function handleSlider(value) {
-    console.log(value + " is chosen");
     let milesToMeters = (value * 1609.344).toFixed(0);
     if (milesToMeters > 40000) {
       milesToMeters = 40000;
