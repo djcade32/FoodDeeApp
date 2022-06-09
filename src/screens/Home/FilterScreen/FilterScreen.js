@@ -4,7 +4,7 @@ import styles from "./styles";
 import SelectDropdown from "react-native-select-dropdown";
 import { Entypo } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
-import { getApiCategory } from "../../../helpers/helpers";
+import { getApiCategory, isEquivalent } from "../../../helpers/helpers";
 
 export default function FilterScreen({
   closeBottomSheet,
@@ -92,7 +92,6 @@ export default function FilterScreen({
   }
 
   function handleSlider(value) {
-    console.log(value + " is chosen");
     let milesToMeters = (value * 1609.344).toFixed(0);
     if (milesToMeters > 40000) {
       milesToMeters = 40000;
@@ -149,7 +148,7 @@ export default function FilterScreen({
           onSelect={(selectedItem, index) => {
             setFilterConfigCopy((prevState) => ({
               ...prevState,
-              ...{ categories: getApiCategory(selectedItem) },
+              ...{ categories: selectedItem === "None" ? "" : selectedItem },
             }));
           }}
         />
@@ -189,8 +188,10 @@ export default function FilterScreen({
 
       <TouchableOpacity
         onPress={() => {
-          setFilterConfig(filterConfigCopy);
-          filterTrigger(true);
+          if (!isEquivalent(filterConfigRef, filterConfigCopy)) {
+            setFilterConfig(filterConfigCopy);
+            filterTrigger(true);
+          }
           closeBottomSheet();
         }}
         activeOpacity={0.5}

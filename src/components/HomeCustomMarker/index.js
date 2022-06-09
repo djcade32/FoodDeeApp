@@ -14,7 +14,6 @@ import { getCuisineIcon, calculateDistance } from "../../helpers/helpers";
 
 const HomeCustomMarker = ({ data, userLocation }) => {
   const navigation = useNavigation();
-  console.log("Data: ", data);
 
   const restaurantDistance = calculateDistance(
     userLocation?.latitude,

@@ -14,6 +14,7 @@ import * as Location from "expo-location";
 import FilterScreen from "../Home/FilterScreen/FilterScreen";
 import Map from "../../components/Map/Map";
 import BottomSheet from "../../components/BottomSheet/BottomSheet";
+import { getApiCategory } from "../../helpers/helpers";
 
 export default function Search() {
   const FETCH_LIMIT = 50;
@@ -76,7 +77,7 @@ export default function Search() {
           "&limit=" +
           limit +
           "&sort_by=distance&categories=" +
-          filterConfig.categories +
+          getApiCategory(filterConfig.categories) +
           "&radius=" +
           filterConfig.distanceRadius +
           "&offset=" +

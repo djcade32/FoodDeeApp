@@ -17,8 +17,10 @@ import BottomSheet from "../../components/BottomSheet/BottomSheet";
 import { useAuthContext } from "../../contexts/AuthContext";
 import { User, RestaurantStatus } from "../../models";
 import HomeRestaurantCard from "../../components/HomeRestaurantCard/HomeRestaurantCard";
+import { calculateDistance, isEquivalent } from "../../helpers/helpers";
 
 import FilterScreen from "./FilterScreen/FilterScreen";
+import { configure } from "@react-native-community/netinfo";
 
 const SEARCH_BAR_STYLES = {
   marginTop: 25,
@@ -27,11 +29,23 @@ const SEARCH_BAR_STYLES = {
   marginBottom: 10,
 };
 
+const INITIAL_CONFIG_STATE = {
+  categories: "",
+  distanceRadius: "",
+  try: false,
+  tried: false,
+};
+
 const Home = () => {
-  const { setDbUser, dbUser, userRestaurantList, setUserRestaurantList } =
-    useAuthContext();
+  const { userRestaurantList } = useAuthContext();
   const [isViewModeList, setIsViewModeList] = useState(true);
   const [userLocation, setUserLocation] = useState(null);
+  const [searchValue, setSearchValue] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchedList, setSearchedList] = useState([]);
+  const [filterConfig, setFilterConfig] = useState(INITIAL_CONFIG_STATE);
+  const [filterAdded, setFilterAdded] = useState(false);
+  const [filterList, setFilterList] = useState([]);
 
   const bottomSheetRef = useRef(null);
 
@@ -79,6 +93,65 @@ const Home = () => {
     // return foregroundSubscription;
   }, []);
 
+  useEffect(() => {
+    setSearchedList([]);
+    if (searchValue !== "") {
+      const delayDebounceFn = setTimeout(() => {
+        (filterAdded ? filterList : userRestaurantList).map((restaurant) => {
+          const name = restaurant.name.toLowerCase();
+          if (name.includes(searchValue.toLowerCase())) {
+            setSearchedList((oldList) => [...oldList, restaurant]);
+          }
+        });
+      }, 1000);
+
+      return () => clearTimeout(delayDebounceFn);
+    } else {
+      setIsSearching(false);
+    }
+  }, [searchValue]);
+
+  useEffect(() => {
+    setFilterList([]);
+    if (!isEquivalent(filterConfig, INITIAL_CONFIG_STATE)) {
+      userRestaurantList.map((restaurant) => {
+        if (filterConfig.try && restaurant.status !== RestaurantStatus.TRY) {
+          return;
+        }
+        if (
+          filterConfig.tried &&
+          restaurant.status !== RestaurantStatus.TRIED
+        ) {
+          return;
+        }
+
+        if (
+          filterConfig.categories !== "" &&
+          restaurant.cuisine !== filterConfig.categories
+        ) {
+          return;
+        }
+
+        if (filterConfig.distanceRadius !== "") {
+          let distanceInMeters =
+            calculateDistance(
+              userLocation.latitude,
+              restaurant.coordinates.latitude,
+              userLocation.longitude,
+              restaurant.coordinates.longitude
+            ) * 1609.344;
+          if (distanceInMeters > filterConfig.distanceRadius) {
+            return;
+          }
+        }
+
+        setFilterList((oldList) => [...oldList, restaurant]);
+      });
+    } else {
+      setFilterAdded(false);
+    }
+  }, [filterConfig]);
+
   return (
     <>
       {userLocation ? (
@@ -90,10 +163,21 @@ const Home = () => {
 
           {isViewModeList ? (
             <>
-              <SearchBar style={SEARCH_BAR_STYLES} placeHolderText={"Search"} />
+              <SearchBar
+                style={SEARCH_BAR_STYLES}
+                placeHolderText={"Search"}
+                setSearchValue={setSearchValue}
+                setIsSearching={setIsSearching}
+              />
               <FlatList
                 style={{ marginBottom: 10 }}
-                data={userRestaurantList}
+                data={
+                  isSearching
+                    ? searchedList
+                    : filterAdded
+                    ? filterList
+                    : userRestaurantList
+                }
                 renderItem={({ item }) => (
                   <HomeRestaurantCard
                     userLocation={userLocation}
@@ -105,13 +189,15 @@ const Home = () => {
           ) : (
             <Map userLocation={userLocation}>
               <SearchBar style={SEARCH_BAR_STYLES} placeHolderText={"Search"} />
-              {userRestaurantList.map((restaurant) => (
-                <HomeCustomMarker
-                  key={restaurant.id}
-                  data={restaurant}
-                  userLocation={userLocation}
-                />
-              ))}
+              {(filterAdded ? filterList : userRestaurantList).map(
+                (restaurant) => (
+                  <HomeCustomMarker
+                    key={restaurant.id}
+                    data={restaurant}
+                    userLocation={userLocation}
+                  />
+                )
+              )}
             </Map>
           )}
           <BottomSheet
@@ -121,6 +207,9 @@ const Home = () => {
           >
             <FilterScreen
               closeBottomSheet={() => bottomSheetRef.current?.close()}
+              setFilterConfig={setFilterConfig}
+              filterTrigger={setFilterAdded}
+              filterConfigRef={filterConfig}
             />
           </BottomSheet>
         </View>

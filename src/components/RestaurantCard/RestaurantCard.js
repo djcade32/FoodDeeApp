@@ -25,9 +25,11 @@ const RestaurantCard = (props) => {
     name: props.restaurant.item?.name,
     image: props.restaurant.item?.image_url,
     address:
-      props.restaurant.item.location?.display_address[0] +
-      " " +
-      props.restaurant.item.location?.display_address[1],
+      props.restaurant.item.location?.display_address.length > 1
+        ? props.restaurant.item.location?.display_address[0] +
+          " " +
+          props.restaurant.item.location?.display_address[1]
+        : props.restaurant.item.location?.display_address[0],
     distance: restaurantDistance,
     cuisine: getCuisine(props.restaurant.item.categories),
     rating: props.restaurant.item?.rating,
@@ -129,35 +131,22 @@ const RestaurantCard = (props) => {
   }
 
   async function switchRestaurantStatus(status) {
-    let filteredList = userRestaurantList.filter(
-      (restaurant) => restaurant.id !== props.restaurant.item?.id
-    );
-    console.log("Filtered List: ", filteredList);
-    filteredList = [
-      ...filteredList,
-      {
-        id: restaurantData.id,
-        name: restaurantData.name,
-        address: restaurantData.address,
-        cuisine: restaurantData.cuisine,
-        status: status,
-        image: restaurantData.image,
-        cost: restaurantData.cost,
-        rating: restaurantData.rating,
-        coordinates: {
-          latitude: restaurantData.coordinates.latitude,
-          longitude: restaurantData.coordinates.longitude,
-        },
-      },
-    ];
+    console.log("Switch to:", status);
+    const updatedRestaurantList = userRestaurantList.map((restaurant) => {
+      if (restaurantData.id === restaurant.id) {
+        return { ...restaurant, status: status };
+      }
+      return restaurant;
+    });
     try {
       const user = await DataStore.save(
         User.copyOf(dbUser, (updated) => {
-          updated.restaurants = filteredList;
+          updated.restaurants = updatedRestaurantList;
         })
       );
+      // console.log("Filter List 2: ", filteredList);
       setDbUser(user);
-      setUserRestaurantList(filteredList);
+      setUserRestaurantList(updatedRestaurantList);
     } catch (e) {
       console.log(e);
     }

@@ -36,12 +36,12 @@ const HomeRestaurantCard = (props) => {
     coordinates: props.restaurant.coordinates,
   };
 
-  // useEffect(() => {
-  //   const foundRestaurant = userRestaurantList.find(
-  //     (restaurant) => restaurant.id === props.restaurant.item?.id
-  //   );
-  //   setBadgeStatus(foundRestaurant?.status);
-  // }, [userRestaurantList]);
+  useEffect(() => {
+    const foundRestaurant = userRestaurantList.find(
+      (restaurant) => restaurant.id === props.restaurant.id
+    );
+    setBadgeStatus(foundRestaurant?.status);
+  }, [userRestaurantList]);
 
   function onPress() {
     navigation.navigate("RestaurantScreen", restaurantData);
@@ -126,35 +126,22 @@ const HomeRestaurantCard = (props) => {
   }
 
   async function switchRestaurantStatus(status) {
-    let filteredList = userRestaurantList.filter(
-      (restaurant) => restaurant.id !== props.restaurant?.id
-    );
-    console.log("Filtered List: ", filteredList);
-    filteredList = [
-      ...filteredList,
-      {
-        id: restaurantData.id,
-        name: restaurantData.name,
-        address: restaurantData.address,
-        cuisine: restaurantData.cuisine,
-        status: status,
-        image: restaurantData.image,
-        cost: restaurantData.cost,
-        rating: restaurantData.rating,
-        coordinates: {
-          latitude: restaurantData.coordinates.latitude,
-          longitude: restaurantData.coordinates.longitude,
-        },
-      },
-    ];
+    console.log("Switching Status");
+
+    const updatedRestaurantList = userRestaurantList.map((restaurant) => {
+      if (restaurantData.id === restaurant.id) {
+        return { ...restaurant, status: status };
+      }
+      return restaurant;
+    });
     try {
       const user = await DataStore.save(
         User.copyOf(dbUser, (updated) => {
-          updated.restaurants = filteredList;
+          updated.restaurants = updatedRestaurantList;
         })
       );
       setDbUser(user);
-      setUserRestaurantList(filteredList);
+      setUserRestaurantList(updatedRestaurantList);
     } catch (e) {
       console.log(e);
     }
