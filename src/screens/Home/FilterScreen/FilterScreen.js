@@ -11,6 +11,7 @@ export default function FilterScreen({
   setFilterConfig,
   filterTrigger,
   filterConfigRef,
+  previousScreen,
 }) {
   const selectDropdownRef = useRef(null);
   const CUISINES = [
@@ -108,32 +109,36 @@ export default function FilterScreen({
         <Text style={styles.filterHeaderTitle}>Filter</Text>
       </View>
 
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>Try</Text>
-        <Switch
-          trackColor={{
-            false: "rgba(182, 182, 207, 0.62)",
-            true: "#FF9A62",
-          }}
-          thumbColor={"white"}
-          ios_backgroundColor="rgba(182, 182, 207, 0.62)"
-          onValueChange={() => toggleSwitch("Try")}
-          value={isTryEnabled}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>Tried</Text>
-        <Switch
-          trackColor={{
-            false: "rgba(182, 182, 207, 0.62)",
-            true: "#FF9A62",
-          }}
-          thumbColor={"white"}
-          ios_backgroundColor="rgba(182, 182, 207, 0.62)"
-          onValueChange={() => toggleSwitch("Tried")}
-          value={isTriedEnabled}
-        />
-      </View>
+      {previousScreen !== "Search" && (
+        <>
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Try</Text>
+            <Switch
+              trackColor={{
+                false: "rgba(182, 182, 207, 0.62)",
+                true: "#FF9A62",
+              }}
+              thumbColor={"white"}
+              ios_backgroundColor="rgba(182, 182, 207, 0.62)"
+              onValueChange={() => toggleSwitch("Try")}
+              value={isTryEnabled}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Tried</Text>
+            <Switch
+              trackColor={{
+                false: "rgba(182, 182, 207, 0.62)",
+                true: "#FF9A62",
+              }}
+              thumbColor={"white"}
+              ios_backgroundColor="rgba(182, 182, 207, 0.62)"
+              onValueChange={() => toggleSwitch("Tried")}
+              value={isTriedEnabled}
+            />
+          </View>
+        </>
+      )}
       <View style={styles.inputContainer}>
         <Text style={styles.inputLabel}>Cuisine</Text>
         <SelectDropdown

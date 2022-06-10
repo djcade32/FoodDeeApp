@@ -14,32 +14,20 @@ import * as Location from "expo-location";
 import FilterScreen from "../Home/FilterScreen/FilterScreen";
 import Map from "../../components/Map/Map";
 import BottomSheet from "../../components/BottomSheet/BottomSheet";
-import { useAuthContext } from "../../contexts/AuthContext";
-
-import {
-  getApiCategory,
-  isEquivalent,
-  calculateDistance,
-} from "../../helpers/helpers";
-import { RestaurantStatus } from "../../models";
+import { getApiCategory } from "../../helpers/helpers";
 
 export default function Search() {
-  const { userRestaurantList } = useAuthContext();
-
   const FETCH_LIMIT = 50;
-
-  const INITIAL_CONFIG_STATE = {
-    categories: "",
-    distanceRadius: "",
-    try: false,
-    tried: false,
-  };
 
   const [fetchedRestaurants, setfetchedRestaurants] = useState([]);
   const [fetchedTotal, setFetchedTotal] = useState(0);
   const [filterAdded, setFilterAdded] = useState(false);
-  const [filterConfig, setFilterConfig] = useState(INITIAL_CONFIG_STATE);
-  const [filterTryTriedList, setFilterTryTriedList] = useState([]);
+  const [filterConfig, setFilterConfig] = useState({
+    categories: "",
+    distanceRadius: "",
+    try: false,
+    tried: false,
+  });
   const [isViewModeList, setIsViewModeList] = useState(true);
   const [userLocation, setUserLocation] = useState(null);
   const [searchValue, setSearchValue] = useState("");
@@ -142,6 +130,7 @@ export default function Search() {
 
   // Allows restaurants to load as user is typing in search bar
   useEffect(() => {
+    console.log("Search Use Effect");
     if (isSearching) {
       console.log("inside search if statemnt");
       setEndIsReached(false);
@@ -158,55 +147,12 @@ export default function Search() {
 
   // Fetch restaurants if user is filtering
   useEffect(() => {
-    setFilterTryTriedList([]);
-    if (!isEquivalent(filterConfig, INITIAL_CONFIG_STATE)) {
+    console.log("Filter Added");
+    if (filterAdded) {
       console.log("Inside Filter effect if statement");
-      if (filterConfig.try || filterConfig.tried) {
-        userRestaurantList.map((restaurant) => {
-          if (filterConfig.try && restaurant.status !== RestaurantStatus.TRY) {
-            return;
-          }
-          if (
-            filterConfig.tried &&
-            restaurant.status !== RestaurantStatus.TRIED
-          ) {
-            return;
-          }
-          if (
-            filterConfig.categories !== "" &&
-            restaurant.cuisine !== filterConfig.categories
-          ) {
-            return;
-          }
-
-          if (filterConfig.distanceRadius !== "") {
-            let distanceInMeters =
-              calculateDistance(
-                userLocation.latitude,
-                restaurant.coordinates.latitude,
-                userLocation.longitude,
-                restaurant.coordinates.longitude
-              ) * 1609.344;
-            if (distanceInMeters > filterConfig.distanceRadius) {
-              return;
-            }
-          }
-
-          setFilterTryTriedList((oldList) => [...oldList, restaurant]);
-        });
-      } else {
-        fetchRestaurants(FETCH_LIMIT, 0);
-      }
+      fetchRestaurants(FETCH_LIMIT, 0);
     }
-  }, [filterConfig]);
-
-  // useEffect(() => {
-  //   if (!isEquivalent(filterConfig, INITIAL_CONFIG_STATE)) {
-  //     console.log("Config Changed");
-  //   } else {
-  //     setFilterAdded(false);
-  //   }
-  // }, [filterConfig]);
+  }, [filterAdded]);
 
   function handleViewType() {
     setIsViewModeList(!isViewModeList);
@@ -240,7 +186,7 @@ export default function Search() {
           <FlatList
             onEndReached={fetchMoreRestaurants}
             style={{ marginBottom: 10 }}
-            data={filterAdded ? filterTryTriedList : fetchedRestaurants}
+            data={fetchedRestaurants}
             renderItem={(restaurant) => (
               <RestaurantCard restaurant={restaurant} />
             )}
@@ -248,11 +194,9 @@ export default function Search() {
         </>
       ) : (
         <Map userLocation={userLocation}>
-          {(filterAdded ? filterTryTriedList : fetchedRestaurants).map(
-            (restaurant) => (
-              <CustomMarker key={restaurant.id} data={restaurant} />
-            )
-          )}
+          {fetchedRestaurants.map((restaurant) => (
+            <CustomMarker key={restaurant.id} data={restaurant} />
+          ))}
         </Map>
       )}
 
@@ -262,6 +206,7 @@ export default function Search() {
           setFilterConfig={setFilterConfig}
           filterTrigger={setFilterAdded}
           filterConfigRef={filterConfig}
+          previousScreen={"Search"}
         />
       </BottomSheet>
     </View>
