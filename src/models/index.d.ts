@@ -33,7 +33,7 @@ export declare class Restaurant {
   readonly image?: string | null;
   readonly cost?: string | null;
   readonly rating: number;
-  readonly itemsID?: (Item | null)[] | null;
+  readonly items?: (Item | null)[] | null;
   readonly coordinates: Coordinates;
   constructor(init: ModelInit<Restaurant>);
 }

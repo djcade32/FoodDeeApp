@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Pressable,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./styles";
 import userData from "../../../assets/data/userData";
 import {
@@ -32,6 +32,18 @@ export default function Restaurant() {
   const route = useRoute();
   const restaurant = route.params;
   const [badgeStatus, setBadgeStatus] = useState(restaurant?.status);
+  const [restaurantItems, setRestaurantItems] = useState([]);
+
+  useEffect(() => {
+    if (restaurant && badgeStatus === RestaurantStatus.TRIED) {
+      console.log("Checking if user restaurant");
+      const foundRestaurant = userRestaurantList.find(
+        (foundRestaurant) => foundRestaurant.id === restaurant.id
+      );
+      setRestaurantItems(foundRestaurant.items);
+      console.log("Found: ", foundRestaurant.items);
+    }
+  });
 
   function handleBadgePress(badgeType) {
     // Switch to opposite status if one is highlighted already
@@ -122,6 +134,58 @@ export default function Restaurant() {
     }
   }
 
+  function addItemButton() {
+    return (
+      <TouchableOpacity
+        onPress={() => navigation.navigate("AddItemScreen", restaurant)}
+        activeOpacity={0.5}
+        style={styles.addButtonContainer}
+      >
+        <Text style={styles.addButtonText}>Add item</Text>
+      </TouchableOpacity>
+    );
+  }
+
+  async function deleteItem(id) {
+    const updatedRestaurantList = userRestaurantList.map((place) => {
+      if (
+        place.id === restaurant.id &&
+        place.status === RestaurantStatus.TRIED
+      ) {
+        console.log("Deleting Item");
+        const updatedItemsList = place.items.filter((item) => item.id !== id);
+        return {
+          id: place.id,
+          name: place.name,
+          address: place.address,
+          cuisine: place.cuisine,
+          status: place.status,
+          image: place.image,
+          cost: place.cost,
+          rating: place.rating,
+          coordinates: {
+            latitude: place.coordinates.latitude,
+            longitude: place.coordinates.longitude,
+          },
+          items: updatedItemsList,
+        };
+      }
+      return place;
+    });
+    console.log("Restaurants", updatedRestaurantList);
+    try {
+      const user = await DataStore.save(
+        User.copyOf(dbUser, (updated) => {
+          updated.restaurants = updatedRestaurantList;
+        })
+      );
+      setDbUser(user);
+      setUserRestaurantList((oldList) => [...oldList, ...user.restaurants]);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <View style={styles.restaurantScreen}>
       <View style={styles.restaurantImageContainer}>
@@ -191,17 +255,21 @@ export default function Restaurant() {
       <View>
         <FlatList
           style={{ height: "35%" }}
-          data={USER.items}
-          renderItem={({ item }) => <RestaurantItem item={item} />}
+          data={restaurantItems}
+          renderItem={({ item }) => (
+            <RestaurantItem deleteItem={deleteItem} item={item} />
+          )}
+          ListFooterComponent={addItemButton}
+          // ListFooterComponentStyle={{ }}
         />
       </View>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => navigation.navigate("AddItemScreen")}
         activeOpacity={0.5}
         style={styles.addButtonContainer}
       >
-        <Text style={styles.addButtonText}>Add item</Text>
-      </TouchableOpacity>
+      <Text style={styles.addButtonText}>Add item</Text>
+      </TouchableOpacity> */}
     </View>
   );
 }

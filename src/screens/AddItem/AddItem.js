@@ -6,27 +6,91 @@ import {
   TouchableOpacity,
   Keyboard,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import styles from "./styles";
 import SelectDropdown from "react-native-select-dropdown";
 import { Entypo } from "@expo/vector-icons";
 import { AirbnbRating } from "react-native-ratings";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { User, RestaurantStatus, ItemType } from "../../models";
+import { DataStore } from "aws-amplify";
+import { useAuthContext } from "../../contexts/AuthContext";
+import uuid from "react-native-uuid";
 
 export default function AddItem() {
-  const navigation = useNavigation();
+  const REVIEW_OPTIONS = ["Terrible", "Bad", "OK", "Good", "Amazing"];
+  const ITEM_TYPE = [ItemType.FOOD, ItemType.DRINK];
 
-  const ITEM_TYPE = ["Food", "Drink"];
+  const navigation = useNavigation();
+  const route = useRoute();
+  const restaurant = route.params;
+  const { setDbUser, dbUser, userRestaurantList, setUserRestaurantList } =
+    useAuthContext();
+  const [itemName, setItemName] = useState("");
+  const [review, setReview] = useState(3);
+  const [itemType, setItemType] = useState(ITEM_TYPE[0]);
 
   function handleDonePress() {
+    addItem();
     navigation.goBack();
+  }
+
+  async function addItem() {
+    const updatedRestaurantList = userRestaurantList.map((place) => {
+      if (
+        place.id === restaurant.id &&
+        place.status === RestaurantStatus.TRIED
+      ) {
+        console.log("Item added");
+        return {
+          id: place.id,
+          name: place.name,
+          address: place.address,
+          cuisine: place.cuisine,
+          status: place.status,
+          image: place.image,
+          cost: place.cost,
+          rating: place.rating,
+          coordinates: {
+            latitude: place.coordinates.latitude,
+            longitude: place.coordinates.longitude,
+          },
+          items: [
+            ...place.items,
+            {
+              id: uuid.v4(),
+              name: itemName,
+              rating: REVIEW_OPTIONS[review - 1],
+              type: itemType,
+            },
+          ],
+        };
+      }
+      return place;
+    });
+    console.log("Restaurants", updatedRestaurantList);
+    try {
+      const user = await DataStore.save(
+        User.copyOf(dbUser, (updated) => {
+          updated.restaurants = updatedRestaurantList;
+        })
+      );
+      setDbUser(user);
+      setUserRestaurantList((oldList) => [...oldList, ...user.restaurants]);
+    } catch (e) {
+      console.log(e);
+    }
   }
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Name</Text>
-          <TextInput style={styles.input} placeholder="Name" />
+          <TextInput
+            style={styles.input}
+            placeholder="Name"
+            onChangeText={(text) => setItemName(text)}
+          />
         </View>
         <View style={styles.inputContainer}>
           <Text style={[styles.inputLabel, { alignSelf: "center" }]}>
@@ -38,9 +102,10 @@ export default function AddItem() {
             }}
             starContainerStyle={{ marginRight: 10 }}
             count={5}
-            reviews={["Terrible", "Bad", "OK", "Good", "Amazing"]}
-            defaultRating={3}
+            reviews={REVIEW_OPTIONS}
+            defaultRating={review}
             size={24}
+            onFinishRating={(number) => setReview(number)}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -54,7 +119,7 @@ export default function AddItem() {
             buttonStyle={styles.dropDown}
             data={ITEM_TYPE}
             onSelect={(selectedItem, index) => {
-              console.log(selectedItem, index);
+              setItemType(selectedItem);
             }}
           />
         </View>

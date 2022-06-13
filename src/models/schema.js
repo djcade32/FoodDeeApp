@@ -230,8 +230,8 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "itemsID": {
-                    "name": "itemsID",
+                "items": {
+                    "name": "items",
                     "isArray": true,
                     "type": {
                         "nonModel": "Item"
@@ -252,5 +252,5 @@ export const schema = {
             }
         }
     },
-    "version": "5fc1fce17c940f27e8bb9d25fdfa8457"
+    "version": "9eb690d8246bf792c86e808df6f9052c"
 };

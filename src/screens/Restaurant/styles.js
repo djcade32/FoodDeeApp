@@ -59,7 +59,7 @@ export default StyleSheet.create({
   },
   addButtonContainer: {
     backgroundColor: "rgba(182, 182, 207, 0.62)",
-    height: "7%",
+    height: 40,
     justifyContent: "center",
   },
   addButtonText: {
