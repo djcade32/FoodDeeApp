@@ -47,6 +47,7 @@ export default function Restaurant() {
 
   function handleBadgePress(badgeType) {
     // Switch to opposite status if one is highlighted already
+    console.log("Badge Status: ", badgeStatus, "Badge Type: ", badgeType);
     if (badgeStatus === RestaurantStatus.TRY && badgeType === "triedBadge") {
       setBadgeStatus(RestaurantStatus.TRIED);
       switchRestaurantStatus(RestaurantStatus.TRIED);
@@ -61,14 +62,17 @@ export default function Restaurant() {
     else if (badgeStatus === RestaurantStatus.TRY && badgeType === "tryBadge") {
       setBadgeStatus(null);
       removeRestaurantStatus();
+      navigation.goBack();
     } else if (
       badgeStatus === RestaurantStatus.TRIED &&
       badgeType === "triedBadge"
     ) {
       setBadgeStatus(null);
       removeRestaurantStatus();
+      navigation.goBack();
     }
-    // Neither icon is highlighted
+    // Save this commented code snippet for undo capability
+    // // Neither icon is highlighted
     // else if (!badgeStatus && badgeType === "tryBadge") {
     //   setBadgeStatus(RestaurantStatus.TRY);
     //   addRestaurantStatus(RestaurantStatus.TRY);
@@ -80,7 +84,7 @@ export default function Restaurant() {
 
   async function removeRestaurantStatus() {
     const filteredList = userRestaurantList.filter(
-      (restaurant) => restaurant.id !== restaurant?.id
+      (place) => place.id !== restaurant?.id
     );
     console.log("Filtered List: ", filteredList);
     try {
