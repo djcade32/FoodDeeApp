@@ -7,6 +7,7 @@ const Map = (props) => {
 
   return (
     <MapView
+      showsPointsOfInterest={false}
       showsCompass={false}
       mapType="mutedStandard"
       style={{
