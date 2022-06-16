@@ -19,7 +19,7 @@ type Restaurant {
   image: String
   cost: String
   rating: Float!
-  itemsID: [Item]
+  items: [Item]
   coordinates: Coordinates!
 }
 
