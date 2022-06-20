@@ -119,7 +119,7 @@ const HomeRestaurantCard = (props) => {
         })
       );
       setDbUser(user);
-      setUserRestaurantList(filteredList);
+      // setUserRestaurantList(filteredList);
     } catch (e) {
       console.log(e);
     }
@@ -141,19 +141,19 @@ const HomeRestaurantCard = (props) => {
         })
       );
       setDbUser(user);
-      setUserRestaurantList(updatedRestaurantList);
+      // setUserRestaurantList(updatedRestaurantList);
     } catch (e) {
       console.log(e);
     }
   }
 
   // A work around that is used to update and sync Amplify's Cloud DB
-  // useEffect(() => {
-  //   const subscription = DataStore.observe(User).subscribe(({ element }) => {
-  //     setDbUser(element);
-  //   });
-  //   return () => subscription.unsubscribe();
-  // }, []);
+  useEffect(() => {
+    const subscription = DataStore.observe(User).subscribe(({ element }) => {
+      setDbUser(element);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   return (
     <Pressable onPress={() => onPress()} style={styles.restaurantCardContainer}>

@@ -84,6 +84,7 @@ const RestaurantCard = (props) => {
 
   async function addRestaurantStatus(status) {
     try {
+      console.log("Previous Restaurant List: ", dbUser.restaurants);
       const user = await DataStore.save(
         User.copyOf(dbUser, (updated) => {
           updated.restaurants = [
@@ -105,8 +106,9 @@ const RestaurantCard = (props) => {
           ];
         })
       );
+      console.log("New Restaurant List: ", user.restaurants);
       setDbUser(user);
-      setUserRestaurantList((oldList) => [...oldList, ...user.restaurants]);
+      // setUserRestaurantList((oldList) => [...oldList, user.restaurants]);
     } catch (e) {
       console.log(e);
     }
@@ -124,7 +126,7 @@ const RestaurantCard = (props) => {
         })
       );
       setDbUser(user);
-      setUserRestaurantList(filteredList);
+      // setUserRestaurantList(filteredList);
     } catch (e) {
       console.log(e);
     }
@@ -146,19 +148,19 @@ const RestaurantCard = (props) => {
       );
       // console.log("Filter List 2: ", filteredList);
       setDbUser(user);
-      setUserRestaurantList(updatedRestaurantList);
+      // setUserRestaurantList(updatedRestaurantList);
     } catch (e) {
       console.log(e);
     }
   }
 
   // A work around that is used to update and sync Amplify's Cloud DB
-  // useEffect(() => {
-  //   const subscription = DataStore.observe(User).subscribe(({ element }) => {
-  //     setDbUser(element);
-  //   });
-  //   return () => subscription.unsubscribe();
-  // }, [User]);
+  useEffect(() => {
+    const subscription = DataStore.observe(User).subscribe(({ element }) => {
+      setDbUser(element);
+    });
+    return () => subscription.unsubscribe();
+  }, [User]);
 
   return (
     <Pressable onPress={onPress} style={styles.restaurantCardContainer}>

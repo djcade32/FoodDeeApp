@@ -27,6 +27,7 @@ const AuthContextProvider = (props) => {
     if (dbUser) {
       console.log("Setting restaurants");
       setUserRestaurantList(dbUser.restaurants);
+      console.log("Set Restaurant List: ", dbUser.restaurants);
     }
   }, [dbUser]);
 
