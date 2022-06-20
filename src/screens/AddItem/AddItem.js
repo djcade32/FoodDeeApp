@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Keyboard,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./styles";
 import SelectDropdown from "react-native-select-dropdown";
 import { Entypo } from "@expo/vector-icons";
@@ -36,12 +36,13 @@ export default function AddItem() {
   }
 
   async function addItem() {
+    let int = 0;
     const updatedRestaurantList = userRestaurantList.map((place) => {
+      console.log("Number: ", ++int);
       if (
         place.id === restaurant.id &&
         place.status === RestaurantStatus.TRIED
       ) {
-        console.log("Item added");
         return {
           id: place.id,
           name: place.name,
@@ -55,20 +56,30 @@ export default function AddItem() {
             latitude: place.coordinates.latitude,
             longitude: place.coordinates.longitude,
           },
-          items: [
-            ...place.items,
-            {
-              id: uuid.v4(),
-              name: itemName,
-              rating: REVIEW_OPTIONS[review - 1],
-              type: itemType,
-            },
-          ],
+          items:
+            place.items === null
+              ? [
+                  {
+                    id: uuid.v4(),
+                    name: itemName,
+                    rating: REVIEW_OPTIONS[review - 1],
+                    type: itemType,
+                  },
+                ]
+              : [
+                  ...place.items,
+                  {
+                    id: uuid.v4(),
+                    name: itemName,
+                    rating: REVIEW_OPTIONS[review - 1],
+                    type: itemType,
+                  },
+                ],
         };
       }
       return place;
     });
-    console.log("Restaurants", updatedRestaurantList);
+    // console.log("Restaurants", updatedRestaurantList);
     try {
       const user = await DataStore.save(
         User.copyOf(dbUser, (updated) => {
@@ -76,11 +87,21 @@ export default function AddItem() {
         })
       );
       setDbUser(user);
-      setUserRestaurantList((oldList) => [...oldList, ...user.restaurants]);
+      // setUserRestaurantList((oldList) => [...oldList, ...user.restaurants]);
     } catch (e) {
       console.log(e);
     }
   }
+
+  // // A work around that is used to update and sync Amplify's Cloud DB
+  // useEffect(() => {
+  //   const subscription = DataStore.observe(User).subscribe(({ element }) => {
+  //     console.log("Element To Change: ", element);
+  //     setDbUser(element);
+  //   });
+  //   return () => subscription.unsubscribe();
+  // }, [User]);
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={{ flex: 1, backgroundColor: "white" }}>

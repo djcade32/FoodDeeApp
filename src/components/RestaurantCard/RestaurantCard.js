@@ -84,7 +84,6 @@ const RestaurantCard = (props) => {
 
   async function addRestaurantStatus(status) {
     try {
-      console.log("Previous Restaurant List: ", dbUser.restaurants);
       const user = await DataStore.save(
         User.copyOf(dbUser, (updated) => {
           updated.restaurants = [
@@ -106,7 +105,6 @@ const RestaurantCard = (props) => {
           ];
         })
       );
-      console.log("New Restaurant List: ", user.restaurants);
       setDbUser(user);
       // setUserRestaurantList((oldList) => [...oldList, user.restaurants]);
     } catch (e) {

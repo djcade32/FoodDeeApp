@@ -41,7 +41,7 @@ export default function Restaurant() {
         (foundRestaurant) => foundRestaurant.id === restaurant.id
       );
       setRestaurantItems(foundRestaurant.items);
-      console.log("Found: ", foundRestaurant.items);
+      console.log("Found: ", foundRestaurant);
     }
   });
 
@@ -94,7 +94,7 @@ export default function Restaurant() {
         })
       );
       setDbUser(user);
-      setUserRestaurantList(filteredList);
+      // setUserRestaurantList(filteredList);
     } catch (e) {
       console.log(e);
     }
@@ -132,7 +132,7 @@ export default function Restaurant() {
         })
       );
       setDbUser(user);
-      setUserRestaurantList(filteredList);
+      // setUserRestaurantList(filteredList);
     } catch (e) {
       console.log(e);
     }
@@ -184,7 +184,7 @@ export default function Restaurant() {
         })
       );
       setDbUser(user);
-      setUserRestaurantList((oldList) => [...oldList, ...user.restaurants]);
+      // setUserRestaurantList((oldList) => [...oldList, ...user.restaurants]);
     } catch (e) {
       console.log(e);
     }
