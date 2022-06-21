@@ -1,16 +1,8 @@
-import {
-  View,
-  SafeAreaView,
-  FlatList,
-  useWindowDimensions,
-  ActivityIndicator,
-  Text,
-} from "react-native";
+import { View, FlatList, ActivityIndicator, Text } from "react-native";
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import styles from "./styles";
 import HomeHeader from "../../components/Header/HomeHeader/HomeHeader";
 import SearchBar from "../../components/SearchBar/SearchBar";
-import { Marker } from "react-native-maps";
 import HomeCustomMarker from "../../components/HomeCustomMarker";
 import * as Location from "expo-location";
 import Map from "../../components/Map/Map";
@@ -185,7 +177,6 @@ const Home = () => {
                 placeHolderText={"Search"}
               />
               <Map userLocation={userLocation}>
-                {/* <SearchBar style={SEARCH_BAR_STYLES} placeHolderText={"Search"} /> */}
                 {(filterAdded ? filterList : userRestaurantList).map(
                   (restaurant) => (
                     <HomeCustomMarker
