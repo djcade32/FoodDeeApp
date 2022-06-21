@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import React from "react";
 import styles from "../RestaurantCard/styles";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import defaultImage from "../../../assets/images/foodee_default_img.jpg";
 
 import { getCuisine } from "../../helpers/helpers";
@@ -106,7 +106,6 @@ const RestaurantCard = (props) => {
         })
       );
       setDbUser(user);
-      // setUserRestaurantList((oldList) => [...oldList, user.restaurants]);
     } catch (e) {
       console.log(e);
     }
@@ -124,7 +123,6 @@ const RestaurantCard = (props) => {
         })
       );
       setDbUser(user);
-      // setUserRestaurantList(filteredList);
     } catch (e) {
       console.log(e);
     }
@@ -144,9 +142,7 @@ const RestaurantCard = (props) => {
           updated.restaurants = updatedRestaurantList;
         })
       );
-      // console.log("Filter List 2: ", filteredList);
       setDbUser(user);
-      // setUserRestaurantList(updatedRestaurantList);
     } catch (e) {
       console.log(e);
     }

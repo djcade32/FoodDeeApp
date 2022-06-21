@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import styles from "./styles.";
-import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const RestaurantItem = (props) => {
   return (
@@ -12,12 +12,6 @@ const RestaurantItem = (props) => {
       <Text style={styles.itemType}>{props.item.type}</Text>
       <View style={styles.ratingContainer}>
         <Text style={styles.rating}>{props.item.rating}</Text>
-        {/* <AntDesign
-          style={{ marginRight: 15 }}
-          name="star"
-          size={29}
-          color={"#FFC700"}
-        /> */}
         <TouchableOpacity onPress={() => props.deleteItem(props.item.id)}>
           <MaterialCommunityIcons
             name="trash-can"

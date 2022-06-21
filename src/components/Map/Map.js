@@ -1,4 +1,4 @@
-import { View, Text, useWindowDimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
 import MapView from "react-native-maps";
 import React from "react";
 

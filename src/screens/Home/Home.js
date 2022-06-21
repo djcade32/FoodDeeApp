@@ -21,7 +21,6 @@ import HomeRestaurantCard from "../../components/HomeRestaurantCard/HomeRestaura
 import { calculateDistance, isEquivalent } from "../../helpers/helpers";
 
 import FilterScreen from "./FilterScreen/FilterScreen";
-import { configure } from "@react-native-community/netinfo";
 
 const SEARCH_BAR_STYLES = {
   marginTop: 25,
@@ -78,20 +77,6 @@ const Home = () => {
       });
     }
     getUserLocation();
-
-    // const foregroundSubscription = Location.watchPositionAsync(
-    //   {
-    //     accuracy: Location.Accuracy.High,
-    //     distanceInterval: 100,
-    //   },
-    //   (updatedLocation) => {
-    //     setDriverLocation({
-    //       latitude: updatedLocation.coords.latitude,
-    //       longitude: updatedLocation.coords.longitude,
-    //     });
-    //   }
-    // );
-    // return foregroundSubscription;
   }, []);
 
   useEffect(() => {

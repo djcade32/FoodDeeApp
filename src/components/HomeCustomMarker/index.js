@@ -1,15 +1,7 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import React from "react";
 import { Marker } from "react-native-maps";
-import {
-  Entypo,
-  MaterialIcons,
-  FontAwesome5,
-  Ionicons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
-import { useNavigation, useRoute } from "@react-navigation/native";
-
+import { useNavigation } from "@react-navigation/native";
 import { getCuisineIcon, calculateDistance } from "../../helpers/helpers";
 
 const HomeCustomMarker = ({ data, userLocation }) => {
@@ -57,7 +49,6 @@ const HomeCustomMarker = ({ data, userLocation }) => {
           backgroundColor: "#FF9A62",
           padding: 5,
           borderRadius: 50,
-          // overflow: "hidden",
         }}
       >
         {icon}

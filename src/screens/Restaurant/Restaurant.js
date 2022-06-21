@@ -21,13 +21,8 @@ import { useAuthContext } from "../../contexts/AuthContext";
 import { User, RestaurantStatus } from "../../models";
 import { DataStore } from "aws-amplify";
 
-import { getCuisine } from "../../helpers/helpers";
-
-const USER = userData[0];
-
 export default function Restaurant() {
-  const { setDbUser, dbUser, userRestaurantList, setUserRestaurantList } =
-    useAuthContext();
+  const { setDbUser, dbUser, userRestaurantList } = useAuthContext();
   const navigation = useNavigation();
   const route = useRoute();
   const restaurant = route.params;
@@ -64,14 +59,12 @@ export default function Restaurant() {
     else if (badgeStatus === RestaurantStatus.TRY && badgeType === "tryBadge") {
       setBadgeStatus(null);
       removeRestaurantStatus();
-      // navigation.goBack();
     } else if (
       badgeStatus === RestaurantStatus.TRIED &&
       badgeType === "triedBadge"
     ) {
       setBadgeStatus(null);
       removeRestaurantStatus();
-      // navigation.goBack();
     }
     // Neither icon is highlighted
     else if (!badgeStatus && badgeType === "tryBadge") {
@@ -81,15 +74,6 @@ export default function Restaurant() {
       setBadgeStatus(RestaurantStatus.TRIED);
       addRestaurantStatus(RestaurantStatus.TRIED);
     }
-    // Save this commented code snippet for undo capability
-    // // Neither icon is highlighted
-    // else if (!badgeStatus && badgeType === "tryBadge") {
-    //   setBadgeStatus(RestaurantStatus.TRY);
-    //   addRestaurantStatus(RestaurantStatus.TRY);
-    // } else if (!badgeStatus && badgeType === "triedBadge") {
-    //   setBadgeStatus(RestaurantStatus.TRIED);
-    //   addRestaurantStatus(RestaurantStatus.TRIED);
-    // }
   }
 
   async function addRestaurantStatus(status) {
@@ -134,7 +118,6 @@ export default function Restaurant() {
         })
       );
       setDbUser(user);
-      // setUserRestaurantList((oldList) => [...oldList, ...user.restaurants]);
     } catch (e) {
       console.log(e);
     }
@@ -152,7 +135,6 @@ export default function Restaurant() {
         })
       );
       setDbUser(user);
-      // setUserRestaurantList(filteredList);
     } catch (e) {
       console.log(e);
     }
@@ -181,8 +163,6 @@ export default function Restaurant() {
         },
       },
     ];
-    // console.log("Filtered List 2: ", filteredList);
-
     try {
       const user = await DataStore.save(
         User.copyOf(dbUser, (updated) => {
@@ -190,7 +170,6 @@ export default function Restaurant() {
         })
       );
       setDbUser(user);
-      // setUserRestaurantList(filteredList);
     } catch (e) {
       console.log(e);
     }
@@ -242,7 +221,6 @@ export default function Restaurant() {
         })
       );
       setDbUser(user);
-      // setUserRestaurantList((oldList) => [...oldList, ...user.restaurants]);
     } catch (e) {
       console.log(e);
     }
@@ -325,16 +303,8 @@ export default function Restaurant() {
           ListFooterComponent={
             badgeStatus === RestaurantStatus.TRIED ? addItemButton : <></>
           }
-          // ListFooterComponentStyle={{ }}
         />
       </View>
-      {/* <TouchableOpacity
-        onPress={() => navigation.navigate("AddItemScreen")}
-        activeOpacity={0.5}
-        style={styles.addButtonContainer}
-      >
-      <Text style={styles.addButtonText}>Add item</Text>
-      </TouchableOpacity> */}
     </View>
   );
 }
