@@ -21,7 +21,7 @@ const SEARCH_BAR_STYLES = {
   marginBottom: 10,
 };
 
-const INITIAL_CONFIG_STATE = {
+const INITIAL_FILTER_CONFIG_STATE = {
   categories: "",
   distanceRadius: "",
   try: false,
@@ -35,7 +35,7 @@ const Home = () => {
   const [searchValue, setSearchValue] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [searchedList, setSearchedList] = useState([]);
-  const [filterConfig, setFilterConfig] = useState(INITIAL_CONFIG_STATE);
+  const [filterConfig, setFilterConfig] = useState(INITIAL_FILTER_CONFIG_STATE);
   const [filterAdded, setFilterAdded] = useState(false);
   const [filterList, setFilterList] = useState([]);
 
@@ -91,7 +91,7 @@ const Home = () => {
 
   useEffect(() => {
     setFilterList([]);
-    if (!isEquivalent(filterConfig, INITIAL_CONFIG_STATE)) {
+    if (!isEquivalent(filterConfig, INITIAL_FILTER_CONFIG_STATE)) {
       userRestaurantList.map((restaurant) => {
         if (filterConfig.try && restaurant.status !== RestaurantStatus.TRY) {
           return;
