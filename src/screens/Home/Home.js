@@ -8,7 +8,7 @@ import * as Location from "expo-location";
 import Map from "../../components/Map/Map";
 import BottomSheet from "../../components/BottomSheet/BottomSheet";
 import { useAuthContext } from "../../contexts/AuthContext";
-import { User, RestaurantStatus } from "../../models";
+import { RestaurantStatus } from "../../models";
 import HomeRestaurantCard from "../../components/HomeRestaurantCard/HomeRestaurantCard";
 import { calculateDistance, isEquivalent } from "../../helpers/helpers";
 
