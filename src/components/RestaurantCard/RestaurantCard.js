@@ -39,7 +39,7 @@ const RestaurantCard = (props) => {
   };
 
   useEffect(() => {
-    const foundRestaurant = userRestaurantList.find(
+    const foundRestaurant = userRestaurantList?.find(
       (restaurant) => restaurant.id === props.restaurant.item?.id
     );
     setBadgeStatus(foundRestaurant?.status);
@@ -106,7 +106,7 @@ const RestaurantCard = (props) => {
         })
       );
       setDbUser(user);
-      setUserRestaurantList((oldList) => [...oldList, ...user.restaurants]);
+      // setUserRestaurantList((oldList) => [...oldList, user.restaurants]);
     } catch (e) {
       console.log(e);
     }
@@ -124,7 +124,7 @@ const RestaurantCard = (props) => {
         })
       );
       setDbUser(user);
-      setUserRestaurantList(filteredList);
+      // setUserRestaurantList(filteredList);
     } catch (e) {
       console.log(e);
     }
@@ -146,7 +146,7 @@ const RestaurantCard = (props) => {
       );
       // console.log("Filter List 2: ", filteredList);
       setDbUser(user);
-      setUserRestaurantList(updatedRestaurantList);
+      // setUserRestaurantList(updatedRestaurantList);
     } catch (e) {
       console.log(e);
     }
@@ -158,7 +158,7 @@ const RestaurantCard = (props) => {
       setDbUser(element);
     });
     return () => subscription.unsubscribe();
-  }, []);
+  }, [User]);
 
   return (
     <Pressable onPress={onPress} style={styles.restaurantCardContainer}>

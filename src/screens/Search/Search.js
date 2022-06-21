@@ -206,6 +206,7 @@ export default function Search() {
           setFilterConfig={setFilterConfig}
           filterTrigger={setFilterAdded}
           filterConfigRef={filterConfig}
+          previousScreen={"Search"}
         />
       </BottomSheet>
     </View>

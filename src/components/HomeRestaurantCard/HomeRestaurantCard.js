@@ -119,7 +119,7 @@ const HomeRestaurantCard = (props) => {
         })
       );
       setDbUser(user);
-      setUserRestaurantList(filteredList);
+      // setUserRestaurantList(filteredList);
     } catch (e) {
       console.log(e);
     }
@@ -141,7 +141,7 @@ const HomeRestaurantCard = (props) => {
         })
       );
       setDbUser(user);
-      setUserRestaurantList(updatedRestaurantList);
+      // setUserRestaurantList(updatedRestaurantList);
     } catch (e) {
       console.log(e);
     }

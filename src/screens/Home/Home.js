@@ -187,18 +187,30 @@ const Home = () => {
               />
             </>
           ) : (
-            <Map userLocation={userLocation}>
-              <SearchBar style={SEARCH_BAR_STYLES} placeHolderText={"Search"} />
-              {(filterAdded ? filterList : userRestaurantList).map(
-                (restaurant) => (
-                  <HomeCustomMarker
-                    key={restaurant.id}
-                    data={restaurant}
-                    userLocation={userLocation}
-                  />
-                )
-              )}
-            </Map>
+            <>
+              <SearchBar
+                style={{
+                  position: "absolute",
+                  alignSelf: "center",
+                  width: "85%",
+                  top: 80,
+                  zIndex: 100,
+                }}
+                placeHolderText={"Search"}
+              />
+              <Map userLocation={userLocation}>
+                {/* <SearchBar style={SEARCH_BAR_STYLES} placeHolderText={"Search"} /> */}
+                {(filterAdded ? filterList : userRestaurantList).map(
+                  (restaurant) => (
+                    <HomeCustomMarker
+                      key={restaurant.id}
+                      data={restaurant}
+                      userLocation={userLocation}
+                    />
+                  )
+                )}
+              </Map>
+            </>
           )}
           <BottomSheet
             reference={bottomSheetRef}

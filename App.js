@@ -4,8 +4,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   SafeAreaView,
-  View,
-  Text,
+  Platform,
 } from "react-native";
 import { useState } from "react";
 import * as Font from "expo-font";
@@ -63,6 +62,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    paddingTop: Platform.OS === "android" ? 30 : 0,
   },
 });
 

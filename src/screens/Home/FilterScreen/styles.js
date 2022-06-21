@@ -47,7 +47,7 @@ export default StyleSheet.create({
   filterButtonContainer: {
     backgroundColor: "black",
     borderRadius: 10,
-    marginTop: 50,
+    marginTop: 30,
     marginLeft: "auto",
     marginRight: "auto",
     width: "80%",
@@ -62,7 +62,7 @@ export default StyleSheet.create({
   clearButtonContainer: {
     backgroundColor: "#D6D6D6",
     borderRadius: 10,
-    marginTop: 50,
+    marginTop: 30,
     marginLeft: "auto",
     marginRight: "auto",
     width: "80%",
@@ -73,5 +73,12 @@ export default StyleSheet.create({
     fontSize: 18,
     color: "white",
     textAlign: "center",
+  },
+  cancelButton: {
+    marginTop: 30,
+    textAlign: "center",
+    color: "#CCCCCC",
+    fontSize: 18,
+    fontFamily: "lato",
   },
 });

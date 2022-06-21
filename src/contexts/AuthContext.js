@@ -30,12 +30,6 @@ const AuthContextProvider = (props) => {
     }
   }, [dbUser]);
 
-  useEffect(() => {
-    if (userRestaurantList) {
-      // console.log("List found:", userRestaurantList);
-    }
-  }, [userRestaurantList]);
-
   return (
     <AuthContext.Provider
       value={{
