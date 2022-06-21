@@ -1,14 +1,7 @@
-import {
-  Text,
-  View,
-  useWindowDimensions,
-  FlatList,
-  ActivityIndicator,
-} from "react-native";
+import { Text, View, FlatList, ActivityIndicator } from "react-native";
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import SearchHeader from "../../components/Header/SearchHeader.js/SearchHeader";
 import RestaurantCard from "../../components/RestaurantCard/RestaurantCard";
-import { Marker } from "react-native-maps";
 import CustomMarker from "../../components/CustomMarker";
 import * as Location from "expo-location";
 import FilterScreen from "../Home/FilterScreen/FilterScreen";

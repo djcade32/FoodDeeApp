@@ -1,27 +1,18 @@
-import {
-  View,
-  SafeAreaView,
-  FlatList,
-  useWindowDimensions,
-  ActivityIndicator,
-  Text,
-} from "react-native";
+import { View, FlatList, ActivityIndicator, Text } from "react-native";
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import styles from "./styles";
 import HomeHeader from "../../components/Header/HomeHeader/HomeHeader";
 import SearchBar from "../../components/SearchBar/SearchBar";
-import { Marker } from "react-native-maps";
 import HomeCustomMarker from "../../components/HomeCustomMarker";
 import * as Location from "expo-location";
 import Map from "../../components/Map/Map";
 import BottomSheet from "../../components/BottomSheet/BottomSheet";
 import { useAuthContext } from "../../contexts/AuthContext";
-import { User, RestaurantStatus } from "../../models";
+import { RestaurantStatus } from "../../models";
 import HomeRestaurantCard from "../../components/HomeRestaurantCard/HomeRestaurantCard";
 import { calculateDistance, isEquivalent } from "../../helpers/helpers";
 
 import FilterScreen from "./FilterScreen/FilterScreen";
-import { configure } from "@react-native-community/netinfo";
 
 const SEARCH_BAR_STYLES = {
   marginTop: 25,
@@ -30,7 +21,7 @@ const SEARCH_BAR_STYLES = {
   marginBottom: 10,
 };
 
-const INITIAL_CONFIG_STATE = {
+const INITIAL_FILTER_CONFIG_STATE = {
   categories: "",
   distanceRadius: "",
   try: false,
@@ -44,7 +35,7 @@ const Home = () => {
   const [searchValue, setSearchValue] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [searchedList, setSearchedList] = useState([]);
-  const [filterConfig, setFilterConfig] = useState(INITIAL_CONFIG_STATE);
+  const [filterConfig, setFilterConfig] = useState(INITIAL_FILTER_CONFIG_STATE);
   const [filterAdded, setFilterAdded] = useState(false);
   const [filterList, setFilterList] = useState([]);
 
@@ -78,20 +69,6 @@ const Home = () => {
       });
     }
     getUserLocation();
-
-    // const foregroundSubscription = Location.watchPositionAsync(
-    //   {
-    //     accuracy: Location.Accuracy.High,
-    //     distanceInterval: 100,
-    //   },
-    //   (updatedLocation) => {
-    //     setDriverLocation({
-    //       latitude: updatedLocation.coords.latitude,
-    //       longitude: updatedLocation.coords.longitude,
-    //     });
-    //   }
-    // );
-    // return foregroundSubscription;
   }, []);
 
   useEffect(() => {
@@ -114,7 +91,7 @@ const Home = () => {
 
   useEffect(() => {
     setFilterList([]);
-    if (!isEquivalent(filterConfig, INITIAL_CONFIG_STATE)) {
+    if (!isEquivalent(filterConfig, INITIAL_FILTER_CONFIG_STATE)) {
       userRestaurantList.map((restaurant) => {
         if (filterConfig.try && restaurant.status !== RestaurantStatus.TRY) {
           return;
@@ -200,7 +177,6 @@ const Home = () => {
                 placeHolderText={"Search"}
               />
               <Map userLocation={userLocation}>
-                {/* <SearchBar style={SEARCH_BAR_STYLES} placeHolderText={"Search"} /> */}
                 {(filterAdded ? filterList : userRestaurantList).map(
                   (restaurant) => (
                     <HomeCustomMarker

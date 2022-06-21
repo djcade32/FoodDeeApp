@@ -16,6 +16,7 @@ import { Amplify, Analytics } from "aws-amplify";
 import awsconfig from "./src/aws-exports";
 import { withAuthenticator } from "aws-amplify-react-native";
 import AuthContextProvider from "./src/contexts/AuthContext";
+import RestaurantContextProvider from "./src/contexts/RestaurantContext";
 
 Amplify.configure({ ...awsconfig, Analytics: { disabled: true } });
 
@@ -48,9 +49,11 @@ function App() {
     <NavigationContainer>
       <SafeAreaView style={styles.container}>
         <AuthContextProvider>
-          <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <RootNavigator />
-          </TouchableWithoutFeedback>
+          <RestaurantContextProvider>
+            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+              <RootNavigator />
+            </TouchableWithoutFeedback>
+          </RestaurantContextProvider>
         </AuthContextProvider>
         <StatusBar style="auto" />
       </SafeAreaView>

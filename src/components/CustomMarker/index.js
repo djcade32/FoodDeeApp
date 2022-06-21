@@ -1,14 +1,7 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Marker } from "react-native-maps";
-import {
-  Entypo,
-  MaterialIcons,
-  FontAwesome5,
-  Ionicons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { useAuthContext } from "../../contexts/AuthContext";
 import { getCuisine, getCuisineIcon } from "../../helpers/helpers";
 
