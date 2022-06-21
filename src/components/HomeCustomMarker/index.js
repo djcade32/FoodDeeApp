@@ -53,7 +53,12 @@ const HomeCustomMarker = ({ data, userLocation }) => {
       description={data.address}
     >
       <View
-        style={{ backgroundColor: "#FF9A62", padding: 5, borderRadius: "50%" }}
+        style={{
+          backgroundColor: "#FF9A62",
+          padding: 5,
+          borderRadius: 50,
+          // overflow: "hidden",
+        }}
       >
         {icon}
       </View>

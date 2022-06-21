@@ -66,7 +66,7 @@ const CustomMarker = ({ data }) => {
       }
     >
       <View
-        style={{ backgroundColor: "#FF9A62", padding: 5, borderRadius: "50%" }}
+        style={{ backgroundColor: "#FF9A62", padding: 5, borderRadius: 50 }}
       >
         {icon}
       </View>
