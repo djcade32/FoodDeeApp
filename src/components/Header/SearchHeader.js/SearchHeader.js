@@ -11,7 +11,6 @@ const SEARCH_BAR_STYLES = {
 const SearchHeader = ({
   viewTypeHandler,
   filterHandler,
-  placeHolderText,
   setSearchValue,
   setIsSearching,
 }) => {

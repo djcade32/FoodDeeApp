@@ -4,7 +4,7 @@ import styles from "./styles";
 import SelectDropdown from "react-native-select-dropdown";
 import { Entypo } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
-import { getApiCategory, isEquivalent } from "../../../helpers/helpers";
+import { isEquivalent } from "../../../helpers/helpers";
 
 export default function FilterScreen({
   closeBottomSheet,

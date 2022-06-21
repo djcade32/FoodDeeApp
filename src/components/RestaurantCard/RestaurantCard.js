@@ -3,17 +3,20 @@ import { useState, useEffect } from "react";
 import React from "react";
 import styles from "../RestaurantCard/styles";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import defaultImage from "../../../assets/images/foodee_default_img.jpg";
 
 import { getCuisine } from "../../helpers/helpers";
 import { useAuthContext } from "../../contexts/AuthContext";
+import { useRestaurantContext } from "../../contexts/RestaurantContext";
 import { User, RestaurantStatus } from "../../models";
 import { DataStore } from "aws-amplify";
 
 const RestaurantCard = (props) => {
-  const { setDbUser, dbUser, userRestaurantList, setUserRestaurantList } =
-    useAuthContext();
+  const { setDbUser, userRestaurantList } = useAuthContext();
+  const { addRestaurant, removeRestaurant, switchRestaurantStatus } =
+    useRestaurantContext();
+
   const restaurantDistance = (
     props.restaurant.item?.distance * 0.000621371192
   ).toFixed(1);
@@ -53,112 +56,34 @@ const RestaurantCard = (props) => {
     // Switch to opposite status if one is highlighted already
     if (badgeStatus === RestaurantStatus.TRY && badgeType === "triedBadge") {
       setBadgeStatus(RestaurantStatus.TRIED);
-      switchRestaurantStatus(RestaurantStatus.TRIED);
+      switchRestaurantStatus(RestaurantStatus.TRIED, props.restaurant.item);
     } else if (
       badgeStatus === RestaurantStatus.TRIED &&
       badgeType === "tryBadge"
     ) {
       setBadgeStatus(RestaurantStatus.TRY);
-      switchRestaurantStatus(RestaurantStatus.TRY);
+      switchRestaurantStatus(RestaurantStatus.TRY, props.restaurant.item);
     }
     // Make both icons not highlighted
     else if (badgeStatus === RestaurantStatus.TRY && badgeType === "tryBadge") {
       setBadgeStatus(null);
-      removeRestaurantStatus();
+      removeRestaurant(props.restaurant.item?.id);
     } else if (
       badgeStatus === RestaurantStatus.TRIED &&
       badgeType === "triedBadge"
     ) {
       setBadgeStatus(null);
-      removeRestaurantStatus();
+      removeRestaurant(props.restaurant.item?.id);
     }
     // Neither icon is highlighted
     else if (!badgeStatus && badgeType === "tryBadge") {
       setBadgeStatus(RestaurantStatus.TRY);
-      addRestaurantStatus(RestaurantStatus.TRY);
+      addRestaurant(RestaurantStatus.TRY, restaurantData);
     } else if (!badgeStatus && badgeType === "triedBadge") {
       setBadgeStatus(RestaurantStatus.TRIED);
-      addRestaurantStatus(RestaurantStatus.TRIED);
+      addRestaurant(RestaurantStatus.TRIED, restaurantData);
     }
   }
-
-  async function addRestaurantStatus(status) {
-    try {
-      const user = await DataStore.save(
-        User.copyOf(dbUser, (updated) => {
-          updated.restaurants = [
-            ...updated.restaurants,
-            {
-              id: restaurantData.id,
-              name: restaurantData.name,
-              address: restaurantData.address,
-              cuisine: restaurantData.cuisine,
-              status: status,
-              image: restaurantData.image,
-              cost: restaurantData.cost,
-              rating: restaurantData.rating,
-              coordinates: {
-                latitude: restaurantData.coordinates.latitude,
-                longitude: restaurantData.coordinates.longitude,
-              },
-            },
-          ];
-        })
-      );
-      setDbUser(user);
-      // setUserRestaurantList((oldList) => [...oldList, user.restaurants]);
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  async function removeRestaurantStatus() {
-    const filteredList = userRestaurantList.filter(
-      (restaurant) => restaurant.id !== props.restaurant.item?.id
-    );
-    console.log("Filtered List: ", filteredList);
-    try {
-      const user = await DataStore.save(
-        User.copyOf(dbUser, (updated) => {
-          updated.restaurants = filteredList;
-        })
-      );
-      setDbUser(user);
-      // setUserRestaurantList(filteredList);
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  async function switchRestaurantStatus(status) {
-    console.log("Switch to:", status);
-    const updatedRestaurantList = userRestaurantList.map((restaurant) => {
-      if (restaurantData.id === restaurant.id) {
-        return { ...restaurant, status: status };
-      }
-      return restaurant;
-    });
-    try {
-      const user = await DataStore.save(
-        User.copyOf(dbUser, (updated) => {
-          updated.restaurants = updatedRestaurantList;
-        })
-      );
-      // console.log("Filter List 2: ", filteredList);
-      setDbUser(user);
-      // setUserRestaurantList(updatedRestaurantList);
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  // A work around that is used to update and sync Amplify's Cloud DB
-  useEffect(() => {
-    const subscription = DataStore.observe(User).subscribe(({ element }) => {
-      setDbUser(element);
-    });
-    return () => subscription.unsubscribe();
-  }, [User]);
 
   return (
     <Pressable onPress={onPress} style={styles.restaurantCardContainer}>

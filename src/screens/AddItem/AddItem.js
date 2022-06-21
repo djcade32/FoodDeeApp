@@ -78,7 +78,6 @@ export default function AddItem() {
       }
       return place;
     });
-    // console.log("Restaurants", updatedRestaurantList);
     try {
       const user = await DataStore.save(
         User.copyOf(dbUser, (updated) => {
@@ -86,20 +85,10 @@ export default function AddItem() {
         })
       );
       setDbUser(user);
-      // setUserRestaurantList((oldList) => [...oldList, ...user.restaurants]);
     } catch (e) {
       console.log(e);
     }
   }
-
-  // // A work around that is used to update and sync Amplify's Cloud DB
-  // useEffect(() => {
-  //   const subscription = DataStore.observe(User).subscribe(({ element }) => {
-  //     console.log("Element To Change: ", element);
-  //     setDbUser(element);
-  //   });
-  //   return () => subscription.unsubscribe();
-  // }, [User]);
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>

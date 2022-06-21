@@ -1,11 +1,10 @@
-import { View, Text, TextInput } from "react-native";
+import { View, TextInput } from "react-native";
 import React from "react";
 import styles from "./styles";
 import { Ionicons } from "@expo/vector-icons";
 
 const SearchBar = (props) => {
   return (
-    // <View style={styles.searchBarContainer}>
     <View style={[styles.searchBarContainer, props.style]}>
       <Ionicons
         style={styles.searchBarIcon}
@@ -25,7 +24,6 @@ const SearchBar = (props) => {
         }}
       />
     </View>
-    // </View>
   );
 };
 
