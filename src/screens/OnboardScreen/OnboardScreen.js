@@ -47,6 +47,7 @@ export default function OnboardScreen() {
           birthday,
           favoriteCuisine,
           sub,
+          restaurants: null,
         })
       );
       console.log(user);
