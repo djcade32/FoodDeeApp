@@ -322,7 +322,9 @@ export default function Restaurant() {
           renderItem={({ item }) => (
             <RestaurantItem deleteItem={deleteItem} item={item} />
           )}
-          ListFooterComponent={addItemButton}
+          ListFooterComponent={
+            badgeStatus === RestaurantStatus.TRIED ? addItemButton : <></>
+          }
           // ListFooterComponentStyle={{ }}
         />
       </View>

@@ -38,7 +38,6 @@ export default function AddItem() {
   async function addItem() {
     let int = 0;
     const updatedRestaurantList = userRestaurantList.map((place) => {
-      console.log("Number: ", ++int);
       if (
         place.id === restaurant.id &&
         place.status === RestaurantStatus.TRIED
