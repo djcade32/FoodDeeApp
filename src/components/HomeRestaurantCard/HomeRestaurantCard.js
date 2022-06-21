@@ -6,7 +6,6 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import defaultImage from "../../../assets/images/foodee_default_img.jpg";
 
-import { getCuisine } from "../../helpers/helpers";
 import { useAuthContext } from "../../contexts/AuthContext";
 import { User, RestaurantStatus } from "../../models";
 import { DataStore } from "aws-amplify";
@@ -71,41 +70,6 @@ const HomeRestaurantCard = (props) => {
       removeRestaurantStatus();
     }
   }
-  // Neither icon is highlighted
-  //   else if (!badgeStatus && badgeType === "tryBadge") {
-  //     setBadgeStatus(RestaurantStatus.TRY);
-  //     addRestaurantStatus(RestaurantStatus.TRY);
-  //   } else if (!badgeStatus && badgeType === "triedBadge") {
-  //     setBadgeStatus(RestaurantStatus.TRIED);
-  //     addRestaurantStatus(RestaurantStatus.TRIED);
-  //   }
-  // }
-
-  // async function addRestaurantStatus(status) {
-  //   try {
-  //     const user = await DataStore.save(
-  //       User.copyOf(dbUser, (updated) => {
-  //         updated.restaurants = [
-  //           ...updated.restaurants,
-  //           {
-  //             id: restaurantData.id,
-  //             name: restaurantData.name,
-  //             address: restaurantData.address,
-  //             cuisine: restaurantData.cuisine,
-  //             status: status,
-  //             image: restaurantData.image,
-  //             cost: restaurantData.cost,
-  //             rating: restaurantData.rating,
-  //           },
-  //         ];
-  //       })
-  //     );
-  //     setDbUser(user);
-  //     setUserRestaurantList((oldList) => [...oldList, ...user.restaurants]);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }
 
   async function removeRestaurantStatus() {
     const filteredList = userRestaurantList.filter(
@@ -119,7 +83,6 @@ const HomeRestaurantCard = (props) => {
         })
       );
       setDbUser(user);
-      // setUserRestaurantList(filteredList);
     } catch (e) {
       console.log(e);
     }
@@ -141,7 +104,6 @@ const HomeRestaurantCard = (props) => {
         })
       );
       setDbUser(user);
-      // setUserRestaurantList(updatedRestaurantList);
     } catch (e) {
       console.log(e);
     }
