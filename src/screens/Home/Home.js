@@ -4,6 +4,7 @@ import {
   FlatList,
   useWindowDimensions,
   ActivityIndicator,
+  Text,
 } from "react-native";
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import styles from "./styles";
@@ -233,7 +234,10 @@ const Home = () => {
             backgroundColor: "white",
           }}
         >
-          <ActivityIndicator size={35} color={"grey"} />
+          <View>
+            <ActivityIndicator size={35} color={"grey"} />
+            <Text style={styles.loadingText}>Loading your restaurants...</Text>
+          </View>
         </View>
       )}
     </>

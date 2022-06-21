@@ -15,6 +15,7 @@ import FilterScreen from "../Home/FilterScreen/FilterScreen";
 import Map from "../../components/Map/Map";
 import BottomSheet from "../../components/BottomSheet/BottomSheet";
 import { getApiCategory } from "../../helpers/helpers";
+import styles from "./styles";
 
 export default function Search() {
   const FETCH_LIMIT = 50;
@@ -178,7 +179,12 @@ export default function Search() {
             backgroundColor: "white",
           }}
         >
-          <ActivityIndicator size={35} color={"grey"} />
+          <View>
+            <ActivityIndicator size={35} color={"grey"} />
+            <Text style={styles.loadingText}>
+              Loading nearby restaurants...
+            </Text>
+          </View>
         </View>
       )}
       {isViewModeList ? (

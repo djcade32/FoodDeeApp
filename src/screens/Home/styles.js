@@ -5,4 +5,10 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
   },
+  loadingText: {
+    color: "gray",
+    fontFamily: "lato",
+    fontSize: 16,
+    textAlign: "center",
+  },
 });
