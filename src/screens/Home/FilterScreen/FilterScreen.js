@@ -204,6 +204,10 @@ export default function FilterScreen({
       >
         <Text style={styles.filterButtonText}>Filter</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity activeOpacity={0.5} onPress={() => closeBottomSheet()}>
+        <Text style={styles.cancelButton}>Cancel</Text>
+      </TouchableOpacity>
     </View>
   );
 }

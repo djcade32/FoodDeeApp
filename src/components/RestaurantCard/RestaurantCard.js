@@ -39,7 +39,7 @@ const RestaurantCard = (props) => {
   };
 
   useEffect(() => {
-    const foundRestaurant = userRestaurantList.find(
+    const foundRestaurant = userRestaurantList?.find(
       (restaurant) => restaurant.id === props.restaurant.item?.id
     );
     setBadgeStatus(foundRestaurant?.status);

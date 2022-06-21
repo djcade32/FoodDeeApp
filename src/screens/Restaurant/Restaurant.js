@@ -37,10 +37,12 @@ export default function Restaurant() {
   useEffect(() => {
     if (restaurant && badgeStatus === RestaurantStatus.TRIED) {
       console.log("Checking if user restaurant");
-      const foundRestaurant = userRestaurantList.find(
+      const foundRestaurant = userRestaurantList?.find(
         (foundRestaurant) => foundRestaurant.id === restaurant.id
       );
-      setRestaurantItems(foundRestaurant.items);
+      if (foundRestaurant) {
+        setRestaurantItems(foundRestaurant?.items);
+      }
       console.log("Found: ", foundRestaurant);
     }
   });
@@ -62,14 +64,22 @@ export default function Restaurant() {
     else if (badgeStatus === RestaurantStatus.TRY && badgeType === "tryBadge") {
       setBadgeStatus(null);
       removeRestaurantStatus();
-      navigation.goBack();
+      // navigation.goBack();
     } else if (
       badgeStatus === RestaurantStatus.TRIED &&
       badgeType === "triedBadge"
     ) {
       setBadgeStatus(null);
       removeRestaurantStatus();
-      navigation.goBack();
+      // navigation.goBack();
+    }
+    // Neither icon is highlighted
+    else if (!badgeStatus && badgeType === "tryBadge") {
+      setBadgeStatus(RestaurantStatus.TRY);
+      addRestaurantStatus(RestaurantStatus.TRY);
+    } else if (!badgeStatus && badgeType === "triedBadge") {
+      setBadgeStatus(RestaurantStatus.TRIED);
+      addRestaurantStatus(RestaurantStatus.TRIED);
     }
     // Save this commented code snippet for undo capability
     // // Neither icon is highlighted
@@ -80,6 +90,54 @@ export default function Restaurant() {
     //   setBadgeStatus(RestaurantStatus.TRIED);
     //   addRestaurantStatus(RestaurantStatus.TRIED);
     // }
+  }
+
+  async function addRestaurantStatus(status) {
+    try {
+      const user = await DataStore.save(
+        User.copyOf(dbUser, (updated) => {
+          updated.restaurants =
+            updated.restaurants === null
+              ? [
+                  {
+                    id: restaurant.id,
+                    name: restaurant.name,
+                    address: restaurant.address,
+                    cuisine: restaurant.cuisine,
+                    status: status,
+                    image: restaurant.image,
+                    cost: restaurant.cost,
+                    rating: restaurant.rating,
+                    coordinates: {
+                      latitude: restaurant.coordinates.latitude,
+                      longitude: restaurant.coordinates.longitude,
+                    },
+                  },
+                ]
+              : [
+                  ...updated.restaurants,
+                  {
+                    id: restaurant.id,
+                    name: restaurant.name,
+                    address: restaurant.address,
+                    cuisine: restaurant.cuisine,
+                    status: status,
+                    image: restaurant.image,
+                    cost: restaurant.cost,
+                    rating: restaurant.rating,
+                    coordinates: {
+                      latitude: restaurant.coordinates.latitude,
+                      longitude: restaurant.coordinates.longitude,
+                    },
+                  },
+                ];
+        })
+      );
+      setDbUser(user);
+      // setUserRestaurantList((oldList) => [...oldList, ...user.restaurants]);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   async function removeRestaurantStatus() {
@@ -210,6 +268,7 @@ export default function Restaurant() {
         <View style={styles.iconContainer}>
           <Pressable onPress={() => handleBadgePress("triedBadge")}>
             <MaterialCommunityIcons
+              style={{ marginRight: 10 }}
               name="silverware-fork-knife"
               size={35}
               color={
