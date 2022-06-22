@@ -1,4 +1,4 @@
-import { View, FlatList, ActivityIndicator, Text } from "react-native";
+import { View, FlatList, ActivityIndicator, Text, Image } from "react-native";
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import styles from "./styles";
 import HomeHeader from "../../components/Header/HomeHeader/HomeHeader";
@@ -11,7 +11,6 @@ import { useAuthContext } from "../../contexts/AuthContext";
 import { RestaurantStatus } from "../../models";
 import HomeRestaurantCard from "../../components/HomeRestaurantCard/HomeRestaurantCard";
 import { calculateDistance, isEquivalent } from "../../helpers/helpers";
-
 import FilterScreen from "./FilterScreen/FilterScreen";
 
 const SEARCH_BAR_STYLES = {
@@ -148,6 +147,16 @@ const Home = () => {
                 setIsSearching={setIsSearching}
               />
               <FlatList
+                ListEmptyComponent={() => (
+                  <View
+                    style={{
+                      justifyContent: "center",
+                      marginTop: 250,
+                    }}
+                  >
+                    <Text style={styles.loadingText}>No restaurants added</Text>
+                  </View>
+                )}
                 style={{ marginBottom: 10 }}
                 data={
                   isSearching
