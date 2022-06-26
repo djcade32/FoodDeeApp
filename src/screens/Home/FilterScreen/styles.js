@@ -1,10 +1,6 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
-  homeScreenContainer: {
-    flex: 1,
-    backgroundColor: "white",
-  },
   filterHeaderContainer: {
     borderBottomColor: "#D6D6D6",
     borderBottomWidth: 0.5,
