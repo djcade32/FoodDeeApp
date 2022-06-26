@@ -37,6 +37,7 @@ const Home = () => {
   const [filterConfig, setFilterConfig] = useState(INITIAL_FILTER_CONFIG_STATE);
   const [filterAdded, setFilterAdded] = useState(false);
   const [filterList, setFilterList] = useState([]);
+  const [filterScreenShowing, setFilterScreenShowing] = useState(false);
 
   const bottomSheetRef = useRef(null);
 
@@ -50,6 +51,7 @@ const Home = () => {
   // Opens bottom sheet
   function filterHandler() {
     bottomSheetRef.current?.expand();
+    setFilterScreenShowing(true);
   }
 
   // Ask user permission for location if not already granted
@@ -181,7 +183,7 @@ const Home = () => {
                   alignSelf: "center",
                   width: "85%",
                   top: 80,
-                  zIndex: 100,
+                  zIndex: filterScreenShowing ? 0 : 1,
                 }}
                 placeHolderText={"Search"}
               />
@@ -204,7 +206,10 @@ const Home = () => {
             snapPoints={snapPoints}
           >
             <FilterScreen
-              closeBottomSheet={() => bottomSheetRef.current?.close()}
+              closeBottomSheet={() => {
+                setFilterScreenShowing(false);
+                bottomSheetRef.current?.close();
+              }}
               setFilterConfig={setFilterConfig}
               filterTrigger={setFilterAdded}
               filterConfigRef={filterConfig}
