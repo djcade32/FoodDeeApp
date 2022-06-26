@@ -15,7 +15,7 @@ import { useAuthContext } from "../../contexts/AuthContext";
 import { User } from "../../models";
 
 export default function Profile() {
-  const { dbUser, setDbUser } = useAuthContext();
+  const { dbUser, setDbUser, setUserRestaurantList } = useAuthContext();
   const [editEnabled, setEditEnabled] = useState(false);
   const [name, setName] = useState(dbUser.name);
   const [gender, setGender] = useState(dbUser.gender);
@@ -159,7 +159,14 @@ export default function Profile() {
             {editEnabled ? "Save profile" : "Edit profile"}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.5} onPress={() => Auth.signOut()}>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => {
+            Auth.signOut();
+            setUserRestaurantList([]);
+            setDbUser(null);
+          }}
+        >
           <Text style={styles.signOutButton}>Sign out</Text>
         </TouchableOpacity>
       </View>
