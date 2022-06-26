@@ -96,7 +96,6 @@ export default function Search() {
           ...json.businesses,
         ]);
       }
-
       return;
     } catch (error) {
       console.error("Can't fetch restaurants: " + error);
@@ -183,18 +182,6 @@ export default function Search() {
       {isViewModeList ? (
         <>
           <FlatList
-            ListEmptyComponent={() => (
-              <View
-                style={{
-                  justifyContent: "center",
-                  marginTop: 300,
-                }}
-              >
-                <Text style={styles.loadingText}>
-                  No nearby restaurants found
-                </Text>
-              </View>
-            )}
             onEndReached={fetchMoreRestaurants}
             style={{ marginBottom: 10 }}
             data={fetchedRestaurants}
