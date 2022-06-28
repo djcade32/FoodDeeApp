@@ -73,6 +73,14 @@ export default function Profile() {
     return () => subscription.unsubscribe();
   }, []);
 
+  async function signOut() {
+    try {
+      await Auth.signOut();
+    } catch (error) {
+      console.log("error signing out: ", error);
+    }
+  }
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={{ flex: 1, backgroundColor: "white" }}>
@@ -162,7 +170,7 @@ export default function Profile() {
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => {
-            Auth.signOut();
+            signOut();
             setUserRestaurantList([]);
             setDbUser(null);
           }}
