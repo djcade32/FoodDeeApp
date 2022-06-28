@@ -28,6 +28,11 @@ export default function Search() {
   const bottomSheetRef = useRef(null);
   const [isSearching, setIsSearching] = useState(false);
   const [endIsReached, setEndIsReached] = useState(false);
+  const [initialRestuarantFetchDone, setInitialRestuarantFetchDone] =
+    useState(false);
+  const [initialRestuarantFetchList, setInitialRestuarantFetchList] = useState(
+    []
+  );
 
   const snapPoints = useMemo(() => ["1%", "100%"], []);
 
@@ -83,6 +88,7 @@ export default function Search() {
       setFetchedTotal(json.total);
       if (fetchedRestaurants.length === 0 || filterAdded) {
         setfetchedRestaurants(json.businesses);
+        setInitialRestuarantFetchList(json.businesses);
         if (filterAdded) {
           setFilterAdded(false);
         }
@@ -96,6 +102,7 @@ export default function Search() {
           ...json.businesses,
         ]);
       }
+      setInitialRestuarantFetchDone(true);
       return;
     } catch (error) {
       console.error("Can't fetch restaurants: " + error);
@@ -129,7 +136,11 @@ export default function Search() {
       setEndIsReached(false);
       const delayDebounceFn = setTimeout(() => {
         if (searchValue === "") {
-          setfetchedRestaurants([]);
+          setfetchedRestaurants(initialRestuarantFetchList);
+        }
+        // Prevent app from crashing when restaurants are not loaded to search through
+        if (!initialRestuarantFetchDone) {
+          return;
         }
         fetchRestaurants(FETCH_LIMIT, 0);
       }, 1000);
@@ -163,7 +174,7 @@ export default function Search() {
         setSearchValue={setSearchValue}
         setIsSearching={setIsSearching}
       />
-      {fetchedRestaurants.length === 0 && (
+      {fetchedRestaurants?.length === 0 && !userLocation && (
         <View
           style={{
             flex: 1,
@@ -182,6 +193,7 @@ export default function Search() {
       {isViewModeList ? (
         <>
           <FlatList
+            onEndReachedThreshold={2}
             onEndReached={fetchMoreRestaurants}
             style={{ marginBottom: 10 }}
             data={fetchedRestaurants}
