@@ -26,6 +26,7 @@ export default function Search() {
   const [userLocation, setUserLocation] = useState(null);
   const [searchValue, setSearchValue] = useState("");
   const bottomSheetRef = useRef(null);
+  const flatListRef = useRef(null);
   const [isSearching, setIsSearching] = useState(false);
   const [endIsReached, setEndIsReached] = useState(false);
   const [initialRestuarantFetchDone, setInitialRestuarantFetchDone] =
@@ -133,6 +134,7 @@ export default function Search() {
     console.log("Search Use Effect");
     if (isSearching) {
       console.log("inside search if statemnt");
+      flatListRef.current.scrollToIndex({ animated: true, index: 0 });
       setEndIsReached(false);
       const delayDebounceFn = setTimeout(() => {
         if (searchValue === "") {
@@ -193,6 +195,7 @@ export default function Search() {
       {isViewModeList ? (
         <>
           <FlatList
+            ref={flatListRef}
             onEndReachedThreshold={2}
             onEndReached={fetchMoreRestaurants}
             style={{ marginBottom: 10 }}

@@ -149,16 +149,23 @@ const Home = () => {
                 setIsSearching={setIsSearching}
               />
               <FlatList
-                ListEmptyComponent={() => (
-                  <View
-                    style={{
-                      justifyContent: "center",
-                      marginTop: 250,
-                    }}
-                  >
-                    <Text style={styles.loadingText}>No restaurants added</Text>
-                  </View>
-                )}
+                ListEmptyComponent={() => {
+                  if (!isSearching) {
+                    return (
+                      <View
+                        style={{
+                          justifyContent: "center",
+                          marginTop: 250,
+                        }}
+                      >
+                        <Text style={styles.loadingText}>
+                          No restaurants added
+                        </Text>
+                      </View>
+                    );
+                  }
+                  return <></>;
+                }}
                 style={{ marginBottom: 10 }}
                 data={
                   isSearching
