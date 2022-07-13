@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import React from "react";
 import styles from "../RestaurantCard/styles";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import defaultImage from "../../../assets/images/foodee_default_img.jpg";
 
 import { useAuthContext } from "../../contexts/AuthContext";

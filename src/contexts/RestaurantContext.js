@@ -89,6 +89,7 @@ const RestaurantContextProvider = (props) => {
           updated.restaurants = updatedRestaurantList;
         })
       );
+      console.log("Saving user!!!!");
       setDbUser(user);
     } catch (e) {
       console.log(e);

@@ -170,9 +170,9 @@ export default function Profile() {
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => {
-            signOut();
             setUserRestaurantList([]);
             setDbUser(null);
+            signOut();
           }}
         >
           <Text style={styles.signOutButton}>Sign out</Text>

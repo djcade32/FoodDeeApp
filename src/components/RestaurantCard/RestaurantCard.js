@@ -13,7 +13,7 @@ import { User, RestaurantStatus } from "../../models";
 import { DataStore } from "aws-amplify";
 
 const RestaurantCard = (props) => {
-  const { setDbUser, userRestaurantList } = useAuthContext();
+  const { userRestaurantList } = useAuthContext();
   const { addRestaurant, removeRestaurant, switchRestaurantStatus } =
     useRestaurantContext();
 
